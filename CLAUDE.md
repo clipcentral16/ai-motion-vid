@@ -20,6 +20,10 @@ Whenever we create a 3D animation or video in this project, **always use this st
 - Load async assets (GLTF, textures) with `delayRender`/`continueRender`, or with `useLoader` inside `<Suspense>` (which `@remotion/three` supports).
 - Keep each composition in its own folder under `src/<Name>/`, with the 3D scene, captions and composition root in separate files, and register it in `src/Root.tsx`.
 - Keep `remotion`, `@remotion/*` versions **exactly equal** (pinned, no `^`).
+- Use `random(seed)` from `remotion` for any randomness (crowds, placement).
+- Reuse the shared pieces in `src/WhatIfNoLegs/three/` (capsule `Character`, props, `Street`, `CameraRig`, `Puff`) for new cartoon scenes.
+- Captions: build `createTikTokStyleCaptions` pages **per scene**, and give every word a leading space. Otherwise the first word of a line gets attached to the previous page.
+- Fonts are bundled in `public/fonts/` and loaded with `@remotion/fonts`, so renders don't depend on network fonts.
 
 ## Layout
 
@@ -27,7 +31,10 @@ Whenever we create a 3D animation or video in this project, **always use this st
 src/index.ts                 registerRoot
 src/Root.tsx                 all <Composition>s
 src/SpinningObject/          example: 3D scene + captions + audio
-public/                      static assets (audio, models, textures)
+src/WhatIfNoLegs/            "What if" vertical short: scenes/, three/ (shared
+                             characters, props, city), captions, SFX, transitions
+public/                      static assets (audio, models, textures, fonts)
+scripts/generate-audio.mjs   synthesises the beat + SFX into public/whatif/
 remotion.config.ts           render config (ANGLE GL renderer for WebGL)
 out/                         render output (git-ignored)
 ```
@@ -38,6 +45,8 @@ out/                         render output (git-ignored)
 - `npm run render`: render `SpinningObject` to `out/spinning-object.mp4`
 - `npx remotion render <CompositionId> out/<name>.mp4`: render any composition
 - `npm run typecheck`: TypeScript check
+- `npm run render:whatif`: render `WhatIfNoLegs` (1080×1920) to `out/what-if-no-legs.mp4`
+- `node scripts/generate-audio.mjs`: regenerate the synthesised music and sound effects
 
 In sandboxed or cloud environments where Remotion can't download its own headless Chrome (from `remotion.media`), add
 `--browser-executable=/opt/pw-browsers/chromium_headless_shell-1243/chrome-headless-shell-linux64/chrome-headless-shell`
