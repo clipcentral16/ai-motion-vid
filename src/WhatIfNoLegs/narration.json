@@ -1,0 +1,224 @@
+{
+  "voice": "en-US-AndrewNeural",
+  "rate": "+6%",
+  "lines": [
+    {
+      "scene": 0,
+      "file": "whatif/voice/line0.mp3",
+      "start": 0.35,
+      "duration": 1.92,
+      "words": [
+        {
+          "spoken": "What",
+          "start": 0.1,
+          "end": 0.289,
+          "text": "What"
+        },
+        {
+          "spoken": "if",
+          "start": 0.3,
+          "end": 0.395,
+          "text": "if"
+        },
+        {
+          "spoken": "everyone",
+          "start": 0.407,
+          "end": 0.69,
+          "text": "everyone"
+        },
+        {
+          "spoken": "lost",
+          "start": 0.701,
+          "end": 0.937,
+          "text": "lost"
+        },
+        {
+          "spoken": "their",
+          "start": 0.949,
+          "end": 1.067,
+          "text": "their"
+        },
+        {
+          "spoken": "legs",
+          "start": 1.079,
+          "end": 1.562,
+          "text": "legs?"
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 1,
+      "file": "whatif/voice/line1.mp3",
+      "start": 1.9,
+      "duration": 1.872,
+      "words": [
+        {
+          "spoken": "Overnight",
+          "start": 0.1,
+          "end": 0.607,
+          "text": "Overnight…"
+        },
+        {
+          "spoken": "gone",
+          "start": 0.902,
+          "end": 1.256,
+          "text": "gone."
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 2,
+      "file": "whatif/voice/line2.mp3",
+      "start": 0.35,
+      "duration": 2.376,
+      "words": [
+        {
+          "spoken": "Office",
+          "start": 0.1,
+          "end": 0.501,
+          "text": "Office"
+        },
+        {
+          "spoken": "chairs",
+          "start": 0.513,
+          "end": 0.784,
+          "text": "chairs"
+        },
+        {
+          "spoken": "become",
+          "start": 0.796,
+          "end": 1.114,
+          "text": "become"
+        },
+        {
+          "spoken": "the",
+          "start": 1.126,
+          "end": 1.185,
+          "text": "the"
+        },
+        {
+          "spoken": "#1",
+          "start": 1.197,
+          "end": 1.645,
+          "text": "#1"
+        },
+        {
+          "spoken": "car",
+          "start": 1.657,
+          "end": 2.034,
+          "text": "car"
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 3,
+      "file": "whatif/voice/line3.mp3",
+      "start": 0.35,
+      "duration": 1.92,
+      "words": [
+        {
+          "spoken": "Sports",
+          "start": 0.1,
+          "end": 0.572,
+          "text": "Sports"
+        },
+        {
+          "spoken": "would",
+          "start": 0.584,
+          "end": 0.713,
+          "text": "would"
+        },
+        {
+          "spoken": "never",
+          "start": 0.725,
+          "end": 0.984,
+          "text": "never"
+        },
+        {
+          "spoken": "be",
+          "start": 0.996,
+          "end": 1.102,
+          "text": "be"
+        },
+        {
+          "spoken": "the",
+          "start": 1.114,
+          "end": 1.197,
+          "text": "the"
+        },
+        {
+          "spoken": "same",
+          "start": 1.208,
+          "end": 1.574,
+          "text": "same"
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 4,
+      "file": "whatif/voice/line4.mp3",
+      "start": 0.4,
+      "duration": 1.872,
+      "words": [
+        {
+          "spoken": "Stairs",
+          "start": 0.1,
+          "end": 0.654,
+          "text": "Stairs?"
+        },
+        {
+          "spoken": "Banned",
+          "start": 0.993,
+          "end": 1.418,
+          "text": "Banned."
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 5,
+      "file": "whatif/voice/line5.mp3",
+      "start": 1.2,
+      "duration": 2.256,
+      "words": [
+        {
+          "spoken": "Would",
+          "start": 0.1,
+          "end": 0.277,
+          "text": "Would"
+        },
+        {
+          "spoken": "you",
+          "start": 0.289,
+          "end": 0.336,
+          "text": "you"
+        },
+        {
+          "spoken": "survive",
+          "start": 0.348,
+          "end": 0.831,
+          "text": "survive?"
+        },
+        {
+          "spoken": "Comment",
+          "start": 1.17,
+          "end": 1.559,
+          "text": "Comment"
+        },
+        {
+          "spoken": "below",
+          "start": 1.571,
+          "end": 1.913,
+          "text": "below"
+        }
+      ],
+      "extra": [
+        "👇"
+      ]
+    }
+  ]
+}

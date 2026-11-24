@@ -1,37 +1,38 @@
 import type { Caption } from "@remotion/captions";
-import { FPS, POOF_SECONDS, SCENE_STARTS } from "./constants";
+import { FPS, SCENE_STARTS } from "./constants";
+import narration from "./narration.json";
 
-type Line = { scene: number; words: string[]; startSec: number; gapSec?: number; pauses?: Record<number, number> };
+// Captions follow the narrator word for word. narration.json is written by
+// scripts/generate-narration.py from Microsoft Edge TTS word boundaries, so
+// each word pops in at the moment it is spoken.
 
-// One caption per scene. Words pop in one by one starting at `startSec`
-// (seconds into the scene). `pauses` adds extra delay before a word index.
-const LINES: Line[] = [
-  { scene: 0, words: ["What", "if", "everyone", "lost", "their", "legs?"], startSec: 0.35, gapSec: 0.24 },
-  { scene: 1, words: ["Overnight…", "gone."], startSec: POOF_SECONDS + 0.45, pauses: { 1: 0.55 } },
-  { scene: 2, words: ["Office", "chairs", "become", "the", "#1", "car"], startSec: 0.35, gapSec: 0.22 },
-  { scene: 3, words: ["Sports", "would", "never", "be", "the", "same"], startSec: 0.35, gapSec: 0.22 },
-  { scene: 4, words: ["Stairs?", "Banned."], startSec: 0.4, pauses: { 1: 0.5 } },
-  { scene: 5, words: ["Would", "you", "survive?", "Comment", "below", "👇"], startSec: 1.6, gapSec: 0.26, pauses: { 3: 0.45 } },
-];
+export type NarrationLine = (typeof narration.lines)[number];
+export const NARRATION_LINES: NarrationLine[] = narration.lines;
 
-const ms = (frames: number) => (frames / FPS) * 1000;
+const sceneMs = (scene: number) => (SCENE_STARTS[scene] / FPS) * 1000;
+
+/** Absolute start of a narration clip, in ms. */
+export const lineStartMs = (line: NarrationLine) => sceneMs(line.scene) + line.start * 1000;
 
 /** Captions grouped per scene, in @remotion/captions format (absolute ms). */
-export const CAPTION_LINES: Caption[][] = LINES.map((line) => {
-  const sceneMs = ms(SCENE_STARTS[line.scene]);
-  let at = sceneMs + line.startSec * 1000;
-  return line.words.map((word, i) => {
-    at += (line.pauses?.[i] ?? 0) * 1000;
-    const startMs = at;
-    at += (line.gapSec ?? 0.3) * 1000;
-    return {
-      // Leading space marks a word boundary; createTikTokStyleCaptions starts
-      // a new page only on tokens that begin with a space.
-      text: ` ${word}`,
-      startMs,
-      endMs: startMs + 400,
-      timestampMs: startMs,
-      confidence: 1,
-    };
-  });
+export const CAPTION_LINES: Caption[][] = NARRATION_LINES.map((line) => {
+  const base = lineStartMs(line);
+  const spoken: Caption[] = line.words.map((w) => ({
+    // Leading space marks a word boundary; createTikTokStyleCaptions starts
+    // a new page only on tokens that begin with a space.
+    text: ` ${w.text}`,
+    startMs: base + w.start * 1000,
+    endMs: base + w.end * 1000,
+    timestampMs: base + w.start * 1000,
+    confidence: 1,
+  }));
+  const lastEnd = spoken[spoken.length - 1].endMs;
+  const extra: Caption[] = line.extra.map((text, i) => ({
+    text: ` ${text}`,
+    startMs: lastEnd + 120 + i * 200,
+    endMs: lastEnd + 520 + i * 200,
+    timestampMs: lastEnd + 120 + i * 200,
+    confidence: 1,
+  }));
+  return [...spoken, ...extra];
 });

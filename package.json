@@ -7,7 +7,8 @@
     "render": "remotion render SpinningObject out/spinning-object.mp4",
     "typecheck": "tsc --noEmit",
     "render:whatif": "remotion render WhatIfNoLegs out/what-if-no-legs.mp4 --crf=24",
-    "audio": "node scripts/generate-audio.mjs"
+    "audio": "node scripts/generate-audio.mjs",
+    "narration": "python3 scripts/generate-narration.py"
   },
   "repository": {
     "type": "git",
