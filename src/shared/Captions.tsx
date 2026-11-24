@@ -1,5 +1,6 @@
 import { useMemo } from "react";
-import { AbsoluteFill, Sequence, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
+import { AbsoluteFill, Sequence, interpolate, random, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
+import type { CaptionTone, PageMeta } from "./narration";
 import { createTikTokStyleCaptions, type Caption, type TikTokPage } from "@remotion/captions";
 import { loadFont } from "@remotion/fonts";
 
@@ -8,27 +9,62 @@ loadFont({ family: FONT, url: staticFile("fonts/LilitaOne-Regular.ttf") });
 
 const isEmoji = (s: string) => /\p{Extended_Pictographic}/u.test(s);
 
-const Page: React.FC<{ page: TikTokPage; durationInFrames: number; emphasis: Set<number> }> = ({ page, durationInFrames, emphasis }) => {
+const TONES: Record<CaptionTone, { color: string; chip: string; chipText: string; size: number; jitter: number }> = {
+  narrator: { color: "white", chip: "#1d1b26", chipText: "#ffffff", size: 100, jitter: 0 },
+  radio: { color: "#c4ffd2", chip: "#12351f", chipText: "#7dffa6", size: 92, jitter: 1.2 },
+  alien: { color: "#ff4a4a", chip: "#3a0a0f", chipText: "#ff6b6b", size: 104, jitter: 6 },
+  hero: { color: "white", chip: "#3d2c00", chipText: "#ffd166", size: 104, jitter: 0 },
+  weak: { color: "#d9d4cf", chip: "#26232b", chipText: "#bdb6ae", size: 82, jitter: 0.6 },
+};
+
+const Page: React.FC<{ page: TikTokPage; durationInFrames: number; emphasis: Set<number>; meta?: PageMeta }> = ({
+  page,
+  durationInFrames,
+  emphasis,
+  meta,
+}) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+  const tone = TONES[meta?.tone ?? "narrator"];
+  // Glitchy shake for radio / alien lines (deterministic per frame).
+  const jx = tone.jitter ? (random(`jx${page.startMs}-${frame}`) - 0.5) * tone.jitter * 2 : 0;
+  const jy = tone.jitter ? (random(`jy${page.startMs}-${frame}`) - 0.5) * tone.jitter : 0;
   const exit = interpolate(frame, [durationInFrames - 6, durationInFrames], [1, 0], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
 
   return (
-    <AbsoluteFill style={{ justifyContent: "flex-end", alignItems: "center", paddingBottom: 360 }}>
+    <AbsoluteFill style={{ justifyContent: "flex-end", alignItems: "center", paddingBottom: 360, flexDirection: "column", gap: 18 }}>
+      {meta?.speaker ? (
+        <div
+          style={{
+            fontFamily: `'${FONT}', sans-serif`,
+            fontSize: 44,
+            letterSpacing: "0.08em",
+            color: tone.chipText,
+            background: tone.chip,
+            border: `4px solid ${tone.chipText}`,
+            borderRadius: 14,
+            padding: "6px 22px",
+            opacity: exit * Math.min(1, frame / 4),
+            transform: `translate(${jx}px, ${jy}px)`,
+          }}
+        >
+          {meta.speaker}
+        </div>
+      ) : null}
       <div
         style={{
           fontFamily: `'${FONT}', 'Noto Color Emoji', sans-serif`,
-          fontSize: 100,
+          fontSize: tone.size,
           lineHeight: 1.08,
-          color: "white",
+          color: tone.color,
           textAlign: "center",
           maxWidth: 1000,
           textTransform: "uppercase",
           opacity: exit,
-          transform: `scale(${0.85 + 0.15 * exit})`,
+          transform: `translate(${jx}px, ${jy}px) scale(${0.85 + 0.15 * exit})`,
         }}
       >
         {page.tokens.map((token, i) => {
@@ -47,7 +83,7 @@ const Page: React.FC<{ page: TikTokPage; durationInFrames: number; emphasis: Set
                 style={{
                   display: "inline-block",
                   opacity: visible ? 1 : 0,
-                  color: emph ? "#ffd93d" : "white",
+                  color: emph ? (meta?.tone === "alien" ? "#ff1f1f" : "#ffd93d") : tone.color,
                   fontSize: emph ? "1.22em" : undefined,
                   transform: `scale(${visible ? pop : 0}) rotate(${(1 - Math.min(1, pop)) * (i % 2 ? 8 : -8) + wobble}deg)`,
                   WebkitTextStroke: emoji ? undefined : "18px black",
@@ -75,7 +111,8 @@ export const CaptionTrack: React.FC<{
   emphasis: Set<number>;
   sceneStarts: number[];
   totalFrames: number;
-}> = ({ lines, emphasis, sceneStarts, totalFrames }) => {
+  pageMeta?: Map<number, PageMeta>;
+}> = ({ lines, emphasis, sceneStarts, totalFrames, pageMeta }) => {
   const { fps } = useVideoConfig();
   // Build pages per scene so one scene's words never spill into another's page.
   const pages = useMemo(
@@ -87,12 +124,13 @@ export const CaptionTrack: React.FC<{
     <AbsoluteFill>
       {pages.map((page, i) => {
         const from = Math.round((page.startMs / 1000) * fps);
-        // Each caption stays up until the end of its scene.
+        // Each caption stays up until its scene ends or the next caption starts.
         const sceneEnd = [...sceneStarts.slice(1), totalFrames].find((s) => s > from) ?? totalFrames;
-        const duration = sceneEnd - from;
+        const next = pages[i + 1] ? Math.round((pages[i + 1].startMs / 1000) * fps) : totalFrames;
+        const duration = Math.min(sceneEnd, next) - from;
         return (
           <Sequence key={i} from={from} durationInFrames={duration} layout="none">
-            <Page page={page} durationInFrames={duration} emphasis={emphasis} />
+            <Page page={page} durationInFrames={duration} emphasis={emphasis} meta={pageMeta?.get(page.startMs)} />
           </Sequence>
         );
       })}

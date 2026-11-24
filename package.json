@@ -11,7 +11,10 @@
     "narration": "python3 scripts/generate-narration.py scripts/narration/no-legs.json",
     "render:nuke": "remotion render WhatIfNuke out/what-if-nuke.mp4 --crf=24",
     "audio:nuke": "node scripts/generate-audio.mjs nuke",
-    "narration:nuke": "python3 scripts/generate-narration.py scripts/narration/nuke.json"
+    "narration:nuke": "python3 scripts/generate-narration.py scripts/narration/nuke.json",
+    "render:jupiter": "remotion render JupiterIncident out/jupiter-incident.mp4 --crf=24",
+    "audio:jupiter": "node scripts/generate-audio.mjs jupiter",
+    "narration:jupiter": "python3 scripts/generate-narration.py scripts/narration/jupiter.json"
   },
   "repository": {
     "type": "git",

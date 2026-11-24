@@ -1,0 +1,305 @@
+{
+  "voice": "en-US-ChristopherNeural",
+  "rate": "-6%",
+  "lines": [
+    {
+      "scene": 0,
+      "file": "jupiter/voice/line0.mp3",
+      "start": 0.45,
+      "duration": 3.814,
+      "words": [
+        {
+          "spoken": "2011",
+          "start": 0.103,
+          "end": 1.233,
+          "text": "2011.",
+          "emphasis": false
+        },
+        {
+          "spoken": "A",
+          "start": 1.473,
+          "end": 1.539,
+          "text": "A",
+          "emphasis": false
+        },
+        {
+          "spoken": "crew",
+          "start": 1.553,
+          "end": 1.912,
+          "text": "crew",
+          "emphasis": false
+        },
+        {
+          "spoken": "reached",
+          "start": 1.925,
+          "end": 2.257,
+          "text": "reached",
+          "emphasis": false
+        },
+        {
+          "spoken": "Jupiter",
+          "start": 2.271,
+          "end": 2.829,
+          "text": "Jupiter.",
+          "emphasis": true
+        }
+      ],
+      "extra": [],
+      "tone": "narrator"
+    },
+    {
+      "scene": 1,
+      "file": "jupiter/voice/line1.mp3",
+      "start": 0.35,
+      "duration": 3.291,
+      "words": [
+        {
+          "spoken": "Houston",
+          "start": 0.098,
+          "end": 0.579,
+          "text": "Houston…",
+          "emphasis": false
+        },
+        {
+          "spoken": "we're",
+          "start": 0.783,
+          "end": 0.939,
+          "text": "we're",
+          "emphasis": false
+        },
+        {
+          "spoken": "picking",
+          "start": 0.963,
+          "end": 1.288,
+          "text": "picking",
+          "emphasis": false
+        },
+        {
+          "spoken": "up",
+          "start": 1.312,
+          "end": 1.42,
+          "text": "up",
+          "emphasis": false
+        },
+        {
+          "spoken": "movement",
+          "start": 1.432,
+          "end": 1.805,
+          "text": "movement",
+          "emphasis": true
+        },
+        {
+          "spoken": "outside",
+          "start": 1.829,
+          "end": 2.37,
+          "text": "outside.",
+          "emphasis": false
+        }
+      ],
+      "extra": [],
+      "speaker": "CAPTAIN · RADIO",
+      "tone": "radio"
+    },
+    {
+      "scene": 2,
+      "file": "jupiter/voice/line2.mp3",
+      "start": 0.9,
+      "duration": 2.56,
+      "words": [
+        {
+          "spoken": "You",
+          "start": 0.107,
+          "end": 0.277,
+          "text": "You",
+          "emphasis": false
+        },
+        {
+          "spoken": "should",
+          "start": 0.291,
+          "end": 0.519,
+          "text": "should",
+          "emphasis": false
+        },
+        {
+          "spoken": "not",
+          "start": 0.533,
+          "end": 0.746,
+          "text": "not",
+          "emphasis": true
+        },
+        {
+          "spoken": "have",
+          "start": 0.76,
+          "end": 1.016,
+          "text": "have",
+          "emphasis": false
+        },
+        {
+          "spoken": "come",
+          "start": 1.03,
+          "end": 1.485,
+          "text": "come.",
+          "emphasis": false
+        }
+      ],
+      "extra": [],
+      "speaker": "???",
+      "tone": "alien"
+    },
+    {
+      "scene": 3,
+      "file": "jupiter/voice/line3.mp3",
+      "start": 0.2,
+      "duration": 2.9,
+      "words": [
+        {
+          "spoken": "They're",
+          "start": 0.09,
+          "end": 0.272,
+          "text": "They're",
+          "emphasis": false
+        },
+        {
+          "spoken": "inside",
+          "start": 0.282,
+          "end": 0.675,
+          "text": "inside",
+          "emphasis": true
+        },
+        {
+          "spoken": "the",
+          "start": 0.685,
+          "end": 0.735,
+          "text": "the",
+          "emphasis": false
+        },
+        {
+          "spoken": "ship",
+          "start": 0.746,
+          "end": 1.098,
+          "text": "ship!",
+          "emphasis": false
+        },
+        {
+          "spoken": "They're",
+          "start": 1.794,
+          "end": 2.147,
+          "text": "They're—",
+          "emphasis": false
+        }
+      ],
+      "extra": [],
+      "speaker": "ENGINEER · RADIO",
+      "tone": "radio"
+    },
+    {
+      "scene": 4,
+      "file": "jupiter/voice/line4.mp3",
+      "start": 0.3,
+      "duration": 1.907,
+      "words": [
+        {
+          "spoken": "I",
+          "start": 0.1,
+          "end": 0.269,
+          "text": "I",
+          "emphasis": false
+        },
+        {
+          "spoken": "have",
+          "start": 0.282,
+          "end": 0.412,
+          "text": "have",
+          "emphasis": false
+        },
+        {
+          "spoken": "a",
+          "start": 0.426,
+          "end": 0.491,
+          "text": "a",
+          "emphasis": false
+        },
+        {
+          "spoken": "gun",
+          "start": 0.504,
+          "end": 0.842,
+          "text": "gun.",
+          "emphasis": true
+        }
+      ],
+      "extra": [],
+      "speaker": "CASEOH",
+      "tone": "hero"
+    },
+    {
+      "scene": 5,
+      "file": "jupiter/voice/line5.mp3",
+      "start": 0.8,
+      "duration": 2.743,
+      "words": [
+        {
+          "spoken": "They're",
+          "start": 0.1,
+          "end": 0.584,
+          "text": "They're…",
+          "emphasis": false
+        },
+        {
+          "spoken": "all",
+          "start": 1.088,
+          "end": 1.35,
+          "text": "all…",
+          "emphasis": false
+        },
+        {
+          "spoken": "gone",
+          "start": 1.451,
+          "end": 2.076,
+          "text": "gone.",
+          "emphasis": true
+        }
+      ],
+      "extra": [],
+      "speaker": "CASEOH",
+      "tone": "weak"
+    },
+    {
+      "scene": 6,
+      "file": "jupiter/voice/line6.mp3",
+      "start": 0.2,
+      "duration": 3.709,
+      "words": [
+        {
+          "spoken": "CaseOh",
+          "start": 0.103,
+          "end": 0.821,
+          "text": "CaseOh.",
+          "emphasis": false
+        },
+        {
+          "spoken": "A",
+          "start": 1.729,
+          "end": 1.848,
+          "text": "A",
+          "emphasis": false
+        },
+        {
+          "spoken": "true",
+          "start": 1.862,
+          "end": 2.168,
+          "text": "true",
+          "emphasis": false
+        },
+        {
+          "spoken": "hero",
+          "start": 2.181,
+          "end": 2.753,
+          "text": "hero.",
+          "emphasis": true
+        }
+      ],
+      "extra": [],
+      "tone": "narrator"
+    }
+  ]
+}

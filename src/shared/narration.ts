@@ -4,7 +4,19 @@ import type { Caption } from "@remotion/captions";
 // scene plus the time of every spoken word (Microsoft Edge TTS boundaries).
 
 export type NarrationWord = { spoken: string; text: string; start: number; end: number; emphasis?: boolean };
-export type NarrationLine = { scene: number; file: string; start: number; duration: number; words: NarrationWord[]; extra: string[] };
+export type CaptionTone = "narrator" | "radio" | "alien" | "hero" | "weak";
+export type NarrationLine = {
+  scene: number;
+  file: string;
+  start: number;
+  duration: number;
+  words: NarrationWord[];
+  extra: string[];
+  speaker?: string;
+  tone?: string;
+};
+/** Per-caption-page styling, keyed by the page's first word start (ms). */
+export type PageMeta = { speaker?: string; tone?: CaptionTone };
 export type Narration = { voice: string; rate: string; lines: NarrationLine[] };
 
 export type VoiceClip = { from: number; to: number; src: string };
@@ -47,5 +59,9 @@ export const buildNarration = (narration: Narration, sceneStarts: number[], fps:
     return { from, to: from + Math.ceil(line.duration * fps), src: line.file };
   });
 
-  return { captionLines, emphasis, voiceClips };
+  const pageMeta = new Map<number, PageMeta>(
+    narration.lines.map((line) => [lineStartMs(line) + line.words[0].start * 1000, { speaker: line.speaker, tone: line.tone as CaptionTone | undefined }]),
+  );
+
+  return { captionLines, emphasis, voiceClips, pageMeta };
 };

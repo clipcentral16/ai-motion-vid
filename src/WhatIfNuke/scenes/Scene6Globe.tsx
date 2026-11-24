@@ -2,7 +2,8 @@ import { Easing, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import { SceneCanvas } from "../../shared/three/SceneCanvas";
 import { CameraRig, punchFov, type Vec3 } from "../../shared/three/World";
 import { SKIES } from "../constants";
-import { Globe, Stars } from "../three/NukeProps";
+import { Globe} from "../three/NukeProps";
+import { Stars } from "../../shared/three/Stars";
 
 // 6. Pull back from Earth as smoke spreads around the planet.
 export const Scene6Globe: React.FC = () => {

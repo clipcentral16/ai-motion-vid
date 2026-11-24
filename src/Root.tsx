@@ -4,6 +4,8 @@ import { WhatIfNoLegs } from "./WhatIfNoLegs/WhatIfNoLegs";
 import { FPS, HEIGHT, TOTAL_FRAMES, WIDTH } from "./WhatIfNoLegs/constants";
 import { WhatIfNuke } from "./WhatIfNuke/WhatIfNuke";
 import * as Nuke from "./WhatIfNuke/constants";
+import { JupiterIncident } from "./JupiterIncident/JupiterIncident";
+import * as Jupiter from "./JupiterIncident/constants";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -31,6 +33,14 @@ export const RemotionRoot: React.FC = () => {
         fps={Nuke.FPS}
         width={Nuke.WIDTH}
         height={Nuke.HEIGHT}
+      />
+      <Composition
+        id="JupiterIncident"
+        component={JupiterIncident}
+        durationInFrames={Jupiter.TOTAL_FRAMES}
+        fps={Jupiter.FPS}
+        width={Jupiter.WIDTH}
+        height={Jupiter.HEIGHT}
       />
     </>
   );

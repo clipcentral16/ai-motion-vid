@@ -10,6 +10,12 @@ loudness, scene lengths, output paths and one line per scene:
   caption  exactly what is shown on screen; a word starting with * is highlighted
   extra    words shown after the spoken ones (e.g. an emoji)
   start    seconds into the scene when the clip begins (~0.1s lead-in)
+Optional per line: voice / rate / pitch / lufs (override the defaults),
+  fx       "radio" (crackly walkie-talkie), "alien" (pitched-down, warbling,
+           distorted) or "weak" (quiet, shaky); effects keep the timing, so
+           captions still match the words
+  speaker  label shown above the caption (e.g. "CAPTAIN", "???")
+  tone     caption style: "radio", "alien", "hero", "weak" or "narrator"
 
 Writes public/<audio_dir>/line<N>.mp3 and <json_out> (clip offsets + word
 timings). Needs network access to speech.platform.bing.com. List voices with:
@@ -48,24 +54,39 @@ def duration_of(path: Path) -> float:
     return float(out.stdout.strip())
 
 
-def loudness_process(path: Path):
-    """Compress + normalise a clip in place so the narrator sits on top of the mix."""
+# Voice effects. Each keeps the clip's timing (pitch shifts are paired with
+# an inverse tempo change) so the TTS word boundaries stay valid.
+FX = {
+    None: "",
+    "radio": "highpass=f=380,lowpass=f=2700,acompressor=threshold=-30dB:ratio=8:attack=1:release=40:makeup=4,"
+             "acrusher=bits=9:mix=0.35:mode=log,aphaser=type=t:speed=0.6:decay=0.3,",
+    "alien": "asetrate=44100*0.7,aresample=44100,atempo=1.428571,vibrato=f=7:d=0.35,"
+             "tremolo=f=38:d=0.55,aecho=0.8:0.6:35|70:0.45|0.3,acrusher=bits=7:mix=0.35:mode=log,"
+             "acompressor=threshold=-36dB:ratio=12:attack=1:release=60:makeup=10,alimiter=limit=0.7,",
+    "weak": "lowpass=f=3200,tremolo=f=5.5:d=0.3,vibrato=f=4:d=0.08,",
+}
+
+
+def loudness_process(path: Path, fx=None, lufs=None):
+    """Apply the line's voice effect, then compress + normalise in place."""
     tmp = path.with_suffix(".tmp.mp3")
+    chain = "aresample=44100," + FX[fx] + (
+        f"acompressor=threshold=-22dB:ratio=3.5:attack=4:release=80:makeup=2,"
+        f"loudnorm=I={lufs if lufs is not None else TARGET_LUFS}:TP=-1.2:LRA=6"
+    )
     subprocess.run(
-        ["ffmpeg", "-y", "-loglevel", "error", "-i", str(path), "-af",
-         f"acompressor=threshold=-22dB:ratio=3.5:attack=4:release=80:makeup=2,loudnorm=I={TARGET_LUFS}:TP=-1.2:LRA=6",
-         "-ar", "44100", "-b:a", "192k", str(tmp)],
+        ["ffmpeg", "-y", "-loglevel", "error", "-i", str(path), "-af", chain, "-ar", "44100", "-b:a", "192k", str(tmp)],
         check=True,
     )
     tmp.replace(path)
 
 
-async def synth(text: str, path: Path):
+async def synth(text: str, path: Path, voice: str, rate: str, pitch: str):
     kwargs = {}
     proxy = os.environ.get("HTTPS_PROXY") or os.environ.get("https_proxy")
     if proxy:
         kwargs["proxy"] = proxy
-    comm = edge_tts.Communicate(text, VOICE, rate=RATE, pitch=PITCH, boundary="WordBoundary", **kwargs)
+    comm = edge_tts.Communicate(text, voice, rate=rate, pitch=pitch, boundary="WordBoundary", **kwargs)
     words = []
     with open(path, "wb") as f:
         async for chunk in comm.stream():
@@ -85,8 +106,10 @@ async def main():
         shown = line["caption"].split()
         emphasis = [w.startswith("*") for w in shown]
         shown = [w.lstrip("*") for w in shown]
-        words = await synth(" ".join(shown), path)
-        loudness_process(path)
+        words = await synth(
+            " ".join(shown), path, line.get("voice", VOICE), line.get("rate", RATE), line.get("pitch", PITCH)
+        )
+        loudness_process(path, line.get("fx"), line.get("lufs"))
         if len(words) != len(shown):
             sys.exit(f"Line {i}: {len(shown)} caption words but {len(words)} spoken words: {[w['spoken'] for w in words]}")
         for w, text, emph in zip(words, shown, emphasis):
@@ -102,6 +125,8 @@ async def main():
             "duration": round(dur, 3),
             "words": words,
             "extra": line.get("extra", []),
+            **({"speaker": line["speaker"]} if "speaker" in line else {}),
+            **({"tone": line["tone"]} if "tone" in line else {}),
         })
         print(f"line{i}: {dur:.2f}s  {' | '.join(w['text'] + '@' + str(w['start']) for w in words)}")
     JSON_OUT.write_text(json.dumps({"voice": VOICE, "rate": RATE, "lines": result}, ensure_ascii=False, indent=2) + "\n")

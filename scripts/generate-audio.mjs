@@ -8,6 +8,8 @@
 //
 // Output: public/whatif/*.mp3 (default, "What if everyone lost their legs?")
 //         public/whatif-nuke/*.mp3 (nuke: tense score + siren, boom, ...)
+//   node scripts/generate-audio.mjs jupiter
+//         public/jupiter/*.mp3 (dark score, radio static, flatline, gunshots...)
 
 import { writeFileSync, mkdirSync, unlinkSync } from "node:fs";
 import { execFileSync } from "node:child_process";
@@ -15,7 +17,7 @@ import { join } from "node:path";
 
 const SR = 44100;
 const SET = process.argv[2] ?? "no-legs";
-const OUT_NAME = SET === "nuke" ? "whatif-nuke" : "whatif";
+const OUT_NAME = { nuke: "whatif-nuke", jupiter: "jupiter" }[SET] ?? "whatif";
 const OUT = join(process.cwd(), "public", OUT_NAME);
 mkdirSync(OUT, { recursive: true });
 
@@ -478,7 +480,224 @@ const tenseMusic = () => {
   writeWav("score", buf, 0.8);
 };
 
-if (SET === "nuke") {
+// ---------- "The 2011 Jupiter Incident" ----------
+
+// Radio static: hissy band-limited noise with random crackles.
+const radioStatic = () => {
+  const d = 3;
+  const buf = stereo(d);
+  let lp = 0;
+  for (let i = 0; i < buf[0].length; i++) {
+    const t = i / SR;
+    const n = noise();
+    lp += lpCoef(3500) * (n - lp);
+    const hiss = (lp - 0.3 * n) * 0.5;
+    const crackle = rand() < 0.0015 ? noise() * 3 : 0;
+    const wobble = 0.7 + 0.3 * Math.sin(TAU * 0.7 * t) * Math.sin(TAU * 3.1 * t);
+    const env = Math.min(1, t / 0.05) * Math.min(1, (d - t) / 0.1);
+    add(buf, i, (hiss * wobble + crackle) * env);
+  }
+  writeWav("static", buf);
+};
+
+// Walkie-talkie squelch: click + short noise burst.
+const squelch = () => {
+  const d = 0.25;
+  const buf = stereo(d);
+  let lp = 0;
+  for (let i = 0; i < buf[0].length; i++) {
+    const t = i / SR;
+    lp += lpCoef(4000) * (noise() - lp);
+    const click = t < 0.004 ? (1 - t / 0.004) * 1.5 : 0;
+    add(buf, i, click + lp * Math.exp(-t * 18) * 1.4);
+  }
+  writeWav("squelch", buf);
+};
+
+// Static burst, then a long flatline beep.
+const flatline = () => {
+  const d = 2.6;
+  const buf = stereo(d);
+  let lp = 0;
+  for (let i = 0; i < buf[0].length; i++) {
+    const t = i / SR;
+    let v = 0;
+    if (t < 0.45) {
+      lp += lpCoef(5000) * (noise() - lp);
+      v = (lp * 1.6 + (rand() < 0.01 ? noise() * 2 : 0)) * (1 - t / 0.45);
+    }
+    if (t >= 0.4) {
+      const lt = t - 0.4;
+      const env = Math.min(1, lt / 0.01) * Math.min(1, (d - t) / 0.4);
+      v += Math.sin(TAU * 1000 * lt) * 0.55 * env;
+    }
+    add(buf, i, v);
+  }
+  writeWav("flatline", buf);
+};
+
+// Punchy cartoon gunshot.
+const gunshot = () => {
+  const d = 0.6;
+  const buf = stereo(d);
+  let lp = 0, ph = 0;
+  for (let i = 0; i < buf[0].length; i++) {
+    const t = i / SR;
+    lp += lpCoef(6000 * Math.exp(-t * 25) + 300) * (noise() - lp);
+    ph += (TAU * (60 + 120 * Math.exp(-t * 40))) / SR;
+    const v = lp * Math.exp(-t * 14) * 2 + Math.sin(ph) * Math.exp(-t * 18) * 1.2;
+    add(buf, i, v, (rand() - 0.5) * 0.2);
+  }
+  writeWav("gunshot", buf);
+};
+
+// Alien vanishing: descending warble that fizzles out.
+const vanish = () => {
+  const d = 0.8;
+  const buf = stereo(d);
+  let ph = 0, lp = 0;
+  for (let i = 0; i < buf[0].length; i++) {
+    const t = i / SR;
+    const f = 900 * Math.exp(-t * 3.5) + 60 * Math.sin(TAU * 25 * t);
+    ph += (TAU * f) / SR;
+    lp += lpCoef(3000) * (noise() - lp);
+    const env = Math.min(1, t / 0.01) * Math.exp(-t * 4);
+    add(buf, i, (Math.sign(Math.sin(ph)) * 0.25 + lp * 0.6 * Math.exp(-t * 6)) * env, Math.sin(t * 20) * 0.3);
+  }
+  writeWav("vanish", buf);
+};
+
+// Ship alarm: two-tone klaxon.
+const alarm = () => {
+  const d = 3.2;
+  const buf = stereo(d);
+  let ph = 0, lp = 0;
+  for (let i = 0; i < buf[0].length; i++) {
+    const t = i / SR;
+    const f = Math.floor(t / 0.4) % 2 ? 620 : 470;
+    ph += f / SR;
+    const sq = (ph % 1) < 0.5 ? 1 : -1;
+    lp += lpCoef(1600) * (sq - lp);
+    const env = Math.min(1, t / 0.05) * Math.min(1, (d - t) / 0.3);
+    add(buf, i, lp * env * 0.6, 0.2);
+  }
+  writeWav("alarm", buf);
+};
+
+// Dark score, 32.5s. Section times (s) match src/JupiterIncident/constants.ts.
+const darkScore = () => {
+  const DURATION = 32.5;
+  const HEARTBEAT_FROM = 9.5;
+  const RISER_FROM = 14;
+  const SILENCE_FROM = 17.1; // radio cuts out
+  const ACTION_FROM = 18.5;
+  const SAD_FROM = 23.5;
+  const HERO_FROM = 28;
+  const buf = stereo(DURATION);
+
+  // Low dissonant drone (A + B-flat) with slow swell, until the action.
+  let lp = 0;
+  for (let i = 0; i < buf[0].length; i++) {
+    const t = i / SR;
+    let v = 0;
+    if (t < SILENCE_FROM) {
+      const sw = 0.6 + 0.4 * Math.sin(TAU * 0.12 * t);
+      for (const f of [55, 58.27, 110, 116.54]) v += ((f * t) % 1) * 2 - 1;
+      lp += lpCoef(220 + 160 * sw) * (v - lp);
+      let g = 0.09 * sw * Math.min(1, t / 1.5);
+      if (t >= RISER_FROM) g *= 1 + (t - RISER_FROM) * 0.5;
+      add(buf, i, lp * g, Math.sin(t * 0.2) * 0.3);
+    }
+  }
+  // Riser before the radio cuts: rising filtered noise
+  let rl = 0;
+  for (let i = Math.round(RISER_FROM * SR); i < Math.round(SILENCE_FROM * SR); i++) {
+    const t = i / SR - RISER_FROM;
+    const span = SILENCE_FROM - RISER_FROM;
+    rl += lpCoef(300 + 5000 * (t / span) ** 2) * (noise() - rl);
+    add(buf, i, rl * 0.35 * (t / span));
+  }
+  // Heartbeat
+  const thump = (start, g) => {
+    let ph = 0;
+    for (let j = 0; j < 0.25 * SR; j++) {
+      const t = j / SR;
+      ph += (TAU * (45 + 30 * Math.exp(-t * 25))) / SR;
+      add(buf, Math.round((start + t) * SR), Math.sin(ph) * Math.exp(-t * 14) * g);
+    }
+  };
+  for (let t = HEARTBEAT_FROM; t < SILENCE_FROM - 0.4; t += 0.8 - Math.min(0.3, (t - HEARTBEAT_FROM) * 0.04)) {
+    thump(t, 0.9);
+    thump(t + 0.22, 0.6);
+  }
+  // Action: driving drums + ostinato
+  const kick = (start) => {
+    let ph = 0;
+    for (let j = 0; j < 0.3 * SR; j++) {
+      const t = j / SR;
+      ph += (TAU * (48 + 100 * Math.exp(-t * 30))) / SR;
+      add(buf, Math.round((start + t) * SR), Math.sin(ph) * Math.exp(-t * 10) * 0.9);
+    }
+  };
+  const snare = (start) => {
+    let l = 0;
+    for (let j = 0; j < 0.18 * SR; j++) {
+      const t = j / SR;
+      const n = noise();
+      l += lpCoef(1500) * (n - l);
+      add(buf, Math.round((start + t) * SR), (n - l) * Math.exp(-t * 20) * 0.5);
+    }
+  };
+  const pluck = (start, f, g) => {
+    let l = 0, ph = 0;
+    for (let j = 0; j < 0.18 * SR; j++) {
+      const t = j / SR;
+      ph += f / SR;
+      l += lpCoef(900 * Math.exp(-t * 10) + 200) * (((ph % 1) * 2 - 1) - l);
+      add(buf, Math.round((start + t) * SR), l * Math.exp(-t * 9) * g, -0.2);
+    }
+  };
+  const step = 60 / 140 / 2; // 140 BPM eighths
+  const riff = [55, 55, 65.41, 55, 73.42, 55, 65.41, 61.74];
+  for (let k = 0, t = ACTION_FROM; t < SAD_FROM - 0.2; k++, t += step) {
+    if (k % 2 === 0) kick(t);
+    if (k % 4 === 2) snare(t);
+    pluck(t, riff[k % 8] * 2, 0.45);
+  }
+  // Sad pad, then a heroic major swell
+  let pl = 0;
+  for (let i = Math.round(SAD_FROM * SR); i < buf[0].length; i++) {
+    const t = i / SR;
+    const hero = t >= HERO_FROM;
+    const chord = hero ? [146.83, 185.0, 220.0, 293.66] : [110, 130.81, 164.81];
+    let v = 0;
+    for (const f of chord) for (const det of [0.996, 1.004]) v += ((f * det * t) % 1) * 2 - 1;
+    pl += lpCoef(hero ? 1400 : 600) * (v - pl);
+    const g = hero ? 0.06 * Math.min(1, (t - HERO_FROM) / 1.2) : 0.045 * Math.min(1, (t - SAD_FROM) / 1);
+    add(buf, i, pl * g, Math.sin(t * 0.4) * 0.3);
+  }
+  // Timpani roll into the hero swell
+  for (let t = HERO_FROM - 0.6; t < HERO_FROM + 0.2; t += 0.07) thump(t, 0.25 + (t - HERO_FROM + 0.6) * 0.6);
+
+  for (let i = 0; i < buf[0].length; i++) {
+    const t = i / SR;
+    const g = Math.min(1, t / 0.5) * Math.min(1, Math.max(0, (DURATION - t) / 1.8));
+    buf[0][i] *= g;
+    buf[1][i] *= g;
+  }
+  writeWav("score", buf, 0.8);
+};
+
+if (SET === "jupiter") {
+  whoosh();
+  radioStatic();
+  squelch();
+  flatline();
+  gunshot();
+  vanish();
+  alarm();
+  darkScore();
+} else if (SET === "nuke") {
   whoosh();
   siren();
   rumble();

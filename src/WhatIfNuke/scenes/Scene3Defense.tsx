@@ -4,7 +4,8 @@ import { Building } from "../../shared/three/Props";
 import { SceneCanvas } from "../../shared/three/SceneCanvas";
 import { CameraRig, Lights, Puff, punchFov, type Vec3 } from "../../shared/three/World";
 import { HITS, SKIES } from "../constants";
-import { Burst, Hills, LauncherTruck, Stars, Streak } from "../three/NukeProps";
+import { Burst, Hills, LauncherTruck, Streak } from "../three/NukeProps";
+import { Stars } from "../../shared/three/Stars";
 
 const lerp = (a: Vec3, b: Vec3, u: number): Vec3 => [a[0] + (b[0] - a[0]) * u, a[1] + (b[1] - a[1]) * u, a[2] + (b[2] - a[2]) * u];
 
