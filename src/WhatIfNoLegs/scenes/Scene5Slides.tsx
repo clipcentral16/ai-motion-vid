@@ -6,7 +6,7 @@ import { Character } from "../three/Character";
 import { geo, mat } from "../three/materials";
 import { Building, Cloud, Tree, slideRiderTransform, useHalfPipe } from "../three/Props";
 import { SceneCanvas } from "../three/SceneCanvas";
-import { CameraRig, Lights, type Vec3 } from "../three/World";
+import { CameraRig, Lights, punchFov, type Vec3 } from "../three/World";
 
 const SLIDE_R = 0.85;
 const TOWER_H = 16;
@@ -44,8 +44,8 @@ const riders = Array.from({ length: 12 }).map((_, i) => {
   const r = (k: string) => random(`s5-${k}-${i}`);
   return {
     slide: i % 3,
-    start: (Math.floor(i / 3) * 1.35 + r("s") * 0.3) - 0.6,
-    dur: 3.2 + r("d") * 0.6,
+    start: Math.floor(i / 3) * 0.85 + r("s") * 0.25 - 0.9,
+    dur: 2.3 + r("d") * 0.4,
     color: SHIRT_COLORS[Math.floor(r("c") * SHIRT_COLORS.length)],
     skin: SKIN_COLORS[Math.floor(r("k") * SKIN_COLORS.length)],
   };
@@ -87,14 +87,14 @@ export const Scene5Slides: React.FC = () => {
   const g2 = useHalfPipe(curves[2], SLIDE_R, 80);
   const geos = [g0, g1, g2];
 
-  const angle = interpolate(p, [0, 1], [0.9, 2.6]);
+  const angle = interpolate(p, [0, 1], [0.6, 2.45]);
   const radius = interpolate(p, [0, 1], [17, 15]);
   const cam: Vec3 = [Math.cos(angle) * radius, interpolate(p, [0, 1], [17, 4]), Math.sin(angle) * radius + 4];
   const target: Vec3 = [0, interpolate(p, [0, 1], [11, 2.5]), 1];
 
   return (
     <SceneCanvas>
-      <CameraRig position={cam} target={target} fov={66} />
+      <CameraRig position={cam} target={target} fov={punchFov(frame, fps, 66)} />
       <Lights fogNear={40} fogFar={130} />
       <mesh geometry={geo.plane} material={mat("#7ccf5b")} rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.02, 0]} scale={[200, 200, 1]} />
       <mesh geometry={geo.box} material={mat("#d9d4cc")} position={[0, 0.02, 3]} scale={[40, 0.06, 14]} />
@@ -122,7 +122,9 @@ export const Scene5Slides: React.FC = () => {
         const s = (t - r.start) / r.dur;
         if (s < 0 || s > 1.15) return null;
         const u = Math.min(1, Math.pow(Math.min(1, s), 1.35));
-        const tr = slideRiderTransform(curves[r.slide], u, SLIDE_R);
+        // Swing up the walls as they speed up.
+        const swing = Math.sin(t * 5 + i * 1.7) * 0.75 * Math.min(1, u * 2);
+        const tr = slideRiderTransform(curves[r.slide], u, SLIDE_R, swing);
         return (
           <group key={i} position={tr.position} rotation={[0, tr.rotationY, 0]}>
             <Character
@@ -131,7 +133,8 @@ export const Scene5Slides: React.FC = () => {
               legs={0}
               shadow={false}
               lean={tr.pitch}
-              armsUp={0.9 + 0.1 * Math.sin(t * 10 + i)}
+              roll={tr.roll}
+              armsUp={0.75 + 0.25 * Math.sin(t * 14 + i)}
               expression={i % 2 ? "shock" : "happy"}
             />
           </group>

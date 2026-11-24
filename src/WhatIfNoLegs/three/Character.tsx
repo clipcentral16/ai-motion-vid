@@ -22,6 +22,8 @@ export type CharacterProps = {
   /** Forward/back arm swing (radians), e.g. paddling along on a chair. */
   armSwing?: number;
   lean?: number;
+  /** Side-to-side tilt of the upper body (radians). */
+  roll?: number;
   scale?: number;
   shadow?: boolean;
 };
@@ -42,6 +44,7 @@ export const Character: React.FC<CharacterProps> = ({
   armsUp = 0,
   armSwing,
   lean = 0,
+  roll = 0,
   scale = 1,
   shadow = true,
 }) => {
@@ -70,7 +73,7 @@ export const Character: React.FC<CharacterProps> = ({
         </group>
       ) : null}
 
-      <group position={[0, base, 0]} scale={[sx * 1, squash, sx]} rotation={[lean, 0, 0]}>
+      <group position={[0, base, 0]} scale={[sx * 1, squash, sx]} rotation={[lean, 0, roll]}>
         <mesh geometry={geo.body} material={body} position={[0, 0.565, 0]} />
         {[-1, 1].map((side) => (
           <group key={side} position={[side * 0.38, 0.9, 0]} rotation={[armSwing === undefined ? swing * side : swing, 0, side * armOut]}>

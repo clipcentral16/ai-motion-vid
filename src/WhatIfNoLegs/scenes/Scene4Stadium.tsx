@@ -6,12 +6,14 @@ import { Character } from "../three/Character";
 import { geo, mat } from "../three/materials";
 import { BOARD_DECK_Y, Cloud, Skateboard, SoccerBall } from "../three/Props";
 import { SceneCanvas } from "../three/SceneCanvas";
-import { CameraRig, Lights, type Vec3 } from "../three/World";
+import { CameraRig, Lights, punchFov, type Vec3 } from "../three/World";
+import { ollie } from "./walkers";
 
 const FIELD_L = 40; // along X
 const FIELD_W = 26; // along Z
 
-const ballAt = (t: number): Vec3 => [11 * Math.sin(0.55 * t + 0.4), 0.35, 6.5 * Math.sin(0.9 * t + 1.1)];
+// Faster, bouncier ball path.
+const ballAt = (t: number): Vec3 => [11 * Math.sin(0.8 * t + 0.4), 0.35, 6.5 * Math.sin(1.25 * t + 1.1)];
 
 const players = Array.from({ length: 12 }).map((_, i) => {
   const r = (k: string) => random(`s4-${k}-${i}`);
@@ -78,11 +80,12 @@ export const Scene4Stadium: React.FC = () => {
   const t = frame / fps;
   const p = interpolate(frame, [0, durationInFrames], [0, 1], { easing: Easing.inOut(Easing.sin) });
 
-  const ball = ballAt(t + 2);
+  const ballFlat = ballAt(t + 2);
+  const ball: Vec3 = [ballFlat[0], 0.35 + Math.abs(Math.sin(t * 4.5)) * 1.6, ballFlat[2]];
   // Frame the middle of the pack (ball + chasing players).
   const pack = ballAt(t + 2 - 0.45);
-  const focus: Vec3 = [(ball[0] + pack[0]) / 2, 0.6, (ball[2] + pack[2]) / 2];
-  const angle = interpolate(p, [0, 1], [0.35, 1.5]);
+  const focus: Vec3 = [(ballFlat[0] + pack[0]) / 2, 0.6, (ballFlat[2] + pack[2]) / 2];
+  const angle = interpolate(p, [0, 1], [0.2, 1.9]);
   const radius = interpolate(p, [0, 1], [13, 8.5]);
   const cam: Vec3 = [focus[0] + Math.sin(angle) * radius, interpolate(p, [0, 1], [8, 4]), focus[2] + Math.cos(angle) * radius];
   const target: Vec3 = focus;
@@ -90,7 +93,7 @@ export const Scene4Stadium: React.FC = () => {
 
   return (
     <SceneCanvas>
-      <CameraRig position={cam} target={target} fov={66} />
+      <CameraRig position={cam} target={target} fov={punchFov(frame, fps, 66)} />
       <Lights fogNear={40} fogFar={140} />
       {/* Grass with mowing stripes */}
       <mesh geometry={geo.plane} material={mat("#5cb85c")} rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.02, 0]} scale={[120, 120, 1]} />
@@ -136,14 +139,18 @@ export const Scene4Stadium: React.FC = () => {
       ))}
 
       <SoccerBall position={ball} roll={roll} />
+      <mesh geometry={geo.blob} rotation={[-Math.PI / 2, 0, 0]} position={[ballFlat[0], 0.03, ballFlat[2]]} scale={0.8 - (ball[1] - 0.35) * 0.25}>
+        <meshBasicMaterial color="#000000" transparent opacity={0.25} depthWrite={false} />
+      </mesh>
       {players.map((pl, i) => {
         const pos = ballAt(t + 2 - pl.lag);
         const prev = ballAt(t + 2 - pl.lag - 0.1);
         const x = pos[0] + pl.ox * Math.min(1, pl.lag);
         const z = pos[2] + pl.oz * Math.min(1, pl.lag);
         const heading = Math.atan2(pos[0] - prev[0], pos[2] - prev[2]);
+        const o = ollie(t, pl.phase, 1.3, 0.42, 0.8);
         return (
-          <group key={i} position={[x, 0, z]} rotation={[0, heading, 0]}>
+          <group key={i} position={[x, o.h, z]} rotation={[o.pitch, heading, 0]}>
             <Skateboard color={pl.team ? "#1d3557" : "#e63946"} />
             <Character
               position={[0, BOARD_DECK_Y, 0]}
@@ -151,8 +158,10 @@ export const Scene4Stadium: React.FC = () => {
               skin={pl.skin}
               legs={0}
               shadow={false}
-              armSwing={Math.sin(t * 8 + pl.phase) * 0.9}
-              lean={0.25}
+              armSwing={o.h > 0 ? 0 : Math.sin(t * 10 + pl.phase) * 1.1}
+              armsUp={o.h > 0 ? 0.85 : 0}
+              lean={0.3}
+              roll={Math.sin(t * 6 + pl.phase) * 0.12}
               expression={i % 3 === 0 ? "shock" : "happy"}
             />
           </group>

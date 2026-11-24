@@ -180,14 +180,15 @@ const whistle = () => {
 };
 
 // ---------- background beat ----------
-// 120 BPM, I–V–vi–IV in C. Kick drops out for the intro and for one beat
-// right before the "poof" (7.5s) so the poof lands on the drop.
+// 120 BPM, I–V–vi–IV in C. No kick in the intro and one silent beat right
+// before the "poof" (5s), so the drums drop in exactly on the poof.
+// Keep DURATION / POOF in sync with src/WhatIfNoLegs/constants.ts.
 const music = () => {
-  const DURATION = 37;
+  const DURATION = 25.5;
   const BPM = 120;
   const beat = 60 / BPM;
   const bar = beat * 4;
-  const POOF = 7.5;
+  const POOF = 5;
   const buf = stereo(DURATION);
 
   const muted = (t) => t >= POOF - beat && t < POOF;
@@ -264,7 +265,7 @@ const music = () => {
     const t = b * beat;
     const chord = chords[Math.floor(t / bar) % 4];
     const beatInBar = b % 4;
-    const intro = t < 6;
+    const intro = t < POOF;
     if (muted(t)) continue;
 
     if (!intro) kick(t);

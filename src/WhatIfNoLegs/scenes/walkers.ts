@@ -39,3 +39,14 @@ export const wrap = (v: number, min: number, max: number) => {
   const span = max - min;
   return ((((v - min) % span) + span) % span) + min;
 };
+
+/**
+ * Skateboard "ollie": every `period` seconds the board pops up and tilts.
+ * Returns the hop height and the board/rider pitch (radians).
+ */
+export const ollie = (t: number, offset: number, period = 1.6, airTime = 0.45, height = 0.9) => {
+  const c = (((t + offset) % period) + period) % period;
+  if (c > airTime) return { h: 0, pitch: 0 };
+  const u = c / airTime;
+  return { h: Math.sin(Math.PI * u) * height, pitch: Math.sin(Math.PI * 2 * u) * 0.45 };
+};

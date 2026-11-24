@@ -1,48 +1,54 @@
 {
-  "voice": "en-US-AndrewNeural",
-  "rate": "+6%",
+  "voice": "en-US-BrianMultilingualNeural",
+  "rate": "+14%",
   "lines": [
     {
       "scene": 0,
       "file": "whatif/voice/line0.mp3",
-      "start": 0.35,
-      "duration": 1.92,
+      "start": 0.1,
+      "duration": 2.116,
       "words": [
         {
           "spoken": "What",
-          "start": 0.1,
-          "end": 0.289,
-          "text": "What"
+          "start": 0.066,
+          "end": 0.197,
+          "text": "What",
+          "emphasis": false
         },
         {
           "spoken": "if",
-          "start": 0.3,
-          "end": 0.395,
-          "text": "if"
+          "start": 0.208,
+          "end": 0.362,
+          "text": "if",
+          "emphasis": false
         },
         {
           "spoken": "everyone",
-          "start": 0.407,
-          "end": 0.69,
-          "text": "everyone"
+          "start": 0.384,
+          "end": 0.811,
+          "text": "everyone",
+          "emphasis": false
         },
         {
           "spoken": "lost",
-          "start": 0.701,
-          "end": 0.937,
-          "text": "lost"
+          "start": 0.822,
+          "end": 1.14,
+          "text": "lost",
+          "emphasis": false
         },
         {
           "spoken": "their",
-          "start": 0.949,
-          "end": 1.067,
-          "text": "their"
+          "start": 1.151,
+          "end": 1.305,
+          "text": "their",
+          "emphasis": false
         },
         {
           "spoken": "legs",
-          "start": 1.079,
-          "end": 1.562,
-          "text": "legs?"
+          "start": 1.316,
+          "end": 1.754,
+          "text": "legs?",
+          "emphasis": true
         }
       ],
       "extra": []
@@ -50,20 +56,29 @@
     {
       "scene": 1,
       "file": "whatif/voice/line1.mp3",
-      "start": 1.9,
-      "duration": 1.872,
+      "start": 0.88,
+      "duration": 1.985,
       "words": [
         {
+          "spoken": "POOF",
+          "start": 0.077,
+          "end": 0.395,
+          "text": "POOF!",
+          "emphasis": true
+        },
+        {
           "spoken": "Overnight",
-          "start": 0.1,
-          "end": 0.607,
-          "text": "Overnight…"
+          "start": 0.724,
+          "end": 1.14,
+          "text": "Overnight…",
+          "emphasis": false
         },
         {
           "spoken": "gone",
-          "start": 0.902,
-          "end": 1.256,
-          "text": "gone."
+          "start": 1.228,
+          "end": 1.601,
+          "text": "gone.",
+          "emphasis": true
         }
       ],
       "extra": []
@@ -71,44 +86,50 @@
     {
       "scene": 2,
       "file": "whatif/voice/line2.mp3",
-      "start": 0.35,
-      "duration": 2.376,
+      "start": 0.12,
+      "duration": 2.56,
       "words": [
         {
           "spoken": "Office",
-          "start": 0.1,
-          "end": 0.501,
-          "text": "Office"
+          "start": 0.077,
+          "end": 0.373,
+          "text": "Office",
+          "emphasis": false
         },
         {
           "spoken": "chairs",
-          "start": 0.513,
-          "end": 0.784,
-          "text": "chairs"
+          "start": 0.384,
+          "end": 0.789,
+          "text": "chairs",
+          "emphasis": false
         },
         {
           "spoken": "become",
-          "start": 0.796,
-          "end": 1.114,
-          "text": "become"
+          "start": 0.8,
+          "end": 1.151,
+          "text": "become",
+          "emphasis": false
         },
         {
           "spoken": "the",
-          "start": 1.126,
-          "end": 1.185,
-          "text": "the"
+          "start": 1.162,
+          "end": 1.228,
+          "text": "the",
+          "emphasis": false
         },
         {
           "spoken": "#1",
-          "start": 1.197,
-          "end": 1.645,
-          "text": "#1"
+          "start": 1.239,
+          "end": 1.787,
+          "text": "#1",
+          "emphasis": true
         },
         {
           "spoken": "car",
-          "start": 1.657,
-          "end": 2.034,
-          "text": "car"
+          "start": 1.798,
+          "end": 2.193,
+          "text": "car!",
+          "emphasis": false
         }
       ],
       "extra": []
@@ -116,44 +137,50 @@
     {
       "scene": 3,
       "file": "whatif/voice/line3.mp3",
-      "start": 0.35,
-      "duration": 1.92,
+      "start": 0.12,
+      "duration": 2.011,
       "words": [
         {
           "spoken": "Sports",
-          "start": 0.1,
-          "end": 0.572,
-          "text": "Sports"
+          "start": 0.044,
+          "end": 0.482,
+          "text": "Sports",
+          "emphasis": false
         },
         {
           "spoken": "would",
-          "start": 0.584,
-          "end": 0.713,
-          "text": "would"
+          "start": 0.493,
+          "end": 0.647,
+          "text": "would",
+          "emphasis": false
         },
         {
           "spoken": "never",
-          "start": 0.725,
-          "end": 0.984,
-          "text": "never"
+          "start": 0.658,
+          "end": 0.932,
+          "text": "never",
+          "emphasis": true
         },
         {
           "spoken": "be",
-          "start": 0.996,
-          "end": 1.102,
-          "text": "be"
+          "start": 0.943,
+          "end": 1.075,
+          "text": "be",
+          "emphasis": false
         },
         {
           "spoken": "the",
-          "start": 1.114,
-          "end": 1.197,
-          "text": "the"
+          "start": 1.086,
+          "end": 1.162,
+          "text": "the",
+          "emphasis": false
         },
         {
           "spoken": "same",
-          "start": 1.208,
-          "end": 1.574,
-          "text": "same"
+          "start": 1.173,
+          "end": 1.634,
+          "text": "same!",
+          "emphasis": false
         }
       ],
       "extra": []
@@ -161,20 +188,22 @@
     {
       "scene": 4,
       "file": "whatif/voice/line4.mp3",
-      "start": 0.4,
-      "duration": 1.872,
+      "start": 0.15,
+      "duration": 1.646,
       "words": [
         {
           "spoken": "Stairs",
-          "start": 0.1,
-          "end": 0.654,
-          "text": "Stairs?"
+          "start": 0.047,
+          "end": 0.606,
+          "text": "Stairs?",
+          "emphasis": false
         },
         {
           "spoken": "Banned",
-          "start": 0.993,
-          "end": 1.418,
-          "text": "Banned."
+          "start": 0.954,
+          "end": 1.283,
+          "text": "Banned.",
+          "emphasis": true
         }
       ],
       "extra": []
@@ -182,38 +211,43 @@
     {
       "scene": 5,
       "file": "whatif/voice/line5.mp3",
-      "start": 1.2,
-      "duration": 2.256,
+      "start": 0.5,
+      "duration": 2.456,
       "words": [
         {
           "spoken": "Would",
-          "start": 0.1,
-          "end": 0.277,
-          "text": "Would"
+          "start": 0.077,
+          "end": 0.208,
+          "text": "Would",
+          "emphasis": false
         },
         {
           "spoken": "you",
-          "start": 0.289,
-          "end": 0.336,
-          "text": "you"
+          "start": 0.219,
+          "end": 0.329,
+          "text": "you",
+          "emphasis": false
         },
         {
           "spoken": "survive",
-          "start": 0.348,
-          "end": 0.831,
-          "text": "survive?"
+          "start": 0.34,
+          "end": 0.976,
+          "text": "survive?",
+          "emphasis": true
         },
         {
           "spoken": "Comment",
-          "start": 1.17,
-          "end": 1.559,
-          "text": "Comment"
+          "start": 1.305,
+          "end": 1.667,
+          "text": "Comment",
+          "emphasis": false
         },
         {
           "spoken": "below",
-          "start": 1.571,
-          "end": 1.913,
-          "text": "below"
+          "start": 1.678,
+          "end": 2.094,
+          "text": "below!",
+          "emphasis": false
         }
       ],
       "extra": [

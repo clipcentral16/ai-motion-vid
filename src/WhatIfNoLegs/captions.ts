@@ -14,6 +14,11 @@ const sceneMs = (scene: number) => (SCENE_STARTS[scene] / FPS) * 1000;
 /** Absolute start of a narration clip, in ms. */
 export const lineStartMs = (line: NarrationLine) => sceneMs(line.scene) + line.start * 1000;
 
+/** Start times (ms) of the words to highlight, e.g. "LEGS?", "BANNED." */
+export const EMPHASIS_STARTS = new Set(
+  NARRATION_LINES.flatMap((line) => line.words.filter((w) => w.emphasis).map((w) => lineStartMs(line) + w.start * 1000)),
+);
+
 /** Captions grouped per scene, in @remotion/captions format (absolute ms). */
 export const CAPTION_LINES: Caption[][] = NARRATION_LINES.map((line) => {
   const base = lineStartMs(line);

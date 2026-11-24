@@ -4,8 +4,8 @@ import { Character } from "../three/Character";
 import { geo, mat } from "../three/materials";
 import { BOARD_DECK_Y, Building, CHAIR_SEAT_Y, Cloud, OfficeChair, Skateboard, Tree } from "../three/Props";
 import { SceneCanvas } from "../three/SceneCanvas";
-import { CameraRig, Lights, type Vec3 } from "../three/World";
-import { wrap } from "./walkers";
+import { CameraRig, Lights, punchFov, type Vec3 } from "../three/World";
+import { ollie, wrap } from "./walkers";
 
 const BLOCK = 12; // block size
 const ROAD = 6; // road width
@@ -62,8 +62,8 @@ export const Scene6Aerial: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const t = frame / fps;
-  const p = interpolate(frame, [0, 5.2 * fps], [0, 1], { easing: Easing.inOut(Easing.cubic), extrapolateRight: "clamp" });
-  const drift = t * 0.04;
+  const p = interpolate(frame, [0, 3.6 * fps], [0, 1], { easing: Easing.inOut(Easing.cubic), extrapolateRight: "clamp" });
+  const drift = t * 0.12;
 
   const cam: Vec3 = [
     // Stay over the x=0 road while low, only swing sideways once above the roofs.
@@ -75,7 +75,7 @@ export const Scene6Aerial: React.FC = () => {
 
   return (
     <SceneCanvas far={600}>
-      <CameraRig position={cam} target={target} fov={64} />
+      <CameraRig position={cam} target={target} fov={punchFov(frame, fps, 64)} />
       <Lights fogNear={90} fogFar={260} />
       <mesh geometry={geo.plane} material={mat("#7ccf5b")} rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.05, 0]} scale={[600, 600, 1]} />
       <mesh geometry={geo.box} material={mat("#4a4e69")} position={[0, -0.03, 0]} scale={[EXTENT * 2 + ROAD, 0.04, EXTENT * 2 + ROAD]} />
@@ -107,8 +107,9 @@ export const Scene6Aerial: React.FC = () => {
         const s = wrap(r.s0 + r.dir * r.speed * t, -EXTENT, EXTENT);
         const pos: Vec3 = r.alongX ? [s, 0, r.lane] : [r.lane, 0, s];
         const yaw = r.alongX ? (r.dir === 1 ? Math.PI / 2 : -Math.PI / 2) : r.dir === 1 ? 0 : Math.PI;
+        const o = r.chair ? { h: Math.max(0, Math.sin(t * 5 + i)) * 0.25, pitch: 0 } : ollie(t, i * 0.37, 1.5, 0.45, 1.1);
         return (
-          <group key={i} position={pos} rotation={[0, yaw, 0]} scale={1.25}>
+          <group key={i} position={[pos[0], o.h, pos[2]]} rotation={[o.pitch, yaw, 0]} scale={1.25}>
             {r.chair ? <OfficeChair color={r.board} /> : <Skateboard color={r.board} />}
             <Character
               position={[0, r.chair ? CHAIR_SEAT_Y : BOARD_DECK_Y, 0]}

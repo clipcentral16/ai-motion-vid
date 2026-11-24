@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { useThree } from "@react-three/fiber";
-import { random } from "remotion";
+import { random, spring } from "remotion";
 import { SKY_HORIZON, BUILDING_COLORS } from "../constants";
 import { geo, mat } from "./materials";
 import { Building, Cloud, LampPost, Tree } from "./Props";
@@ -18,6 +18,13 @@ export const CameraRig: React.FC<{ position: Vec3; target: Vec3; fov?: number }>
   }
   return null;
 };
+
+/**
+ * Camera "punch-in": the field of view starts wide and snaps in with a
+ * springy overshoot. Use at scene starts and on big moments.
+ */
+export const punchFov = (frame: number, fps: number, base: number, at = 0, amount = 16) =>
+  frame < at ? base : base + amount * (1 - spring({ frame: frame - at, fps, config: { damping: 11, stiffness: 140 } }));
 
 export const Lights: React.FC<{ fogNear?: number; fogFar?: number }> = ({ fogNear = 30, fogFar = 90 }) => (
   <>

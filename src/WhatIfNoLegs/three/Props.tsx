@@ -181,16 +181,21 @@ export const useHalfPipe = (curve: THREE.Curve<THREE.Vector3>, radius = 0.9, seg
     return g;
   }, [curve, radius, segments]);
 
-export const slideRiderTransform = (curve: THREE.Curve<THREE.Vector3>, u: number, radius: number) => {
+/**
+ * Where a rider sits on a half-pipe slide at progress `u` (0..1). `swing`
+ * (radians) rides them up the side walls, like a real slide.
+ */
+export const slideRiderTransform = (curve: THREE.Curve<THREE.Vector3>, u: number, radius: number, swing = 0) => {
   const uu = Math.min(1, Math.max(0, u));
   const p = curve.getPointAt(uu);
   const t = curve.getTangentAt(uu);
   const side = new THREE.Vector3().crossVectors(t, new THREE.Vector3(0, 1, 0)).normalize();
   const up = new THREE.Vector3().crossVectors(side, t).normalize();
-  const pos = p.addScaledVector(up, -radius * 0.92);
+  const pos = p.addScaledVector(up, -Math.cos(swing) * radius * 0.92).addScaledVector(side, Math.sin(swing) * radius * 0.92);
   return {
     position: [pos.x, pos.y, pos.z] as [number, number, number],
     rotationY: Math.atan2(t.x, t.z),
     pitch: -Math.asin(Math.max(-1, Math.min(1, t.y))),
+    roll: -swing,
   };
 };

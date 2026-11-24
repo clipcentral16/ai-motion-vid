@@ -6,8 +6,8 @@ import { FPS, POOF_SECONDS, SCENE_STARTS } from "./constants";
 // To use your own music instead, replace public/whatif/beat.mp3 (or change
 // MUSIC_SRC) and re-render.
 export const MUSIC_SRC = staticFile("whatif/beat.mp3");
-const MUSIC_VOLUME = 0.55;
-const MUSIC_DUCKED = 0.2; // while the narrator speaks
+const MUSIC_VOLUME = 0.5;
+const MUSIC_DUCKED = 0.13; // while the narrator speaks
 const NARRATION_VOLUME = 1;
 
 // Narrator clips (scripts/generate-narration.py), absolute frames.
@@ -32,21 +32,19 @@ const s = (scene: number, seconds: number) => Math.round(SCENE_STARTS[scene] + s
 
 const CUES: { at: number; src: string; volume: number }[] = [
   // Whoosh for each camera move (timed so the peak lands on the cut)
-  { at: 0, src: "whatif/whoosh.mp3", volume: 0.5 },
-  ...SCENE_STARTS.slice(1).map((start) => ({ at: start - 10, src: "whatif/whoosh.mp3", volume: 0.8 })),
+  { at: 0, src: "whatif/whoosh.mp3", volume: 0.4 },
+  ...SCENE_STARTS.slice(1).map((start) => ({ at: start - 10, src: "whatif/whoosh.mp3", volume: 0.6 })),
   // The poof and the bounce when everyone lands
-  { at: s(1, POOF_SECONDS) - 1, src: "whatif/poof.mp3", volume: 1 },
-  { at: s(1, POOF_SECONDS + 0.12), src: "whatif/boing.mp3", volume: 0.45 },
+  { at: s(1, POOF_SECONDS) - 1, src: "whatif/poof.mp3", volume: 0.8 },
+  { at: s(1, POOF_SECONDS + 0.12), src: "whatif/boing.mp3", volume: 0.3 },
   // Chair traffic jam honks (after the narrator finishes the line)
-  { at: s(2, 3.0), src: "whatif/honk.mp3", volume: 0.55 },
-  { at: s(2, 4.3), src: "whatif/honk.mp3", volume: 0.45 },
-  // Kick-off whistle
-  { at: s(3, 2.5), src: "whatif/whistle.mp3", volume: 0.45 },
+  { at: s(2, 2.75), src: "whatif/honk.mp3", volume: 0.45 },
+  { at: s(2, 3.35), src: "whatif/honk.mp3", volume: 0.35 },
+  // Whistle once the line is spoken
+  { at: s(3, 2.25), src: "whatif/whistle.mp3", volume: 0.35 },
   // Slide whooshes
-  { at: s(4, 2.6), src: "whatif/whoosh.mp3", volume: 0.5 },
-  { at: s(4, 3.8), src: "whatif/whoosh.mp3", volume: 0.5 },
-  // Big pull-out
-  { at: s(5, 0.3), src: "whatif/whoosh.mp3", volume: 0.7 },
+  { at: s(4, 1.9), src: "whatif/whoosh.mp3", volume: 0.45 },
+  { at: s(4, 2.9), src: "whatif/whoosh.mp3", volume: 0.45 },
 ];
 
 export const SoundEffects: React.FC = () => (

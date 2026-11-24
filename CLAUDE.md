@@ -23,7 +23,8 @@ Whenever we create a 3D animation or video in this project, **always use this st
 - Use `random(seed)` from `remotion` for any randomness (crowds, placement).
 - Reuse the shared pieces in `src/WhatIfNoLegs/three/` (capsule `Character`, props, `Street`, `CameraRig`, `Puff`) for new cartoon scenes.
 - Captions: build `createTikTokStyleCaptions` pages **per scene**, and give every word a leading space. Otherwise the first word of a line gets attached to the previous page.
-- Narration: use Microsoft's free Edge neural voices via `edge-tts` (default `en-US-AndrewNeural`). Captions must take their word timings from the TTS word boundaries in `narration.json`, so subtitles match the voice exactly. Duck the music under the voice.
+- Narration: use Microsoft's free Edge neural voices via `edge-tts` (default `en-US-BrianMultilingualNeural`, +14% rate, clips loudness-normalised to about -13 LUFS). Captions must take their word timings from the TTS word boundaries in `narration.json`, so subtitles match the voice exactly. Duck the music under the voice.
+- Keep scenes short (~4s each) with a camera punch-in (`punchFov`) at each scene start and constant character motion (bounces, squash and stretch, ollies, spins).
 - Fonts are bundled in `public/fonts/` and loaded with `@remotion/fonts`, so renders don't depend on network fonts.
 
 ## Layout

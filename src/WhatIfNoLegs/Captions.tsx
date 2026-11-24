@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { AbsoluteFill, Sequence, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { createTikTokStyleCaptions, type TikTokPage } from "@remotion/captions";
 import { loadFont } from "@remotion/fonts";
-import { CAPTION_LINES } from "./captions";
+import { CAPTION_LINES, EMPHASIS_STARTS } from "./captions";
 import { SCENE_STARTS, TOTAL_FRAMES } from "./constants";
 
 const FONT = "Lilita One";
@@ -39,6 +39,9 @@ const Page: React.FC<{ page: TikTokPage; durationInFrames: number }> = ({ page, 
           const visible = frame >= startFrame;
           const word = token.text.trim();
           const emoji = isEmoji(word);
+          const emph = EMPHASIS_STARTS.has(token.fromMs);
+          // Highlighted words land bigger, in yellow, with a little wobble.
+          const wobble = emph && visible ? Math.sin((frame - startFrame) / 3) * 4 * Math.exp(-(frame - startFrame) / 18) : 0;
           return (
             <span key={i}>
               {i > 0 ? " " : ""}
@@ -46,7 +49,9 @@ const Page: React.FC<{ page: TikTokPage; durationInFrames: number }> = ({ page, 
                 style={{
                   display: "inline-block",
                   opacity: visible ? 1 : 0,
-                  transform: `scale(${visible ? pop : 0}) rotate(${(1 - Math.min(1, pop)) * (i % 2 ? 8 : -8)}deg)`,
+                  color: emph ? "#ffd93d" : "white",
+                  fontSize: emph ? "1.22em" : undefined,
+                  transform: `scale(${visible ? pop : 0}) rotate(${(1 - Math.min(1, pop)) * (i % 2 ? 8 : -8) + wobble}deg)`,
                   WebkitTextStroke: emoji ? undefined : "18px black",
                   paintOrder: "stroke fill",
                   textShadow: emoji ? undefined : "0 10px 0 rgba(0,0,0,0.45)",
