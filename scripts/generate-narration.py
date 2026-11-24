@@ -1,16 +1,19 @@
-"""Generate the narrator voice-over for the "What if" video with Microsoft's
-free Edge neural voices (via the `edge-tts` package), plus per-word timings
-so the subtitles pop in exactly when each word is spoken.
+"""Generate a video's narrator voice-over with Microsoft's free Edge neural
+voices (via the `edge-tts` package), plus per-word timings so the subtitles
+pop in exactly when each word is spoken.
 
     pip install edge-tts
-    python3 scripts/generate-narration.py
+    python3 scripts/generate-narration.py scripts/narration/no-legs.json
 
-Writes:
-  public/whatif/voice/line<N>.mp3     one clip per scene
-  src/WhatIfNoLegs/narration.json     clip start offsets + word timings
+The config file (one per video, in scripts/narration/) sets the voice, rate,
+loudness, scene lengths, output paths and one line per scene:
+  caption  exactly what is shown on screen; a word starting with * is highlighted
+  extra    words shown after the spoken ones (e.g. an emoji)
+  start    seconds into the scene when the clip begins (~0.1s lead-in)
 
-Needs network access to speech.platform.bing.com. Change VOICE / RATE below
-and re-run to try another voice (list them with: edge-tts --list-voices).
+Writes public/<audio_dir>/line<N>.mp3 and <json_out> (clip offsets + word
+timings). Needs network access to speech.platform.bing.com. List voices with:
+edge-tts --list-voices
 """
 
 import asyncio
@@ -22,34 +25,19 @@ from pathlib import Path
 
 import edge_tts
 
-VOICE = "en-US-BrianMultilingualNeural"
-RATE = "+14%"
-PITCH = "+2Hz"
-
-# Loudness: compress, then normalise each clip to this integrated loudness
-# (LUFS). -13 is loud and upfront, like short-form narration.
-TARGET_LUFS = -13
-
-POOF_SECONDS = 1.0  # keep in sync with src/WhatIfNoLegs/constants.ts
-SCENE_SECONDS = [4, 4.5, 4, 4, 4, 5]
-
-# One line per scene. `caption` is exactly what is shown on screen (word by
-# word); a word starting with * is highlighted. `extra` are words shown after
-# the spoken ones (e.g. an emoji). `start` is seconds into the scene when the
-# voice clip begins (each clip has ~0.1s of lead-in before the first word).
-LINES = [
-    {"scene": 0, "caption": "What if everyone lost their *legs?", "start": 0.1},
-    # "POOF!" lands right on the poof (first word is ~0.1s into the clip).
-    {"scene": 1, "caption": "*POOF! Overnight… *gone.", "start": POOF_SECONDS - 0.12},
-    {"scene": 2, "caption": "Office chairs become the *#1 car!", "start": 0.12},
-    {"scene": 3, "caption": "Sports would *never be the same!", "start": 0.12},
-    {"scene": 4, "caption": "Stairs? *Banned.", "start": 0.15},
-    {"scene": 5, "caption": "Would you *survive? Comment below!", "extra": ["👇"], "start": 0.5},
-]
-
 ROOT = Path(__file__).resolve().parent.parent
-OUT_DIR = ROOT / "public" / "whatif" / "voice"
-JSON_OUT = ROOT / "src" / "WhatIfNoLegs" / "narration.json"
+
+if len(sys.argv) != 2:
+    sys.exit("usage: python3 scripts/generate-narration.py scripts/narration/<video>.json")
+CONFIG = json.loads(Path(sys.argv[1]).read_text())
+VOICE = CONFIG["voice"]
+RATE = CONFIG.get("rate", "+0%")
+PITCH = CONFIG.get("pitch", "+0Hz")
+TARGET_LUFS = CONFIG.get("target_lufs", -13)
+SCENE_SECONDS = CONFIG["scene_seconds"]
+LINES = CONFIG["lines"]
+OUT_DIR = ROOT / "public" / CONFIG["audio_dir"]
+JSON_OUT = ROOT / CONFIG["json_out"]
 
 
 def duration_of(path: Path) -> float:
@@ -109,7 +97,7 @@ async def main():
             sys.exit(f"Line {i} ({dur:.2f}s) doesn't fit in scene {line['scene']}")
         result.append({
             "scene": line["scene"],
-            "file": f"whatif/voice/line{i}.mp3",
+            "file": f"{CONFIG['audio_dir']}/line{i}.mp3",
             "start": line["start"],
             "duration": round(dur, 3),
             "words": words,

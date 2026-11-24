@@ -1,0 +1,356 @@
+{
+  "voice": "en-US-BrianMultilingualNeural",
+  "rate": "+10%",
+  "lines": [
+    {
+      "scene": 0,
+      "file": "whatif-nuke/voice/line0.mp3",
+      "start": 0.1,
+      "duration": 2.821,
+      "words": [
+        {
+          "spoken": "What",
+          "start": 0.068,
+          "end": 0.205,
+          "text": "What",
+          "emphasis": false
+        },
+        {
+          "spoken": "if",
+          "start": 0.216,
+          "end": 0.386,
+          "text": "if",
+          "emphasis": false
+        },
+        {
+          "spoken": "North",
+          "start": 0.398,
+          "end": 0.705,
+          "text": "North",
+          "emphasis": false
+        },
+        {
+          "spoken": "Korea",
+          "start": 0.716,
+          "end": 1.148,
+          "text": "Korea",
+          "emphasis": false
+        },
+        {
+          "spoken": "started",
+          "start": 1.159,
+          "end": 1.545,
+          "text": "started",
+          "emphasis": false
+        },
+        {
+          "spoken": "nuking",
+          "start": 1.557,
+          "end": 1.909,
+          "text": "nuking",
+          "emphasis": true
+        },
+        {
+          "spoken": "everyone",
+          "start": 1.92,
+          "end": 2.432,
+          "text": "everyone?",
+          "emphasis": false
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 1,
+      "file": "whatif-nuke/voice/line1.mp3",
+      "start": 0.12,
+      "duration": 3.056,
+      "words": [
+        {
+          "spoken": "Sirens",
+          "start": 0.048,
+          "end": 0.525,
+          "text": "Sirens",
+          "emphasis": false
+        },
+        {
+          "spoken": "would",
+          "start": 0.536,
+          "end": 0.73,
+          "text": "would",
+          "emphasis": false
+        },
+        {
+          "spoken": "blare",
+          "start": 0.741,
+          "end": 1.184,
+          "text": "blare.",
+          "emphasis": false
+        },
+        {
+          "spoken": "Minutes",
+          "start": 1.523,
+          "end": 1.864,
+          "text": "Minutes",
+          "emphasis": false
+        },
+        {
+          "spoken": "to",
+          "start": 1.875,
+          "end": 1.977,
+          "text": "to",
+          "emphasis": false
+        },
+        {
+          "spoken": "take",
+          "start": 1.989,
+          "end": 2.227,
+          "text": "take",
+          "emphasis": false
+        },
+        {
+          "spoken": "cover",
+          "start": 2.239,
+          "end": 2.67,
+          "text": "cover!",
+          "emphasis": true
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 2,
+      "file": "whatif-nuke/voice/line2.mp3",
+      "start": 0.12,
+      "duration": 3.291,
+      "words": [
+        {
+          "spoken": "Defenses",
+          "start": 0.057,
+          "end": 0.557,
+          "text": "Defenses",
+          "emphasis": false
+        },
+        {
+          "spoken": "would",
+          "start": 0.568,
+          "end": 0.705,
+          "text": "would",
+          "emphasis": false
+        },
+        {
+          "spoken": "shoot",
+          "start": 0.716,
+          "end": 0.977,
+          "text": "shoot",
+          "emphasis": false
+        },
+        {
+          "spoken": "some",
+          "start": 0.989,
+          "end": 1.159,
+          "text": "some",
+          "emphasis": false
+        },
+        {
+          "spoken": "down",
+          "start": 1.17,
+          "end": 1.545,
+          "text": "down…",
+          "emphasis": false
+        },
+        {
+          "spoken": "but",
+          "start": 2.136,
+          "end": 2.341,
+          "text": "but",
+          "emphasis": false
+        },
+        {
+          "spoken": "not",
+          "start": 2.352,
+          "end": 2.557,
+          "text": "not",
+          "emphasis": true
+        },
+        {
+          "spoken": "all",
+          "start": 2.568,
+          "end": 2.92,
+          "text": "all.",
+          "emphasis": false
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 3,
+      "file": "whatif-nuke/voice/line3.mp3",
+      "start": 0.5,
+      "duration": 2.691,
+      "words": [
+        {
+          "spoken": "One",
+          "start": 0.091,
+          "end": 0.318,
+          "text": "One",
+          "emphasis": false
+        },
+        {
+          "spoken": "blast",
+          "start": 0.33,
+          "end": 0.761,
+          "text": "blast",
+          "emphasis": false
+        },
+        {
+          "spoken": "could",
+          "start": 0.773,
+          "end": 0.909,
+          "text": "could",
+          "emphasis": false
+        },
+        {
+          "spoken": "flatten",
+          "start": 0.92,
+          "end": 1.364,
+          "text": "flatten",
+          "emphasis": true
+        },
+        {
+          "spoken": "an",
+          "start": 1.375,
+          "end": 1.489,
+          "text": "an",
+          "emphasis": false
+        },
+        {
+          "spoken": "entire",
+          "start": 1.5,
+          "end": 1.898,
+          "text": "entire",
+          "emphasis": false
+        },
+        {
+          "spoken": "city",
+          "start": 1.909,
+          "end": 2.307,
+          "text": "city.",
+          "emphasis": false
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 4,
+      "file": "whatif-nuke/voice/line4.mp3",
+      "start": 0.12,
+      "duration": 2.638,
+      "words": [
+        {
+          "spoken": "Smoke",
+          "start": 0.047,
+          "end": 0.467,
+          "text": "Smoke",
+          "emphasis": false
+        },
+        {
+          "spoken": "could",
+          "start": 0.478,
+          "end": 0.672,
+          "text": "could",
+          "emphasis": false
+        },
+        {
+          "spoken": "block",
+          "start": 0.683,
+          "end": 0.99,
+          "text": "block",
+          "emphasis": false
+        },
+        {
+          "spoken": "out",
+          "start": 1.001,
+          "end": 1.183,
+          "text": "out",
+          "emphasis": false
+        },
+        {
+          "spoken": "the",
+          "start": 1.194,
+          "end": 1.262,
+          "text": "the",
+          "emphasis": false
+        },
+        {
+          "spoken": "sun",
+          "start": 1.274,
+          "end": 1.581,
+          "text": "sun",
+          "emphasis": true
+        },
+        {
+          "spoken": "for",
+          "start": 1.592,
+          "end": 1.751,
+          "text": "for",
+          "emphasis": false
+        },
+        {
+          "spoken": "years",
+          "start": 1.762,
+          "end": 2.24,
+          "text": "years.",
+          "emphasis": false
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 5,
+      "file": "whatif-nuke/voice/line5.mp3",
+      "start": 0.5,
+      "duration": 2.56,
+      "words": [
+        {
+          "spoken": "Would",
+          "start": 0.08,
+          "end": 0.216,
+          "text": "Would",
+          "emphasis": false
+        },
+        {
+          "spoken": "you",
+          "start": 0.227,
+          "end": 0.341,
+          "text": "you",
+          "emphasis": false
+        },
+        {
+          "spoken": "survive",
+          "start": 0.352,
+          "end": 1.011,
+          "text": "survive?",
+          "emphasis": true
+        },
+        {
+          "spoken": "Comment",
+          "start": 1.352,
+          "end": 1.727,
+          "text": "Comment",
+          "emphasis": false
+        },
+        {
+          "spoken": "below",
+          "start": 1.739,
+          "end": 2.17,
+          "text": "below!",
+          "emphasis": false
+        }
+      ],
+      "extra": [
+        "👇"
+      ]
+    }
+  ]
+}

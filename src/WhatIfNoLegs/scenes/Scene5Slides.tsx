@@ -2,11 +2,11 @@ import * as THREE from "three";
 import { useMemo } from "react";
 import { Easing, interpolate, random, useCurrentFrame, useVideoConfig } from "remotion";
 import { SHIRT_COLORS, SKIN_COLORS } from "../constants";
-import { Character } from "../three/Character";
-import { geo, mat } from "../three/materials";
-import { Building, Cloud, Tree, slideRiderTransform, useHalfPipe } from "../three/Props";
-import { SceneCanvas } from "../three/SceneCanvas";
-import { CameraRig, Lights, punchFov, type Vec3 } from "../three/World";
+import { Character } from "../../shared/three/Character";
+import { geo, mat } from "../../shared/three/materials";
+import { Building, Cloud, Tree, slideRiderTransform, useHalfPipe } from "../../shared/three/Props";
+import { SceneCanvas } from "../../shared/three/SceneCanvas";
+import { CameraRig, Lights, punchFov, type Vec3 } from "../../shared/three/World";
 
 const SLIDE_R = 0.85;
 const TOWER_H = 16;

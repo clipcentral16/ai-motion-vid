@@ -1,8 +1,8 @@
 import { Easing, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
-import { Character } from "../three/Character";
-import { SceneCanvas } from "../three/SceneCanvas";
-import { CameraRig, Lights, Street, punchFov } from "../three/World";
-import { makeWalkers, wrap } from "./walkers";
+import { Character } from "../../shared/three/Character";
+import { SceneCanvas } from "../../shared/three/SceneCanvas";
+import { CameraRig, Lights, Street, punchFov } from "../../shared/three/World";
+import { makeWalkers, wrap } from "../../shared/three/motion";
 
 const Z_MIN = -40;
 const Z_MAX = 18;

@@ -1,0 +1,17 @@
+{
+  "voice": "en-US-BrianMultilingualNeural",
+  "rate": "+10%",
+  "pitch": "-2Hz",
+  "target_lufs": -13,
+  "scene_seconds": [4, 4, 4, 4, 4, 5],
+  "audio_dir": "whatif-nuke/voice",
+  "json_out": "src/WhatIfNuke/narration.json",
+  "lines": [
+    { "scene": 0, "caption": "What if North Korea started *nuking everyone?", "start": 0.1 },
+    { "scene": 1, "caption": "Sirens would blare. Minutes to take *cover!", "start": 0.12 },
+    { "scene": 2, "caption": "Defenses would shoot some down… but *not all.", "start": 0.12 },
+    { "scene": 3, "caption": "One blast could *flatten an entire city.", "start": 0.5 },
+    { "scene": 4, "caption": "Smoke could block out the *sun for years.", "start": 0.12 },
+    { "scene": 5, "caption": "Would you *survive? Comment below!", "extra": ["👇"], "start": 0.5 }
+  ]
+}

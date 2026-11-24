@@ -4,14 +4,19 @@
 //
 //   node scripts/generate-audio.mjs
 //
-// Output: public/whatif/*.mp3
+//   node scripts/generate-audio.mjs nuke
+//
+// Output: public/whatif/*.mp3 (default, "What if everyone lost their legs?")
+//         public/whatif-nuke/*.mp3 (nuke: tense score + siren, boom, ...)
 
 import { writeFileSync, mkdirSync, unlinkSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { join } from "node:path";
 
 const SR = 44100;
-const OUT = join(process.cwd(), "public", "whatif");
+const SET = process.argv[2] ?? "no-legs";
+const OUT_NAME = SET === "nuke" ? "whatif-nuke" : "whatif";
+const OUT = join(process.cwd(), "public", OUT_NAME);
 mkdirSync(OUT, { recursive: true });
 
 // ---------- helpers ----------
@@ -67,9 +72,9 @@ const writeWav = (name, buf, peak = 0.89) => {
   try {
     execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-i", wav, "-b:a", "192k", join(OUT, `${name}.mp3`)]);
     unlinkSync(wav);
-    console.log(`wrote public/whatif/${name}.mp3`);
+    console.log(`wrote public/${OUT_NAME}/${name}.mp3`);
   } catch {
-    console.log(`wrote public/whatif/${name}.wav (ffmpeg not found, kept WAV)`);
+    console.log(`wrote public/${OUT_NAME}/${name}.wav (ffmpeg not found, kept WAV)`);
   }
 };
 
@@ -296,9 +301,196 @@ const music = () => {
   writeWav("beat", buf, 0.8);
 };
 
-poof();
-whoosh();
-boing();
-honk();
-whistle();
-music();
+// ---------- "What if North Korea started nuking everyone?" ----------
+
+// Air-raid siren: slow rising/falling wail with a little vibrato.
+const siren = () => {
+  const d = 4.2;
+  const buf = stereo(d);
+  let ph = 0;
+  for (let i = 0; i < buf[0].length; i++) {
+    const t = i / SR;
+    const wail = 0.5 - 0.5 * Math.cos((TAU * t) / 3.2); // 0..1..0 over 3.2s
+    const f = 330 + 420 * wail + 6 * Math.sin(TAU * 5 * t);
+    ph += (TAU * f) / SR;
+    const env = Math.min(1, t / 0.3) * Math.min(1, (d - t) / 0.4);
+    const v = Math.sin(ph) * 0.7 + Math.sin(ph * 2) * 0.2 + Math.sin(ph * 3) * 0.1;
+    add(buf, i, v * env * 0.8, Math.sin(t * 0.8) * 0.4);
+  }
+  writeWav("siren", buf);
+};
+
+// Rocket launch: low roaring noise that swells and crackles.
+const rumble = () => {
+  const d = 3.6;
+  const buf = stereo(d);
+  let lp = 0, lp2 = 0;
+  for (let i = 0; i < buf[0].length; i++) {
+    const t = i / SR;
+    const n = noise();
+    lp += lpCoef(220) * (n - lp);
+    lp2 += lpCoef(1400) * (n - lp2);
+    const crackle = rand() < 0.002 ? noise() * 2 : 0;
+    const env = Math.min(1, t / 0.6) * Math.min(1, (d - t) / 1.2);
+    add(buf, i, (lp * 3 + lp2 * 0.5 + crackle * 0.3) * env, Math.sin(t * 1.3) * 0.2);
+  }
+  writeWav("rumble", buf);
+};
+
+// Interceptor: rising "zap" then a crisp pop.
+const zap = () => {
+  const d = 0.9;
+  const buf = stereo(d);
+  let ph = 0, lp = 0;
+  for (let i = 0; i < buf[0].length; i++) {
+    const t = i / SR;
+    let v = 0;
+    if (t < 0.45) {
+      const f = 400 + 2200 * (t / 0.45) ** 2;
+      ph += (TAU * f) / SR;
+      v += Math.sin(ph) * 0.35 * (t / 0.45);
+    } else {
+      const lt = t - 0.45;
+      lp += lpCoef(2500 * Math.exp(-lt * 6) + 200) * (noise() - lp);
+      v += lp * Math.exp(-lt * 9) * 2.4 + Math.sin(TAU * 90 * lt) * Math.exp(-lt * 14);
+    }
+    add(buf, i, v, -0.3 + 0.6 * (t / d));
+  }
+  writeWav("zap", buf);
+};
+
+// Distant nuclear blast: deep sub thump + long rolling rumble.
+const boom = () => {
+  const d = 4.5;
+  const buf = stereo(d);
+  let lp = 0, lp2 = 0, ph = 0;
+  for (let i = 0; i < buf[0].length; i++) {
+    const t = i / SR;
+    const n = noise();
+    lp += lpCoef(160 + 900 * Math.exp(-t * 3)) * (n - lp);
+    lp2 += lpCoef(90) * (lp - lp2);
+    const f = 28 + 40 * Math.exp(-t * 4);
+    ph += (TAU * f) / SR;
+    const thump = Math.sin(ph) * Math.exp(-t * 1.6) * 1.2;
+    const roll = (lp * 1.6 + lp2 * 3) * Math.min(1, t / 0.02) * Math.exp(-t * 0.75);
+    add(buf, i, thump + roll, Math.sin(t * 2.1) * 0.3);
+  }
+  writeWav("boom", buf);
+};
+
+// Cold wind: slowly modulated band-passed noise.
+const wind = () => {
+  const d = 4.5;
+  const buf = stereo(d);
+  let low = 0, band = 0;
+  for (let i = 0; i < buf[0].length; i++) {
+    const t = i / SR;
+    const fc = 500 + 350 * Math.sin(TAU * 0.35 * t) + 150 * Math.sin(TAU * 0.9 * t);
+    const f = 2 * Math.sin((Math.PI * fc) / SR);
+    const high = noise() - low - 0.25 * band;
+    band += f * high;
+    low += f * band;
+    const env = Math.min(1, t / 0.8) * Math.min(1, (d - t) / 1) * (0.7 + 0.3 * Math.sin(TAU * 0.5 * t));
+    add(buf, i, band * env, Math.sin(t * 0.6) * 0.5);
+  }
+  writeWav("wind", buf);
+};
+
+// Tense score, 25s at 100 BPM in A minor (Am–F–Dm–E). Pulsing bass, toms and
+// a ticking clock until the blast (12.6s), then only a dark pad through the
+// "nuclear winter", with the pulse returning quietly for the ending.
+const tenseMusic = () => {
+  const DURATION = 25;
+  const BLAST = 12.6;
+  const WINTER_END = 20;
+  const beat = 60 / 100;
+  const bar = beat * 4;
+  const buf = stereo(DURATION);
+  const chords = [
+    { bass: 55.0, pad: [220.0, 261.63, 329.63] }, // Am
+    { bass: 43.65, pad: [174.61, 220.0, 261.63] }, // F
+    { bass: 36.71, pad: [146.83, 174.61, 220.0] }, // Dm
+    { bass: 41.2, pad: [164.81, 207.65, 246.94] }, // E
+  ];
+  const drums = (t) => t < BLAST - 0.25 || t >= WINTER_END;
+  const drumGain = (t) => (t >= WINTER_END ? 0.55 : 1);
+
+  const tom = (start, f0, g) => {
+    let ph = 0;
+    for (let j = 0; j < 0.5 * SR; j++) {
+      const t = j / SR;
+      ph += (TAU * (f0 + f0 * 0.6 * Math.exp(-t * 20))) / SR;
+      add(buf, Math.round((start + t) * SR), (Math.sin(ph) * Math.exp(-t * 6) + noise() * 0.08 * Math.exp(-t * 30)) * 0.8 * g);
+    }
+  };
+  const tick = (start, g) => {
+    let lp = 0;
+    for (let j = 0; j < 0.03 * SR; j++) {
+      const t = j / SR;
+      const n = noise();
+      lp += lpCoef(6000) * (n - lp);
+      add(buf, Math.round((start + t) * SR), (n - lp) * Math.exp(-t * 120) * 0.25 * g, 0.4);
+    }
+  };
+  const bassNote = (start, f, len, g) => {
+    let lp = 0, ph = 0;
+    for (let j = 0; j < len * SR; j++) {
+      const t = j / SR;
+      ph += f / SR;
+      const saw = (ph % 1) * 2 - 1;
+      lp += lpCoef(300 + 500 * Math.exp(-t * 14)) * (saw - lp);
+      add(buf, Math.round((start + t) * SR), lp * Math.min(1, t / 0.005) * Math.exp(-t * 4) * 0.5 * g);
+    }
+  };
+
+  // Drums, ticks and bass pulse
+  for (let s = 0; s * (beat / 4) < DURATION; s++) {
+    const t = s * (beat / 4);
+    const step = s % 16;
+    const chord = chords[Math.floor(t / bar) % 4];
+    if (!drums(t)) continue;
+    const g = drumGain(t);
+    if (step === 0 || step === 6 || step === 10) tom(t, step === 0 ? 70 : 95, g);
+    if (step % 2 === 1) tick(t, g);
+    if (step % 2 === 0) bassNote(t, chord.bass * 2, beat / 2 - 0.02, g * (t >= WINTER_END ? 0.7 : 1));
+  }
+
+  // Pad: detuned saws through a slow low-pass, swelling per bar
+  let lp = 0;
+  for (let i = 0; i < buf[0].length; i++) {
+    const t = i / SR;
+    const chord = chords[Math.floor(t / bar) % 4];
+    let v = 0;
+    for (const f of chord.pad) for (const det of [0.995, 1.005]) v += ((f * det * t) % 1) * 2 - 1;
+    lp += lpCoef(700 + 300 * Math.sin(TAU * 0.1 * t)) * (v - lp);
+    const inBar = (t % bar) / bar;
+    const swell = 0.55 + 0.45 * Math.sin(Math.PI * inBar);
+    const winter = t >= BLAST && t < WINTER_END ? 1.4 : 1;
+    add(buf, i, lp * 0.05 * swell * winter, Math.sin(t * 0.3) * 0.3);
+  }
+
+  for (let i = 0; i < buf[0].length; i++) {
+    const t = i / SR;
+    const g = Math.min(1, t / 0.4) * Math.min(1, Math.max(0, (DURATION - t) / 2));
+    buf[0][i] *= g;
+    buf[1][i] *= g;
+  }
+  writeWav("score", buf, 0.8);
+};
+
+if (SET === "nuke") {
+  whoosh();
+  siren();
+  rumble();
+  zap();
+  boom();
+  wind();
+  tenseMusic();
+} else {
+  poof();
+  whoosh();
+  boing();
+  honk();
+  whistle();
+  music();
+}

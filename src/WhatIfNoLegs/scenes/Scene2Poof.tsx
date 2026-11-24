@@ -1,9 +1,9 @@
 import { Easing, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import { POOF_SECONDS } from "../constants";
-import { Character, LEG_HEIGHT } from "../three/Character";
-import { SceneCanvas } from "../three/SceneCanvas";
-import { CameraRig, Lights, Puff, Street, punchFov } from "../three/World";
-import { makeWalkers } from "./walkers";
+import { Character, LEG_HEIGHT } from "../../shared/three/Character";
+import { SceneCanvas } from "../../shared/three/SceneCanvas";
+import { CameraRig, Lights, Puff, Street, punchFov } from "../../shared/three/World";
+import { makeWalkers } from "../../shared/three/motion";
 
 const Z_MIN = -26;
 const Z_MAX = 7;

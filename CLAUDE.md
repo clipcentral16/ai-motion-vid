@@ -21,9 +21,10 @@ Whenever we create a 3D animation or video in this project, **always use this st
 - Keep each composition in its own folder under `src/<Name>/`, with the 3D scene, captions and composition root in separate files, and register it in `src/Root.tsx`.
 - Keep `remotion`, `@remotion/*` versions **exactly equal** (pinned, no `^`).
 - Use `random(seed)` from `remotion` for any randomness (crowds, placement).
-- Reuse the shared pieces in `src/WhatIfNoLegs/three/` (capsule `Character`, props, `Street`, `CameraRig`, `Puff`) for new cartoon scenes.
+- Reuse the shared pieces in `src/shared/`: 3D in `shared/three/` (capsule `Character`, props, `Street`, `CameraRig`, `Puff`, `punchFov`, `SceneCanvas` with custom sky colours, `Lights` with a `mood`), plus `CaptionTrack`, `Transitions`, `Soundtrack` and `buildNarration`. Put video-specific props in `src/<Video>/three/`.
 - Captions: build `createTikTokStyleCaptions` pages **per scene**, and give every word a leading space. Otherwise the first word of a line gets attached to the previous page.
 - Narration: use Microsoft's free Edge neural voices via `edge-tts` (default `en-US-BrianMultilingualNeural`, +14% rate, clips loudness-normalised to about -13 LUFS). Captions must take their word timings from the TTS word boundaries in `narration.json`, so subtitles match the voice exactly. Duck the music under the voice.
+- Sensitive topics (war, disasters): keep it cartoon and non-graphic (no injuries or deaths on screen, blasts seen from a distance), no real people or national symbols, and phrase speculative consequences with "could".
 - Keep scenes short (~4s each) with a camera punch-in (`punchFov`) at each scene start and constant character motion (bounces, squash and stretch, ollies, spins).
 - Fonts are bundled in `public/fonts/` and loaded with `@remotion/fonts`, so renders don't depend on network fonts.
 
@@ -33,12 +34,16 @@ Whenever we create a 3D animation or video in this project, **always use this st
 src/index.ts                 registerRoot
 src/Root.tsx                 all <Composition>s
 src/SpinningObject/          example: 3D scene + captions + audio
-src/WhatIfNoLegs/            "What if" vertical short: scenes/, three/ (shared
-                             characters, props, city), captions, SFX, transitions
+src/shared/                  shared by every video: three/ (characters, props,
+                             city, camera, smoke), CaptionTrack, Transitions,
+                             Soundtrack (music ducking + voice + SFX), narration
+src/WhatIfNoLegs/            "What if everyone lost their legs?" (scenes/, captions, SFX)
+src/WhatIfNuke/              "What if North Korea started nuking everyone?"
+                             (scenes/, three/NukeProps: missile, mushroom cloud, globe...)
 public/                      static assets (audio, models, textures, fonts)
-scripts/generate-audio.mjs   synthesises the beat + SFX into public/whatif/
-scripts/generate-narration.py  narrator voice (Microsoft Edge TTS) + word timings
-                             -> public/whatif/voice/, src/WhatIfNoLegs/narration.json
+scripts/generate-audio.mjs   synthesises music + SFX (no arg: public/whatif/, `nuke`: public/whatif-nuke/)
+scripts/generate-narration.py  narrator voice (Microsoft Edge TTS) + word timings,
+                             one config per video in scripts/narration/*.json
 remotion.config.ts           render config (ANGLE GL renderer for WebGL)
 out/                         render output (git-ignored)
 ```
@@ -49,9 +54,9 @@ out/                         render output (git-ignored)
 - `npm run render`: render `SpinningObject` to `out/spinning-object.mp4`
 - `npx remotion render <CompositionId> out/<name>.mp4`: render any composition
 - `npm run typecheck`: TypeScript check
-- `npm run render:whatif`: render `WhatIfNoLegs` (1080×1920) to `out/what-if-no-legs.mp4`
-- `node scripts/generate-audio.mjs`: regenerate the synthesised music and sound effects
-- `python3 scripts/generate-narration.py`: regenerate the narrator voice-over (needs `pip install edge-tts` and network access to `speech.platform.bing.com`)
+- `npm run render:whatif` / `npm run render:nuke`: render a "What if" video (1080×1920) to `out/`
+- `npm run audio` / `npm run audio:nuke`: regenerate the synthesised music and sound effects
+- `npm run narration` / `npm run narration:nuke`: regenerate the narrator voice-over from `scripts/narration/<video>.json` (needs `pip install edge-tts` and network access to `speech.platform.bing.com`)
 
 In sandboxed or cloud environments where Remotion can't download its own headless Chrome (from `remotion.media`), add
 `--browser-executable=/opt/pw-browsers/chromium_headless_shell-1243/chrome-headless-shell-linux64/chrome-headless-shell`

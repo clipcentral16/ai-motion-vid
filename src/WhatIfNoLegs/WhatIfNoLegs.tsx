@@ -1,6 +1,8 @@
 import { AbsoluteFill, Sequence } from "remotion";
-import { Captions } from "./Captions";
-import { SCENE_FRAMES, SCENE_STARTS } from "./constants";
+import { CaptionTrack } from "../shared/Captions";
+import { Transitions } from "../shared/Transitions";
+import { CAPTION_LINES, EMPHASIS_STARTS } from "./captions";
+import { FPS, POOF_SECONDS, SCENE_FRAMES, SCENE_STARTS, TOTAL_FRAMES } from "./constants";
 import { Scene1Street } from "./scenes/Scene1Street";
 import { Scene2Poof } from "./scenes/Scene2Poof";
 import { Scene3Chairs } from "./scenes/Scene3Chairs";
@@ -8,7 +10,6 @@ import { Scene4Stadium } from "./scenes/Scene4Stadium";
 import { Scene5Slides } from "./scenes/Scene5Slides";
 import { Scene6Aerial } from "./scenes/Scene6Aerial";
 import { SoundEffects } from "./SoundEffects";
-import { Transitions } from "./Transitions";
 
 const SCENES = [
   { name: "1 Street", Scene: Scene1Street },
@@ -27,8 +28,8 @@ export const WhatIfNoLegs: React.FC = () => (
         <Scene />
       </Sequence>
     ))}
-    <Captions />
-    <Transitions />
+    <CaptionTrack lines={CAPTION_LINES} emphasis={EMPHASIS_STARTS} sceneStarts={SCENE_STARTS} totalFrames={TOTAL_FRAMES} />
+    <Transitions sceneStarts={SCENE_STARTS} flashes={[{ frame: SCENE_STARTS[1] + POOF_SECONDS * FPS }]} />
     <SoundEffects />
   </AbsoluteFill>
 );

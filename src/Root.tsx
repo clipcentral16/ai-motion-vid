@@ -2,6 +2,8 @@ import { Composition } from "remotion";
 import { SpinningObject } from "./SpinningObject/SpinningObject";
 import { WhatIfNoLegs } from "./WhatIfNoLegs/WhatIfNoLegs";
 import { FPS, HEIGHT, TOTAL_FRAMES, WIDTH } from "./WhatIfNoLegs/constants";
+import { WhatIfNuke } from "./WhatIfNuke/WhatIfNuke";
+import * as Nuke from "./WhatIfNuke/constants";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -21,6 +23,14 @@ export const RemotionRoot: React.FC = () => {
         fps={FPS}
         width={WIDTH}
         height={HEIGHT}
+      />
+      <Composition
+        id="WhatIfNuke"
+        component={WhatIfNuke}
+        durationInFrames={Nuke.TOTAL_FRAMES}
+        fps={Nuke.FPS}
+        width={Nuke.WIDTH}
+        height={Nuke.HEIGHT}
       />
     </>
   );

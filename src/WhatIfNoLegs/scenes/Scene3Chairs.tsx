@@ -1,10 +1,10 @@
 import { Easing, interpolate, random, useCurrentFrame, useVideoConfig } from "remotion";
 import { SHIRT_COLORS, SKIN_COLORS } from "../constants";
-import { Character } from "../three/Character";
-import { BOARD_DECK_Y, CHAIR_SEAT_Y, OfficeChair, Skateboard, TrafficLight } from "../three/Props";
-import { SceneCanvas } from "../three/SceneCanvas";
-import { CameraRig, Lights, Street, punchFov } from "../three/World";
-import { ollie, wrap } from "./walkers";
+import { Character } from "../../shared/three/Character";
+import { BOARD_DECK_Y, CHAIR_SEAT_Y, OfficeChair, Skateboard, TrafficLight } from "../../shared/three/Props";
+import { SceneCanvas } from "../../shared/three/SceneCanvas";
+import { CameraRig, Lights, Street, punchFov } from "../../shared/three/World";
+import { ollie, wrap } from "../../shared/three/motion";
 
 const CHAIR_COLORS = ["#2d3142", "#ef476f", "#118ab2", "#06d6a0", "#ffd166", "#8338ec"];
 

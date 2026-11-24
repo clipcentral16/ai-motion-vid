@@ -1,16 +1,14 @@
 import { useMemo } from "react";
 import { AbsoluteFill, Sequence, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
-import { createTikTokStyleCaptions, type TikTokPage } from "@remotion/captions";
+import { createTikTokStyleCaptions, type Caption, type TikTokPage } from "@remotion/captions";
 import { loadFont } from "@remotion/fonts";
-import { CAPTION_LINES, EMPHASIS_STARTS } from "./captions";
-import { SCENE_STARTS, TOTAL_FRAMES } from "./constants";
 
 const FONT = "Lilita One";
 loadFont({ family: FONT, url: staticFile("fonts/LilitaOne-Regular.ttf") });
 
 const isEmoji = (s: string) => /\p{Extended_Pictographic}/u.test(s);
 
-const Page: React.FC<{ page: TikTokPage; durationInFrames: number }> = ({ page, durationInFrames }) => {
+const Page: React.FC<{ page: TikTokPage; durationInFrames: number; emphasis: Set<number> }> = ({ page, durationInFrames, emphasis }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const exit = interpolate(frame, [durationInFrames - 6, durationInFrames], [1, 0], {
@@ -39,7 +37,7 @@ const Page: React.FC<{ page: TikTokPage; durationInFrames: number }> = ({ page, 
           const visible = frame >= startFrame;
           const word = token.text.trim();
           const emoji = isEmoji(word);
-          const emph = EMPHASIS_STARTS.has(token.fromMs);
+          const emph = emphasis.has(token.fromMs);
           // Highlighted words land bigger, in yellow, with a little wobble.
           const wobble = emph && visible ? Math.sin((frame - startFrame) / 3) * 4 * Math.exp(-(frame - startFrame) / 18) : 0;
           return (
@@ -67,13 +65,22 @@ const Page: React.FC<{ page: TikTokPage; durationInFrames: number }> = ({ page, 
   );
 };
 
-/** Big bold outlined captions, centred near the bottom, popping in word by word. */
-export const Captions: React.FC = () => {
+/**
+ * Big bold outlined captions, centred near the bottom, popping in word by
+ * word. `lines` holds one Caption[] per scene; each stays up until its
+ * scene ends. Words whose start (ms) is in `emphasis` are highlighted.
+ */
+export const CaptionTrack: React.FC<{
+  lines: Caption[][];
+  emphasis: Set<number>;
+  sceneStarts: number[];
+  totalFrames: number;
+}> = ({ lines, emphasis, sceneStarts, totalFrames }) => {
   const { fps } = useVideoConfig();
   // Build pages per scene so one scene's words never spill into another's page.
   const pages = useMemo(
-    () => CAPTION_LINES.flatMap((captions) => createTikTokStyleCaptions({ captions, combineTokensWithinMilliseconds: 10000 }).pages),
-    [],
+    () => lines.flatMap((captions) => createTikTokStyleCaptions({ captions, combineTokensWithinMilliseconds: 10000 }).pages),
+    [lines],
   );
 
   return (
@@ -81,11 +88,11 @@ export const Captions: React.FC = () => {
       {pages.map((page, i) => {
         const from = Math.round((page.startMs / 1000) * fps);
         // Each caption stays up until the end of its scene.
-        const sceneEnd = [...SCENE_STARTS.slice(1), TOTAL_FRAMES].find((s) => s > from) ?? TOTAL_FRAMES;
+        const sceneEnd = [...sceneStarts.slice(1), totalFrames].find((s) => s > from) ?? totalFrames;
         const duration = sceneEnd - from;
         return (
           <Sequence key={i} from={from} durationInFrames={duration} layout="none">
-            <Page page={page} durationInFrames={duration} />
+            <Page page={page} durationInFrames={duration} emphasis={emphasis} />
           </Sequence>
         );
       })}

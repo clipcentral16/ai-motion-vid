@@ -1,5 +1,5 @@
 import { random } from "remotion";
-import { SHIRT_COLORS, SKIN_COLORS } from "../constants";
+import { SHIRT_COLORS, SKIN_COLORS } from "../palette";
 
 export type Walker = {
   x: number;

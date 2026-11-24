@@ -1,21 +1,21 @@
 import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
-import { FPS, POOF_SECONDS, SCENE_STARTS } from "./constants";
 
 const HALF = 7; // frames either side of the cut
-const COLORS = ["#ffd93d", "#ff6b9d", "#4dd4ff", "#7dff8a", "#c77dff"];
+export const BRIGHT_SWIPES = ["#ffd93d", "#ff6b9d", "#4dd4ff", "#7dff8a", "#c77dff"];
 
-/** Colourful diagonal swipe that hides each cut, plus a white flash on the poof. */
-export const Transitions: React.FC = () => {
+export type Flash = { frame: number; color?: string; peak?: number; length?: number };
+
+/** Diagonal colour swipe hiding each scene cut, plus optional full-screen flashes. */
+export const Transitions: React.FC<{ sceneStarts: number[]; colors?: string[]; flashes?: Flash[] }> = ({
+  sceneStarts,
+  colors = BRIGHT_SWIPES,
+  flashes = [],
+}) => {
   const frame = useCurrentFrame();
-  const poofFrame = SCENE_STARTS[1] + POOF_SECONDS * FPS;
-  const flash = interpolate(frame, [poofFrame, poofFrame + 2, poofFrame + 10], [0, 0.85, 0], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-  });
-
+  const COLORS = colors;
   return (
     <AbsoluteFill style={{ pointerEvents: "none", overflow: "hidden" }}>
-      {SCENE_STARTS.slice(1).map((cut, i) => {
+      {sceneStarts.slice(1).map((cut, i) => {
         const p = (frame - (cut - HALF)) / (HALF * 2);
         if (p <= 0 || p >= 1) return null;
         const x = interpolate(p, [0, 1], [-2600, 2600]);
@@ -39,7 +39,14 @@ export const Transitions: React.FC = () => {
           </div>
         );
       })}
-      <AbsoluteFill style={{ background: "white", opacity: flash }} />
+      {flashes.map((f) => {
+        const len = f.length ?? 10;
+        const opacity = interpolate(frame, [f.frame, f.frame + 2, f.frame + len], [0, f.peak ?? 0.85, 0], {
+          extrapolateLeft: "clamp",
+          extrapolateRight: "clamp",
+        });
+        return opacity > 0 ? <AbsoluteFill key={f.frame} style={{ background: f.color ?? "white", opacity }} /> : null;
+      })}
     </AbsoluteFill>
   );
 };

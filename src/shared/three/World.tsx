@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { useThree } from "@react-three/fiber";
 import { random, spring } from "remotion";
-import { SKY_HORIZON, BUILDING_COLORS } from "../constants";
+import { SKY_HORIZON, BUILDING_COLORS } from "../palette";
 import { geo, mat } from "./materials";
 import { Building, Cloud, LampPost, Tree } from "./Props";
 
@@ -26,22 +26,35 @@ export const CameraRig: React.FC<{ position: Vec3; target: Vec3; fov?: number }>
 export const punchFov = (frame: number, fps: number, base: number, at = 0, amount = 16) =>
   frame < at ? base : base + amount * (1 - spring({ frame: frame - at, fps, config: { damping: 11, stiffness: 140 } }));
 
-export const Lights: React.FC<{ fogNear?: number; fogFar?: number }> = ({ fogNear = 30, fogFar = 90 }) => (
+export type LightMood = {
+  fog?: string;
+  sky?: string;
+  ground?: string;
+  hemi?: number;
+  sun?: string;
+  sunIntensity?: number;
+};
+
+export const Lights: React.FC<{ fogNear?: number; fogFar?: number; mood?: LightMood }> = ({ fogNear = 30, fogFar = 90, mood = {} }) => (
   <>
-    <fog attach="fog" args={[SKY_HORIZON, fogNear, fogFar]} />
-    <hemisphereLight args={["#e8f6ff", "#8fd16a", 1.4]} />
-    <directionalLight position={[8, 14, 6]} intensity={2.2} color="#fff4e0" />
+    <fog attach="fog" args={[mood.fog ?? SKY_HORIZON, fogNear, fogFar]} />
+    <hemisphereLight args={[mood.sky ?? "#e8f6ff", mood.ground ?? "#8fd16a", mood.hemi ?? 1.4]} />
+    <directionalLight position={[8, 14, 6]} intensity={mood.sunIntensity ?? 2.2} color={mood.sun ?? "#fff4e0"} />
     <directionalLight position={[-6, 5, -4]} intensity={0.5} color="#b8d8ff" />
   </>
 );
 
 /** Cartoon smoke puff. `progress` runs 0 → 1 over its lifetime. */
-export const Puff: React.FC<{ position: Vec3; progress: number; seed: string | number; size?: number }> = ({
-  position,
-  progress,
-  seed,
-  size = 1,
-}) => {
+export const Puff: React.FC<{
+  position: Vec3;
+  progress: number;
+  seed: string | number;
+  size?: number;
+  color?: string;
+  glow?: number;
+  /** How far the puff drifts upward over its life (in puff radii). */
+  rise?: number;
+}> = ({ position, progress, seed, size = 1, color = "#ffffff", glow = 0.3, rise = 0.5 }) => {
   if (progress <= 0 || progress >= 1) return null;
   const grow = 1 - Math.pow(1 - Math.min(1, progress * 2.2), 3);
   const fade = 1 - Math.pow(progress, 2.2);
@@ -55,10 +68,10 @@ export const Puff: React.FC<{ position: Vec3; progress: number; seed: string | n
           <mesh
             key={i}
             geometry={geo.puff}
-            position={[Math.cos(a) * r * grow, (random(`py${seed}${i}`) * 0.4 + progress * 0.5) * grow, Math.sin(a) * r * grow]}
+            position={[Math.cos(a) * r * grow, (random(`py${seed}${i}`) * 0.4 + progress * rise) * grow, Math.sin(a) * r * grow]}
             scale={Math.max(0.001, s)}
           >
-            <meshStandardMaterial color="#ffffff" flatShading transparent opacity={fade} emissive="#ffffff" emissiveIntensity={0.3} />
+            <meshStandardMaterial color={color} flatShading transparent opacity={fade} emissive={color} emissiveIntensity={glow} />
           </mesh>
         );
       })}

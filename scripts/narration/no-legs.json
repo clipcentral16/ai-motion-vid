@@ -1,0 +1,17 @@
+{
+  "voice": "en-US-BrianMultilingualNeural",
+  "rate": "+14%",
+  "pitch": "+2Hz",
+  "target_lufs": -13,
+  "scene_seconds": [4, 4.5, 4, 4, 4, 5],
+  "audio_dir": "whatif/voice",
+  "json_out": "src/WhatIfNoLegs/narration.json",
+  "lines": [
+    { "scene": 0, "caption": "What if everyone lost their *legs?", "start": 0.1 },
+    { "scene": 1, "caption": "*POOF! Overnight… *gone.", "start": 0.88 },
+    { "scene": 2, "caption": "Office chairs become the *#1 car!", "start": 0.12 },
+    { "scene": 3, "caption": "Sports would *never be the same!", "start": 0.12 },
+    { "scene": 4, "caption": "Stairs? *Banned.", "start": 0.15 },
+    { "scene": 5, "caption": "Would you *survive? Comment below!", "extra": ["👇"], "start": 0.5 }
+  ]
+}

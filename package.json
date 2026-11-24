@@ -8,7 +8,10 @@
     "typecheck": "tsc --noEmit",
     "render:whatif": "remotion render WhatIfNoLegs out/what-if-no-legs.mp4 --crf=24",
     "audio": "node scripts/generate-audio.mjs",
-    "narration": "python3 scripts/generate-narration.py"
+    "narration": "python3 scripts/generate-narration.py scripts/narration/no-legs.json",
+    "render:nuke": "remotion render WhatIfNuke out/what-if-nuke.mp4 --crf=24",
+    "audio:nuke": "node scripts/generate-audio.mjs nuke",
+    "narration:nuke": "python3 scripts/generate-narration.py scripts/narration/nuke.json"
   },
   "repository": {
     "type": "git",

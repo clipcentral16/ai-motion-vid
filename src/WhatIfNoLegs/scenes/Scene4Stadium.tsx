@@ -2,12 +2,12 @@ import * as THREE from "three";
 import { useMemo } from "react";
 import { Easing, interpolate, random, useCurrentFrame, useVideoConfig } from "remotion";
 import { SHIRT_COLORS, SKIN_COLORS } from "../constants";
-import { Character } from "../three/Character";
-import { geo, mat } from "../three/materials";
-import { BOARD_DECK_Y, Cloud, Skateboard, SoccerBall } from "../three/Props";
-import { SceneCanvas } from "../three/SceneCanvas";
-import { CameraRig, Lights, punchFov, type Vec3 } from "../three/World";
-import { ollie } from "./walkers";
+import { Character } from "../../shared/three/Character";
+import { geo, mat } from "../../shared/three/materials";
+import { BOARD_DECK_Y, Cloud, Skateboard, SoccerBall } from "../../shared/three/Props";
+import { SceneCanvas } from "../../shared/three/SceneCanvas";
+import { CameraRig, Lights, punchFov, type Vec3 } from "../../shared/three/World";
+import { ollie } from "../../shared/three/motion";
 
 const FIELD_L = 40; // along X
 const FIELD_W = 26; // along Z
