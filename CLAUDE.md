@@ -28,6 +28,7 @@ Whenever we create a 3D animation or video in this project, **always use this st
 - Sensitive topics (war, disasters): keep it cartoon and non-graphic (no injuries or deaths on screen, blasts seen from a distance), no real people or national symbols, and phrase speculative consequences with "could".
 - Mood: `Transitions mode` can be one value or one per cut (e.g. dips while it's scary, swipes once it turns hype). Playful videos use swipe transitions, whooshes and bouncy SFX; scary or serious ones use `Transitions mode="dip"` (dip to black), no whooshes or playful sounds, and a score that starts calm and builds.
 - Keep scenes short (~4s each) with a camera punch-in (`punchFov`) at each scene start and constant character motion (bounces, squash and stretch, ollies, spins).
+- New "blocky" look (preferred for new videos): `src/shared/blocky/` has `BlockCharacter` (jointed brick-avatar character: shoulders, elbows, hands, hips, knees, ankles, shoes; hairstyles; clothing; painted face decals with expressions + blinking), `poses.ts` (frame-driven walk/run, idle, wave, cheer, scared, sad, armsCrossed, handsOnHips, `blend`), and `Environment.tsx` (`BlockCanvas` with soft shadows + ACES tone mapping, `BlockLights`, textured `Grass`, `Road`, `House`, `BrickWing`, `Townhouse`, `Tower`, `Shop`, `Van`, `Tree`, `LampPost`, `StormClouds`). Units are studs (characters ~5.3 tall). Keep it an original generic style, not any brand's avatars or assets. `StyleTest` is the reference clip.
 - Fonts are bundled in `public/fonts/` and loaded with `@remotion/fonts`, so renders don't depend on network fonts.
 
 ## Layout
@@ -44,6 +45,7 @@ src/WhatIfNuke/              "What if North Korea started nuking everyone?"
                              (scenes/, three/NukeProps: missile, mushroom cloud, globe...)
 src/JupiterIncident/         "The 2011 Jupiter Incident" (dark found-footage style:
                              FoundFootage HUD/grain/SIGNAL LOST, HeroTitles, three/JupiterProps)
+src/StyleTest/               test clip for the blocky look (skyline, street walk, family)
 src/AsteroidSave/            "What if an asteroid was about to hit Earth?" (Zen's Rocket League
                              save: mechanics.ts choreography, game-style callouts, boost meter)
 public/                      static assets (audio, models, textures, fonts)
