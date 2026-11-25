@@ -14,7 +14,10 @@
     "narration:nuke": "python3 scripts/generate-narration.py scripts/narration/nuke.json",
     "render:jupiter": "remotion render JupiterIncident out/jupiter-incident.mp4 --crf=24",
     "audio:jupiter": "node scripts/generate-audio.mjs jupiter",
-    "narration:jupiter": "python3 scripts/generate-narration.py scripts/narration/jupiter.json"
+    "narration:jupiter": "python3 scripts/generate-narration.py scripts/narration/jupiter.json",
+    "render:asteroid": "remotion render AsteroidSave out/asteroid-save.mp4 --crf=24",
+    "audio:asteroid": "node scripts/generate-audio.mjs asteroid",
+    "narration:asteroid": "python3 scripts/generate-narration.py scripts/narration/asteroid.json"
   },
   "repository": {
     "type": "git",

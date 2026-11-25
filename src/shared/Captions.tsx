@@ -15,6 +15,7 @@ const TONES: Record<CaptionTone, { color: string; chip: string; chipText: string
   alien: { color: "#ff4a4a", chip: "#3a0a0f", chipText: "#ff6b6b", size: 104, jitter: 6 },
   hero: { color: "white", chip: "#3d2c00", chipText: "#ffd166", size: 104, jitter: 0 },
   weak: { color: "#d9d4cf", chip: "#26232b", chipText: "#bdb6ae", size: 82, jitter: 0.6 },
+  panic: { color: "#ffffff", chip: "#5c0a0a", chipText: "#ff8a8a", size: 112, jitter: 7 },
 };
 
 const Page: React.FC<{ page: TikTokPage; durationInFrames: number; emphasis: Set<number>; meta?: PageMeta }> = ({

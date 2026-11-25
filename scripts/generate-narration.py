@@ -15,7 +15,10 @@ Optional per line: voice / rate / pitch / lufs (override the defaults),
            distorted) or "weak" (quiet, shaky); effects keep the timing, so
            captions still match the words
   speaker  label shown above the caption (e.g. "CAPTAIN", "???")
-  tone     caption style: "radio", "alien", "hero", "weak" or "narrator"
+  tone     caption style: "radio", "alien", "hero", "weak", "panic" or "narrator"
+Optional "crowd": [{ "name", "texts": [...], "voices": [...], "pitch_spread", "rate",
+  "reverb" }] builds one layered crowd sound per entry (screams, cheers) from
+  many TTS voices, written to public/<audio_dir>/<name>.mp3.
 
 Writes public/<audio_dir>/line<N>.mp3 and <json_out> (clip offsets + word
 timings). Needs network access to speech.platform.bing.com. List voices with:
@@ -98,6 +101,40 @@ async def synth(text: str, path: Path, voice: str, rate: str, pitch: str):
     return words
 
 
+async def build_crowd(item):
+    """Layer many short TTS shouts (different voices/pitches, staggered) into one crowd sound."""
+    import random as _r
+    rng = _r.Random(item["name"])
+    tmp_files = []
+    for k in range(item.get("layers", 12)):
+        text = item["texts"][k % len(item["texts"])]
+        voice = item["voices"][k % len(item["voices"])]
+        pitch = f"{rng.randint(-item.get('pitch_spread', 20), item.get('pitch_spread', 20)) + item.get('pitch', 0):+d}Hz"
+        path = OUT_DIR / f"_crowd{k}.mp3"
+        await synth(text, path, voice, item.get("rate", "+10%"), pitch)
+        tmp_files.append((path, rng.uniform(0, item.get("spread", 0.8))))
+    inputs = []
+    filters = []
+    for i, (path, delay) in enumerate(tmp_files):
+        inputs += ["-i", str(path)]
+        pan = rng.uniform(-0.8, 0.8)
+        filters.append(
+            f"[{i}]aresample=44100,adelay={int(delay * 1000)}|{int(delay * 1000)},"
+            f"pan=stereo|c0={0.5 - pan / 2:.2f}*c0|c1={0.5 + pan / 2:.2f}*c0,volume={rng.uniform(0.5, 1):.2f}[a{i}]"
+        )
+    mix = "".join(f"[a{i}]" for i in range(len(tmp_files)))
+    reverb = ",aecho=0.8:0.7:60|120:0.35|0.25" if item.get("reverb", True) else ""
+    filters.append(f"{mix}amix=inputs={len(tmp_files)}:normalize=0{reverb},loudnorm=I={item.get('lufs', -16)}:TP=-1.5[out]")
+    out = OUT_DIR.parent / f"{item['name']}.mp3"
+    subprocess.run(
+        ["ffmpeg", "-y", "-loglevel", "error", *inputs, "-filter_complex", ";".join(filters), "-map", "[out]", "-ar", "44100", "-b:a", "192k", str(out)],
+        check=True,
+    )
+    for path, _ in tmp_files:
+        path.unlink()
+    print(f"crowd {item['name']}: {duration_of(out):.2f}s -> {out.relative_to(ROOT)}")
+
+
 async def main():
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     result = []
@@ -130,6 +167,8 @@ async def main():
         })
         print(f"line{i}: {dur:.2f}s  {' | '.join(w['text'] + '@' + str(w['start']) for w in words)}")
     JSON_OUT.write_text(json.dumps({"voice": VOICE, "rate": RATE, "lines": result}, ensure_ascii=False, indent=2) + "\n")
+    for item in CONFIG.get("crowd", []):
+        await build_crowd(item)
     print(f"wrote {JSON_OUT.relative_to(ROOT)}")
 
 

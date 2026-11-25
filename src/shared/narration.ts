@@ -4,7 +4,7 @@ import type { Caption } from "@remotion/captions";
 // scene plus the time of every spoken word (Microsoft Edge TTS boundaries).
 
 export type NarrationWord = { spoken: string; text: string; start: number; end: number; emphasis?: boolean };
-export type CaptionTone = "narrator" | "radio" | "alien" | "hero" | "weak";
+export type CaptionTone = "narrator" | "radio" | "alien" | "hero" | "weak" | "panic";
 export type NarrationLine = {
   scene: number;
   file: string;

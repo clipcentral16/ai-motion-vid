@@ -10,6 +10,8 @@
 //         public/whatif-nuke/*.mp3 (nuke: tense score + siren, boom, ...)
 //   node scripts/generate-audio.mjs jupiter
 //         public/jupiter/*.mp3 (dark score, radio static, flatline, gunshots...)
+//   node scripts/generate-audio.mjs asteroid
+//         public/asteroid/*.mp3 (ominous-to-hype score, boost, ball hit, ding...)
 
 import { writeFileSync, mkdirSync, unlinkSync, readFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
@@ -17,7 +19,7 @@ import { join } from "node:path";
 
 const SR = 44100;
 const SET = process.argv[2] ?? "no-legs";
-const OUT_NAME = { nuke: "whatif-nuke", jupiter: "jupiter" }[SET] ?? "whatif";
+const OUT_NAME = { nuke: "whatif-nuke", jupiter: "jupiter", asteroid: "asteroid" }[SET] ?? "whatif";
 const OUT = join(process.cwd(), "public", OUT_NAME);
 mkdirSync(OUT, { recursive: true });
 
@@ -698,7 +700,242 @@ const darkScore = () => {
   writeWav("score", buf, 0.8);
 };
 
-if (SET === "jupiter") {
+// ---------- "What if an asteroid was about to hit Earth?" ----------
+
+// Rocket boost: roaring hiss with a crackly edge.
+const boost = () => {
+  const d = 2.5;
+  const buf = stereo(d);
+  let lp = 0, lp2 = 0;
+  for (let i = 0; i < buf[0].length; i++) {
+    const t = i / SR;
+    const n = noise();
+    lp += lpCoef(2600) * (n - lp);
+    lp2 += lpCoef(300) * (n - lp2);
+    const env = Math.min(1, t / 0.08) * Math.min(1, (d - t) / 0.5);
+    add(buf, i, (lp * 0.7 + lp2 * 1.6 + (rand() < 0.003 ? noise() : 0)) * env, Math.sin(t * 2) * 0.3);
+  }
+  writeWav("boost", buf);
+};
+
+// Big ball hit: punchy sub boom + bright smack.
+const ballHit = () => {
+  const d = 1.4;
+  const buf = stereo(d);
+  let ph = 0, lp = 0;
+  for (let i = 0; i < buf[0].length; i++) {
+    const t = i / SR;
+    ph += (TAU * (40 + 140 * Math.exp(-t * 22))) / SR;
+    lp += lpCoef(8000 * Math.exp(-t * 30) + 400) * (noise() - lp);
+    add(buf, i, Math.sin(ph) * Math.exp(-t * 3.5) * 1.3 + lp * Math.exp(-t * 18) * 1.2);
+  }
+  writeWav("hit", buf);
+};
+
+// Soft catch: muffled thud, everything stops.
+const catchThud = () => {
+  const d = 0.9;
+  const buf = stereo(d);
+  let ph = 0, lp = 0;
+  for (let i = 0; i < buf[0].length; i++) {
+    const t = i / SR;
+    ph += (TAU * (55 + 40 * Math.exp(-t * 20))) / SR;
+    lp += lpCoef(600) * (noise() - lp);
+    add(buf, i, Math.sin(ph) * Math.exp(-t * 6) + lp * Math.exp(-t * 10) * 0.8);
+  }
+  writeWav("catch", buf);
+};
+
+// Flip reset sparkle: quick rising chime.
+const ding = () => {
+  const d = 1.0;
+  const buf = stereo(d);
+  const notes = [1318.5, 1760, 2637];
+  notes.forEach((f, k) => {
+    for (let j = 0; j < 0.8 * SR; j++) {
+      const t = j / SR;
+      add(buf, Math.round((k * 0.06 + t) * SR), (Math.sin(TAU * f * t) + 0.3 * Math.sin(TAU * f * 2.01 * t)) * Math.exp(-t * 5) * 0.4, (k - 1) * 0.4);
+    }
+  });
+  writeWav("ding", buf);
+};
+
+// Applause: many random claps.
+const applause = () => {
+  const d = 4;
+  const buf = stereo(d);
+  for (let c = 0; c < 900; c++) {
+    const at = rand() * (d - 0.2);
+    const pan = rand() * 1.6 - 0.8;
+    const g = 0.15 + rand() * 0.2;
+    let lp = 0;
+    for (let j = 0; j < 0.03 * SR; j++) {
+      const t = j / SR;
+      const n = noise();
+      lp += lpCoef(2500) * (n - lp);
+      add(buf, Math.round((at + t) * SR), (n - lp * 0.5) * Math.exp(-t * 160) * g, pan);
+    }
+  }
+  for (let i = 0; i < buf[0].length; i++) {
+    const t = i / SR;
+    const env = Math.min(1, t / 0.4) * Math.min(1, (d - t) / 1.2);
+    buf[0][i] *= env;
+    buf[1][i] *= env;
+  }
+  writeWav("applause", buf);
+};
+
+// Score, 32s: ominous space drone -> panic drums -> hype build when Zen
+// takes the car -> record-stop on the catch -> riser -> drop on the flick.
+// Catch/flick times come from the narration timings.
+const hypeScore = () => {
+  const DURATION = 32;
+  const STARTS = [0, 4.5, 9, 13.5, 18.5, 23.5, 28];
+  const narr = JSON.parse(readFileSync(join(process.cwd(), "src", "AsteroidSave", "narration.json"), "utf8"));
+  const word = (scene, idx) => {
+    const l = narr.lines.find((x) => x.scene === scene);
+    return STARTS[scene] + l.start + l.words[idx].start;
+  };
+  const CATCH = word(3, 4); // "caught"
+  const FLICK = word(4, 3); // "FLICK!"
+  const PANIC = STARTS[1];
+  const BUILD = STARTS[2];
+  const buf = stereo(DURATION);
+  const stopped = (t) => (t >= CATCH && t < CATCH + 0.7) || (t >= FLICK - 0.35 && t < FLICK);
+
+  // Ominous drone (space + panic)
+  let dl = 0;
+  for (let i = 0; i < Math.round(BUILD * SR); i++) {
+    const t = i / SR;
+    let v = 0;
+    for (const f of [41.2, 43.65, 82.41, 87.31]) v += ((f * t) % 1) * 2 - 1;
+    dl += lpCoef(200 + 150 * Math.sin(TAU * 0.2 * t)) * (v - dl);
+    const g = 0.1 * Math.min(1, t / 2) * (t > PANIC ? 1.5 : 1) * Math.min(1, (BUILD + 0.3 - t) / 0.6);
+    add(buf, i, dl * g, Math.sin(t * 0.3) * 0.3);
+  }
+  const tom = (start, f0, g) => {
+    let ph = 0;
+    for (let j = 0; j < 0.45 * SR; j++) {
+      const t = j / SR;
+      ph += (TAU * (f0 + f0 * 0.7 * Math.exp(-t * 20))) / SR;
+      add(buf, Math.round((start + t) * SR), (Math.sin(ph) * Math.exp(-t * 6) + noise() * 0.1 * Math.exp(-t * 30)) * g);
+    }
+  };
+  for (let t = PANIC; t < BUILD - 0.2; t += 0.375) tom(t, 60 + (Math.round((t - PANIC) / 0.375) % 4 === 0 ? 0 : 20), 0.7);
+
+  // Hype section at 128 BPM
+  const beat = 60 / 128;
+  const kick = (start, g = 1) => {
+    let ph = 0;
+    for (let j = 0; j < 0.3 * SR; j++) {
+      const t = j / SR;
+      ph += (TAU * (45 + 110 * Math.exp(-t * 32))) / SR;
+      add(buf, Math.round((start + t) * SR), Math.sin(ph) * Math.exp(-t * 9) * 0.95 * g);
+    }
+  };
+  const clap = (start) => {
+    let lp = 0;
+    for (let j = 0; j < 0.2 * SR; j++) {
+      const t = j / SR;
+      const n = noise();
+      lp += lpCoef(1300) * (n - lp);
+      add(buf, Math.round((start + t) * SR), (n - lp) * Math.exp(-t * 20) * 0.5);
+    }
+  };
+  const hat = (start) => {
+    let lp = 0;
+    for (let j = 0; j < 0.05 * SR; j++) {
+      const t = j / SR;
+      const n = noise();
+      lp += lpCoef(7000) * (n - lp);
+      add(buf, Math.round((start + t) * SR), (n - lp) * Math.exp(-t * 60) * 0.22, -0.3);
+    }
+  };
+  const chords = [
+    [220.0, 261.63, 329.63], // Am
+    [174.61, 220.0, 261.63], // F
+    [196.0, 246.94, 293.66], // G
+    [164.81, 207.65, 246.94], // E
+  ];
+  const bassRoots = [55, 43.65, 49, 41.2];
+  const saw = (start, tones, len, g) => {
+    let lp = 0;
+    for (let j = 0; j < len * SR; j++) {
+      const t = j / SR;
+      let v = 0;
+      for (const f of tones) for (const det of [0.993, 1, 1.007]) v += ((f * det * t) % 1) * 2 - 1;
+      lp += lpCoef(2400) * (v - lp);
+      add(buf, Math.round((start + t) * SR), lp * Math.min(1, t / 0.01) * Math.exp(-t * 2.5) * g, 0.15);
+    }
+  };
+  const bass = (start, f, len) => {
+    let lp = 0, ph = 0;
+    for (let j = 0; j < len * SR; j++) {
+      const t = j / SR;
+      ph += f / SR;
+      lp += lpCoef(400) * ((((ph % 1) < 0.5) ? 1 : -1) - lp);
+      add(buf, Math.round((start + t) * SR), lp * Math.exp(-t * 4) * 0.45);
+    }
+  };
+  for (let b = 0; BUILD + b * beat < DURATION; b++) {
+    const t = BUILD + b * beat;
+    if (stopped(t)) continue;
+    const bar = Math.floor(b / 4);
+    const chord = chords[bar % 4];
+    const dropped = t >= FLICK;
+    const build = !dropped;
+    // Build: 4-on-floor kick + rising arp. Drop: full mix.
+    kick(t, build ? 0.8 : 1);
+    if (!stopped(t + beat / 2)) hat(t + beat / 2);
+    if (dropped) {
+      if (b % 2 === 1) clap(t);
+      if (b % 4 === 0) saw(t, chord, beat * 4, 0.06);
+      bass(t, bassRoots[bar % 4] * 2, beat * 0.9);
+      if (!stopped(t + beat / 2)) bass(t + beat / 2, bassRoots[bar % 4] * 2, beat * 0.45);
+    } else {
+      // rising arpeggio, louder as the flick approaches
+      const g = 0.05 + 0.08 * Math.min(1, (t - BUILD) / (FLICK - BUILD));
+      for (let k = 0; k < 2; k++) {
+        const tt = t + (k * beat) / 2;
+        if (stopped(tt)) continue;
+        const f = chord[(b * 2 + k) % 3] * 2;
+        for (let j = 0; j < 0.18 * SR; j++) {
+          const x = j / SR;
+          add(buf, Math.round((tt + x) * SR), (((f * x) % 1) * 2 - 1) * Math.exp(-x * 12) * g, -0.2);
+        }
+      }
+    }
+  }
+  // Riser into the flick
+  let rl = 0;
+  for (let i = Math.round((CATCH + 0.7) * SR); i < Math.round((FLICK - 0.35) * SR); i++) {
+    const t = i / SR;
+    const u = (t - CATCH - 0.7) / (FLICK - 0.35 - CATCH - 0.7);
+    rl += lpCoef(300 + 7000 * u * u) * (noise() - rl);
+    add(buf, i, rl * 0.4 * u);
+  }
+
+  for (let i = 0; i < buf[0].length; i++) {
+    const t = i / SR;
+    const g = Math.min(1, t / 1) * Math.min(1, Math.max(0, (DURATION - t) / 2));
+    buf[0][i] *= g;
+    buf[1][i] *= g;
+  }
+  writeWav("score", buf, 0.8);
+};
+
+if (SET === "asteroid") {
+  whoosh();
+  siren();
+  rumble();
+  boom();
+  boost();
+  ballHit();
+  catchThud();
+  ding();
+  applause();
+  hypeScore();
+} else if (SET === "jupiter") {
   radioStatic();
   squelch();
   flatline();

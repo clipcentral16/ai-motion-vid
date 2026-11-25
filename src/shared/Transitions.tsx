@@ -10,7 +10,9 @@ export type Flash = { frame: number; color?: string; peak?: number; length?: num
  * a quick dip to black (`mode="dip"`, for serious or scary videos). Plus
  * optional full-screen flashes.
  */
-export const Transitions: React.FC<{ sceneStarts: number[]; colors?: string[]; flashes?: Flash[]; mode?: "swipe" | "dip" }> = ({
+export type TransitionMode = "swipe" | "dip";
+
+export const Transitions: React.FC<{ sceneStarts: number[]; colors?: string[]; flashes?: Flash[]; mode?: TransitionMode | TransitionMode[] }> = ({
   sceneStarts,
   colors = BRIGHT_SWIPES,
   flashes = [],
@@ -21,7 +23,8 @@ export const Transitions: React.FC<{ sceneStarts: number[]; colors?: string[]; f
   return (
     <AbsoluteFill style={{ pointerEvents: "none", overflow: "hidden" }}>
       {sceneStarts.slice(1).map((cut, i) => {
-        if (mode === "dip") {
+        // `mode` can be one value for every cut, or one per cut.
+        if ((Array.isArray(mode) ? mode[i] : mode) === "dip") {
           const o = interpolate(frame, [cut - 9, cut, cut + 9], [0, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
           return o > 0 ? <AbsoluteFill key={cut} style={{ background: "#000", opacity: o }} /> : null;
         }

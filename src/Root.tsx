@@ -6,6 +6,8 @@ import { WhatIfNuke } from "./WhatIfNuke/WhatIfNuke";
 import * as Nuke from "./WhatIfNuke/constants";
 import { JupiterIncident } from "./JupiterIncident/JupiterIncident";
 import * as Jupiter from "./JupiterIncident/constants";
+import { AsteroidSave } from "./AsteroidSave/AsteroidSave";
+import * as Asteroid from "./AsteroidSave/constants";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -41,6 +43,14 @@ export const RemotionRoot: React.FC = () => {
         fps={Jupiter.FPS}
         width={Jupiter.WIDTH}
         height={Jupiter.HEIGHT}
+      />
+      <Composition
+        id="AsteroidSave"
+        component={AsteroidSave}
+        durationInFrames={Asteroid.TOTAL_FRAMES}
+        fps={Asteroid.FPS}
+        width={Asteroid.WIDTH}
+        height={Asteroid.HEIGHT}
       />
     </>
   );
