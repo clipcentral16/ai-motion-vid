@@ -45,6 +45,23 @@ export const grassTexture = (repeat: [number, number] = [20, 20]) =>
     repeat,
   );
 
+/** Large, soft light/dark patches laid once over a whole lawn (no visible repeat). */
+export const grassMacroTexture = () =>
+  make("grass-macro", 512, 512, (ctx) => {
+    ctx.clearRect(0, 0, 512, 512);
+    for (let i = 0; i < 70; i++) {
+      const x = random(`mx${i}`) * 512;
+      const y = random(`my${i}`) * 512;
+      const r = 20 + random(`mr${i}`) * 70;
+      const light = random(`ml${i}`) < 0.5;
+      const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+      g.addColorStop(0, light ? "rgba(190,240,120,0.35)" : "rgba(20,70,10,0.28)");
+      g.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = g;
+      ctx.fillRect(x - r, y - r, r * 2, r * 2);
+    }
+  });
+
 /** Horizontal wooden siding boards. */
 export const sidingTexture = (color: string, repeat: [number, number] = [1, 1]) =>
   make(
@@ -283,4 +300,155 @@ export const faceTexture = (expr: Expression, blink: boolean) =>
         ctx.lineTo(148, 178);
         ctx.stroke();
     }
+  });
+
+// ---------- Clothing details (transparent decals over plain coloured blocks) ----------
+
+const shade = (hex: string, amt: number) => {
+  const c = new THREE.Color(hex);
+  const hsl = { h: 0, s: 0, l: 0 };
+  c.getHSL(hsl);
+  c.setHSL(hsl.h, hsl.s, Math.max(0, Math.min(1, hsl.l + amt)));
+  return `#${c.getHexString()}`;
+};
+
+export type Top = "tee" | "hoodie" | "jacket";
+
+/** Front of the torso: collar, folds, hoodie pocket + strings, or an open jacket over a shirt. */
+export const torsoFrontTexture = (top: Top, color: string, inner?: string) =>
+  make(`torso-${top}-${color}-${inner}`, 256, 220, (ctx) => {
+    ctx.clearRect(0, 0, 256, 220);
+    const dark = shade(color, -0.12);
+    // soft fold shading at the sides and bottom
+    const g = ctx.createLinearGradient(0, 0, 256, 0);
+    g.addColorStop(0, "rgba(0,0,0,0.10)");
+    g.addColorStop(0.2, "rgba(0,0,0,0)");
+    g.addColorStop(0.8, "rgba(0,0,0,0)");
+    g.addColorStop(1, "rgba(0,0,0,0.10)");
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, 256, 220);
+    ctx.strokeStyle = "rgba(0,0,0,0.12)";
+    ctx.lineWidth = 3;
+    for (const [x1, y1, x2, y2] of [
+      [70, 150, 100, 190],
+      [190, 140, 165, 185],
+    ]) {
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.quadraticCurveTo((x1 + x2) / 2 + 8, (y1 + y2) / 2, x2, y2);
+      ctx.stroke();
+    }
+    if (top === "tee") {
+      ctx.fillStyle = dark;
+      ctx.beginPath();
+      ctx.ellipse(128, 0, 46, 26, 0, 0, Math.PI);
+      ctx.fill();
+    }
+    if (top === "hoodie") {
+      // hood bunched around the neck
+      ctx.fillStyle = dark;
+      ctx.beginPath();
+      ctx.ellipse(128, 4, 70, 30, 0, 0, Math.PI);
+      ctx.fill();
+      // strings
+      ctx.strokeStyle = "#f4f4f4";
+      ctx.lineWidth = 6;
+      for (const x of [108, 148]) {
+        ctx.beginPath();
+        ctx.moveTo(x, 24);
+        ctx.lineTo(x + (x < 128 ? -4 : 4), 92);
+        ctx.stroke();
+        ctx.fillStyle = "#cfcfcf";
+        ctx.fillRect(x - 5 + (x < 128 ? -4 : 4), 90, 10, 12);
+      }
+      // kangaroo pocket
+      ctx.fillStyle = dark;
+      ctx.beginPath();
+      ctx.moveTo(62, 200);
+      ctx.lineTo(82, 128);
+      ctx.lineTo(174, 128);
+      ctx.lineTo(194, 200);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = shade(color, -0.22);
+      ctx.lineWidth = 3;
+      ctx.stroke();
+    }
+    if (top === "jacket") {
+      // inner shirt showing between the open jacket
+      ctx.fillStyle = inner ?? "#ffffff";
+      ctx.beginPath();
+      ctx.moveTo(96, 0);
+      ctx.lineTo(160, 0);
+      ctx.lineTo(150, 220);
+      ctx.lineTo(106, 220);
+      ctx.closePath();
+      ctx.fill();
+      // lapels / collar
+      ctx.fillStyle = shade(color, -0.1);
+      for (const s of [-1, 1]) {
+        ctx.beginPath();
+        ctx.moveTo(128 + s * 32, 0);
+        ctx.lineTo(128 + s * 70, 0);
+        ctx.lineTo(128 + s * 30, 70);
+        ctx.closePath();
+        ctx.fill();
+      }
+      // zipper edges and chest pockets
+      ctx.fillStyle = shade(color, -0.25);
+      ctx.fillRect(92, 60, 5, 160);
+      ctx.fillRect(159, 60, 5, 160);
+      ctx.strokeStyle = shade(color, -0.2);
+      ctx.lineWidth = 3;
+      ctx.strokeRect(30, 70, 46, 34);
+      ctx.strokeRect(180, 70, 46, 34);
+    }
+  });
+
+/** Back of the torso: hood for hoodies. */
+export const torsoBackTexture = (top: Top, color: string) =>
+  make(`torsoback-${top}-${color}`, 256, 220, (ctx) => {
+    ctx.clearRect(0, 0, 256, 220);
+    if (top === "hoodie") {
+      ctx.fillStyle = shade(color, -0.1);
+      ctx.beginPath();
+      ctx.moveTo(60, 0);
+      ctx.lineTo(196, 0);
+      ctx.quadraticCurveTo(200, 70, 128, 86);
+      ctx.quadraticCurveTo(56, 70, 60, 0);
+      ctx.fill();
+    }
+  });
+
+/** Trousers: front of each leg with a seam and pocket edge; belt on the hips. */
+export const legFrontTexture = (color: string, jeans: boolean) =>
+  make(`leg-${color}-${jeans}`, 128, 128, (ctx) => {
+    ctx.clearRect(0, 0, 128, 128);
+    const g = ctx.createLinearGradient(0, 0, 128, 0);
+    g.addColorStop(0, "rgba(0,0,0,0.12)");
+    g.addColorStop(0.5, "rgba(255,255,255,0.05)");
+    g.addColorStop(1, "rgba(0,0,0,0.12)");
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, 128, 128);
+    ctx.strokeStyle = jeans ? "rgba(255,215,140,0.55)" : "rgba(0,0,0,0.18)";
+    ctx.lineWidth = jeans ? 2 : 3;
+    ctx.setLineDash(jeans ? [6, 4] : []);
+    ctx.beginPath();
+    ctx.moveTo(12, 0);
+    ctx.quadraticCurveTo(40, 30, 30, 0);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(100, 0);
+    ctx.lineTo(104, 128);
+    ctx.stroke();
+  });
+
+export const beltTexture = (color: string) =>
+  make(`belt-${color}`, 256, 64, (ctx) => {
+    ctx.fillStyle = shade(color, -0.3);
+    ctx.fillRect(0, 10, 256, 26);
+    ctx.fillStyle = "#c9a227";
+    ctx.fillRect(112, 8, 32, 30);
+    ctx.fillStyle = shade(color, -0.3);
+    ctx.fillRect(120, 15, 16, 16);
   });

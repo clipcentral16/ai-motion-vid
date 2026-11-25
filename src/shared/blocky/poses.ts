@@ -209,10 +209,11 @@ export const sad = (t: number, seed = 0): Pose => {
 /** Arms folded across the chest (grumpy). */
 export const armsCrossed = (t: number, seed = 0): Pose => {
   const p = idle(t, seed);
-  p.shoulderL = { x: -0.45, z: -0.12, y: 0.2 };
-  p.shoulderR = { x: -0.45, z: -0.12, y: -0.2 };
-  p.elbowL = { x: -1.7, z: 0, y: 0.9 };
-  p.elbowR = { x: -1.7, z: 0, y: -0.9 };
+  // Upper arms forward and in, forearms folded across the chest.
+  p.shoulderL = { x: -0.55, z: -0.22, y: 0 };
+  p.shoulderR = { x: -0.5, z: -0.22, y: 0 };
+  p.elbowL = { x: -1.45, z: 0, y: -1.25 };
+  p.elbowR = { x: -1.35, z: 0, y: -1.2 };
   p.head = { ...p.head, z: 0.06 };
   return p;
 };
@@ -220,10 +221,11 @@ export const armsCrossed = (t: number, seed = 0): Pose => {
 /** Proud stance with fists on hips. */
 export const handsOnHips = (t: number, seed = 0): Pose => {
   const p = idle(t, seed);
-  p.shoulderL = { x: 0.15, z: 0.75 };
-  p.shoulderR = { x: 0.15, z: 0.75 };
-  p.elbowL = { x: -0.3, z: -1.55 };
-  p.elbowR = { x: -0.3, z: -1.55 };
+  // Elbows only slightly out so the chunky arms read as fists on hips.
+  p.shoulderL = { x: 0.1, z: 0.5 };
+  p.shoulderR = { x: 0.1, z: 0.5 };
+  p.elbowL = { x: -0.15, z: -1.15 };
+  p.elbowR = { x: -0.15, z: -1.15 };
   p.head = { x: -0.08, y: p.head.y, z: 0 };
   p.lean = -0.04;
   return p;

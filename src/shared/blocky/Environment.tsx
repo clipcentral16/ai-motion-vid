@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { AbsoluteFill, random, useVideoConfig } from "remotion";
 import { ThreeCanvas } from "@remotion/three";
 import { plastic, rbox } from "./BlockCharacter";
-import { brickTexture, facadeTexture, glassTexture, grassTexture, pavingTexture, roadTexture, sidingTexture } from "./textures";
+import { brickTexture, facadeTexture, glassTexture, grassMacroTexture, grassTexture, pavingTexture, roadTexture, sidingTexture } from "./textures";
 
 type V3 = [number, number, number];
 
@@ -17,7 +17,7 @@ export const BlockCanvas: React.FC<{
   fov?: number;
   far?: number;
   exposure?: number;
-}> = ({ children, skyTop, skyHorizon, fov = 50, far = 1200, exposure = 1.05 }) => {
+}> = ({ children, skyTop, skyHorizon, fov = 50, far = 1200, exposure = 1.12 }) => {
   const { width, height } = useVideoConfig();
   return (
     <AbsoluteFill style={{ background: `linear-gradient(180deg, ${skyTop} 0%, ${skyHorizon} 70%)` }}>
@@ -45,7 +45,7 @@ export const BlockLights: React.FC<{
   ground?: string;
   fill?: number;
   fog?: { color: string; near: number; far: number };
-}> = ({ sun = [40, 60, 30], target = [0, 0, 0], area = 60, sunColor = "#fff4e2", sunIntensity = 2.6, sky = "#cfe8ff", ground = "#5b8f3c", fill = 1.3, fog }) => {
+}> = ({ sun = [40, 60, 30], target = [0, 0, 0], area = 60, sunColor = "#fff4e2", sunIntensity = 2.2, sky = "#d8ecff", ground = "#6a9a48", fill = 1.8, fog }) => {
   const light = useMemo(() => new THREE.DirectionalLight(), []);
   light.position.set(target[0] + sun[0], target[1] + sun[1], target[2] + sun[2]);
   light.target.position.set(...target);
@@ -64,7 +64,8 @@ export const BlockLights: React.FC<{
   cam.updateProjectionMatrix();
   light.shadow.bias = -0.0004;
   light.shadow.normalBias = 0.05;
-  light.shadow.radius = 4;
+  light.shadow.radius = 7;
+  light.shadow.blurSamples = 16;
   return (
     <>
       {fog ? <fog attach="fog" args={[fog.color, fog.near, fog.far]} /> : null}
@@ -78,10 +79,17 @@ export const BlockLights: React.FC<{
 // ---------- Ground ----------
 
 export const Grass: React.FC<{ size?: number; position?: V3 }> = ({ size = 600, position = [0, 0, 0] }) => (
-  <mesh rotation={[-Math.PI / 2, 0, 0]} position={position} receiveShadow>
-    <planeGeometry args={[size, size]} />
-    <meshStandardMaterial map={grassTexture([size / 12, size / 12])} roughness={0.95} />
-  </mesh>
+  <group position={position}>
+    <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+      <planeGeometry args={[size, size]} />
+      <meshStandardMaterial map={grassTexture([size / 12, size / 12])} roughness={0.95} />
+    </mesh>
+    {/* Soft light/dark patches so the lawn doesn't look tiled */}
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]} receiveShadow>
+      <planeGeometry args={[Math.min(size, 260), Math.min(size, 260)]} />
+      <meshStandardMaterial map={grassMacroTexture()} transparent depthWrite={false} roughness={1} />
+    </mesh>
+  </group>
 );
 
 /** Road strip running along Z, with paving sidewalks on both sides. */
@@ -216,6 +224,18 @@ export const Townhouse: React.FC<{ position: V3; w: number; d: number; h: number
         <meshStandardMaterial map={facadeTexture(wall, Math.max(1, Math.round(w / 4)), floors)} roughness={0.85} />
       </mesh>
       <mesh geometry={roofGeo} material={plastic(roof, 0.75)} position={[0, h, 0]} castShadow />
+      {/* Chimney + a little rooftop clutter, varied by position */}
+      {random(`ch${position[0]}${position[2]}`) < 0.6 ? (
+        <mesh geometry={rbox(1.1, 3, 1.1, 0.06)} material={plastic("#a9533c", 0.8)} position={[w * 0.25, h + 2.2, -d * 0.15]} castShadow />
+      ) : null}
+      {random(`wt${position[0]}${position[2]}`) < 0.25 ? (
+        <group position={[-w * 0.2, h + Math.min(4, w * 0.4) * 0.55, d * 0.2]}>
+          <mesh castShadow>
+            <cylinderGeometry args={[0.8, 0.8, 1.4, 12]} />
+            <meshStandardMaterial color="#9c7a5a" roughness={0.9} />
+          </mesh>
+        </group>
+      ) : null}
     </group>
   );
 };
@@ -256,6 +276,9 @@ export const Tower: React.FC<{ position: V3; w: number; d: number; h: number; hu
         <boxGeometry args={[w * (1 - setbacks * 0.18) + 0.4, 0.8, d * (1 - setbacks * 0.18) + 0.4]} />
         <meshStandardMaterial color="#e8edf2" roughness={0.6} />
       </mesh>
+      {[-1, 1].map((s) => (
+        <mesh key={s} geometry={rbox(w * 0.22, 1.2, d * 0.18, 0.08)} material={plastic("#c9ced6", 0.6)} position={[s * w * 0.18 * (1 - setbacks * 0.18), h + 1.4, s * d * 0.12]} castShadow />
+      ))}
       {crown ? (
         <mesh position={[0, h + 2.5, 0]} castShadow>
           <cylinderGeometry args={[w * 0.12, w * 0.2, 4, 12]} />
@@ -353,32 +376,48 @@ export const Van: React.FC<{ position: V3; rotationY?: number; color?: string }>
   </group>
 );
 
-/** A dark, lumpy storm-cloud ceiling made of smooth puffs. */
+/**
+ * A dense, lumpy storm-cloud ceiling: overlapping flattened puffs on a grid
+ * with jitter, darker underneath, plus a few hanging lumps.
+ */
 export const StormClouds: React.FC<{ y: number; area: number; z?: number; seed?: string; count?: number; color?: string }> = ({
   y,
   area,
   z = 0,
   seed = "storm",
   count = 70,
-  color = "#3a3742",
+  color = "#3d3948",
 }) => {
-  const puffs = useMemo(
-    () =>
-      Array.from({ length: count }).map((_, i) => ({
-        x: (random(`${seed}x${i}`) - 0.5) * area,
-        y: y + random(`${seed}y${i}`) * 8,
-        z: z - random(`${seed}z${i}`) * area,
-        r: 7 + random(`${seed}r${i}`) * 9,
-        shade: random(`${seed}s${i}`),
-      })),
-    [area, count, seed, y, z],
-  );
+  const puffs = useMemo(() => {
+    const n = Math.max(6, Math.round(Math.sqrt(count * 3)));
+    const cell = area / n;
+    const out: { x: number; y: number; z: number; r: number; tone: number }[] = [];
+    for (let i = 0; i < n; i++) {
+      for (let j = 0; j < n; j++) {
+        const k = `${seed}${i}-${j}`;
+        out.push({
+          x: -area / 2 + (i + 0.5) * cell + (random(`x${k}`) - 0.5) * cell * 0.8,
+          y: y + random(`y${k}`) * cell * 0.25,
+          z: z - (j + 0.5) * cell + (random(`z${k}`) - 0.5) * cell * 0.8,
+          r: cell * (0.75 + random(`r${k}`) * 0.5),
+          tone: random(`t${k}`),
+        });
+        if (random(`h${k}`) < 0.35) {
+          // hanging lump underneath
+          out.push({ x: out[out.length - 1].x + cell * 0.2, y: y - cell * 0.25, z: out[out.length - 1].z, r: cell * 0.45, tone: 0 });
+        }
+      }
+    }
+    return out;
+  }, [area, count, seed, y, z]);
+  // Seen from below, so the tones carry their own light (emissive) to show the lumps.
+  const tones = [color, "#5a5568", "#6a6478", "#48445a"];
   return (
     <group>
       {puffs.map((p, i) => (
-        <mesh key={i} position={[p.x, p.y, p.z]} scale={[p.r * 1.5, p.r * 0.7, p.r]}>
-          <sphereGeometry args={[1, 18, 12]} />
-          <meshStandardMaterial color={p.shade < 0.5 ? color : "#4a4654"} roughness={1} emissive="#1b1530" emissiveIntensity={0.25} />
+        <mesh key={i} position={[p.x, p.y, p.z]} scale={[p.r, p.r * 0.55, p.r]}>
+          <sphereGeometry args={[1, 16, 10]} />
+          <meshStandardMaterial color={tones[Math.floor(p.tone * tones.length)]} roughness={1} emissive={tones[Math.floor(p.tone * tones.length)]} emissiveIntensity={0.55} />
         </mesh>
       ))}
     </group>

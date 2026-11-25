@@ -62,14 +62,14 @@ const Skyline: React.FC = () => {
       {towers.map((t, i) => (
         <Tower key={i} position={[t.x, 0, t.z]} w={t.w} d={t.w} h={t.h} hue={t.hue} setbacks={t.setbacks} round={t.round} crown={t.crown} />
       ))}
-      <StormClouds y={120} area={520} z={160} count={110} />
+      <StormClouds y={115} area={520} z={160} count={140} />
     </BlockCanvas>
   );
 };
 
 // ---------- Shot 2: someone walking down a bright city street ----------
-const WALKER: Look = { skin: "#d9a066", shirt: "#7a5a3a", pants: "#c8a77a", shoes: "#2b2f36", hair: "spiky", hairColor: "#f2d36b", sleeves: "long", top: "jacket", jacket: "#4b3a2a" };
-const PASSER: Look = { skin: "#f2c9a0", shirt: "#e8e8e8", pants: "#2f4b7c", shoes: "#ffffff", hair: "cap", hairColor: "#6b3a1e", sleeves: "short" };
+const WALKER: Look = { skin: "#d9a066", shirt: "#e9e2d0", pants: "#c8a77a", shoes: "#2b2f36", hair: "spiky", hairColor: "#f2d36b", sleeves: "long", top: "jacket", jacket: "#5a4632" };
+const PASSER: Look = { skin: "#f2c9a0", shirt: "#e8e8e8", pants: "#2f4b7c", shoes: "#ffffff", hair: "cap", hairColor: "#6b3a1e", sleeves: "short", jeans: true };
 
 const Street: React.FC = () => {
   const frame = useCurrentFrame();
@@ -112,10 +112,10 @@ const Street: React.FC = () => {
 
 // ---------- Shot 3: a family in front of their house ----------
 const FAMILY: { look: Look; x: number; z: number; pose: typeof idle; expr: "grin" | "happy" | "sad" | "angry"; scale: number; rot: number }[] = [
-  { look: { skin: "#f2c9a0", shirt: "#1f3a6b", pants: "#2f4b7c", shoes: "#d9a441", hair: "buzz", hairColor: "#2a1d17", top: "jacket", jacket: "#7d8591", sleeves: "long" }, x: -5.6, z: 2, pose: handsOnHips, expr: "grin", scale: 1.05, rot: 0.15 },
-  { look: { skin: "#f2c9a0", shirt: "#ffcc2e", pants: "#6b7a3a", shoes: "#d93636", hair: "spiky", hairColor: "#d9612a", top: "hoodie", sleeves: "long" }, x: -2.0, z: 3, pose: wave, expr: "happy", scale: 0.85, rot: 0.05 },
-  { look: { skin: "#f2c9a0", shirt: "#ff8fc0", pants: "#b48ae0", shoes: "#ffffff", hair: "ponytails", hairColor: "#f5d36b", sleeves: "short" }, x: 1.4, z: 3, pose: sad, expr: "sad", scale: 0.72, rot: -0.05 },
-  { look: { skin: "#f2c9a0", shirt: "#f4efe6", pants: "#3a5f9a", shoes: "#f4efe6", hair: "long", hairColor: "#5a3a26", top: "jacket", jacket: "#f07a4a", sleeves: "long" }, x: 5.2, z: 2, pose: armsCrossed, expr: "angry", scale: 1.0, rot: -0.2 },
+  { look: { skin: "#f2c9a0", shirt: "#1f3a6b", pants: "#2f4b7c", shoes: "#d9a441", hair: "buzz", hairColor: "#2a1d17", top: "jacket", jacket: "#7d8591", sleeves: "long", jeans: true }, x: -5.6, z: 2, pose: handsOnHips, expr: "grin", scale: 1.05, rot: 0.15 },
+  { look: { skin: "#f2c9a0", shirt: "#ffcc2e", pants: "#6b7a3a", shoes: "#d93636", hair: "spiky", hairColor: "#d9612a", top: "hoodie", sleeves: "long", build: "kid" }, x: -2.0, z: 3, pose: wave, expr: "happy", scale: 1, rot: 0.05 },
+  { look: { skin: "#f2c9a0", shirt: "#ff8fc0", pants: "#b48ae0", shoes: "#ffffff", hair: "ponytails", hairColor: "#f5d36b", sleeves: "short", build: "kid", accent: "#ff4fa3" }, x: 1.4, z: 3, pose: sad, expr: "sad", scale: 0.86, rot: -0.05 },
+  { look: { skin: "#f2c9a0", shirt: "#f4efe6", pants: "#3a5f9a", shoes: "#f4efe6", hair: "long", hairColor: "#5a3a26", top: "jacket", jacket: "#f07a4a", sleeves: "long", jeans: true }, x: 5.2, z: 2, pose: armsCrossed, expr: "angry", scale: 1.0, rot: -0.2 },
 ];
 
 const Family: React.FC = () => {
@@ -132,7 +132,7 @@ const Family: React.FC = () => {
       <House position={[0, 0, -10]} w={18} d={12} h={15} />
       <BrickWing position={[16, 0, -13]} />
       <House position={[-21, 0, -14]} w={14} d={12} h={18} siding="#c9d6e3" roof="#8a4a3a" />
-      <StormClouds y={45} area={220} z={60} count={60} />
+      <StormClouds y={42} area={240} z={70} count={90} />
       {FAMILY.map((m, i) => (
         <BlockCharacter key={i} look={m.look} pose={m.pose(t, i * 1.7)} expression={m.expr} t={t} seed={i} position={[m.x, 0, m.z]} rotationY={m.rot} scale={m.scale} />
       ))}
