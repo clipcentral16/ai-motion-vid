@@ -5,17 +5,26 @@ export const BRIGHT_SWIPES = ["#ffd93d", "#ff6b9d", "#4dd4ff", "#7dff8a", "#c77d
 
 export type Flash = { frame: number; color?: string; peak?: number; length?: number };
 
-/** Diagonal colour swipe hiding each scene cut, plus optional full-screen flashes. */
-export const Transitions: React.FC<{ sceneStarts: number[]; colors?: string[]; flashes?: Flash[] }> = ({
+/**
+ * Hides each scene cut: a diagonal colour swipe (`mode="swipe"`, playful) or
+ * a quick dip to black (`mode="dip"`, for serious or scary videos). Plus
+ * optional full-screen flashes.
+ */
+export const Transitions: React.FC<{ sceneStarts: number[]; colors?: string[]; flashes?: Flash[]; mode?: "swipe" | "dip" }> = ({
   sceneStarts,
   colors = BRIGHT_SWIPES,
   flashes = [],
+  mode = "swipe",
 }) => {
   const frame = useCurrentFrame();
   const COLORS = colors;
   return (
     <AbsoluteFill style={{ pointerEvents: "none", overflow: "hidden" }}>
       {sceneStarts.slice(1).map((cut, i) => {
+        if (mode === "dip") {
+          const o = interpolate(frame, [cut - 9, cut, cut + 9], [0, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+          return o > 0 ? <AbsoluteFill key={cut} style={{ background: "#000", opacity: o }} /> : null;
+        }
         const p = (frame - (cut - HALF)) / (HALF * 2);
         if (p <= 0 || p >= 1) return null;
         const x = interpolate(p, [0, 1], [-2600, 2600]);

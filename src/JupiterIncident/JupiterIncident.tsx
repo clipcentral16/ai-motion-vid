@@ -2,7 +2,7 @@ import { AbsoluteFill, Sequence } from "remotion";
 import { CaptionTrack } from "../shared/Captions";
 import { Transitions } from "../shared/Transitions";
 import { CAPTION_LINES, EMPHASIS_STARTS, PAGE_META } from "./captions";
-import { FPS, SCENE_FRAMES, SCENE_STARTS, SHOTS, SWIPES, TOTAL_FRAMES } from "./constants";
+import { FPS, SCENE_FRAMES, SCENE_STARTS, SHOTS, TOTAL_FRAMES } from "./constants";
 import { FoundFootage } from "./FoundFootage";
 import { HeroTitles } from "./HeroTitles";
 import { Scene6Fallen, Scene7Hero } from "./scenes/Aftermath";
@@ -35,7 +35,7 @@ export const JupiterIncident: React.FC = () => (
     ))}
     <HeroTitles />
     <CaptionTrack lines={CAPTION_LINES} emphasis={EMPHASIS_STARTS} sceneStarts={SCENE_STARTS} totalFrames={TOTAL_FRAMES} pageMeta={PAGE_META} />
-    <Transitions sceneStarts={SCENE_STARTS} colors={SWIPES} flashes={FLASHES} />
+    <Transitions sceneStarts={SCENE_STARTS} mode="dip" flashes={FLASHES} />
     <FoundFootage />
     <SoundEffects />
   </AbsoluteFill>

@@ -1,3 +1,5 @@
+import narration from "./narration.json";
+
 export const FPS = 30;
 export const WIDTH = 1080;
 export const HEIGHT = 1920;
@@ -9,8 +11,11 @@ export const SCENE_FRAMES = SCENE_SECONDS.map((s) => Math.round(s * FPS));
 export const SCENE_STARTS = SCENE_FRAMES.map((_, i) => SCENE_FRAMES.slice(0, i).reduce((a, b) => a + b, 0));
 export const TOTAL_FRAMES = SCENE_FRAMES.reduce((a, b) => a + b, 0);
 
-// Scene 4 (index 3): the engineer's radio cuts to static, then the flatline.
-export const SIGNAL_LOST = 3.1;
+// Scene 4 (index 3): Speed's radio cuts to static right as his last word ends,
+// then the flatline. Derived from the voice timings (scripts/narration/jupiter.json);
+// the score (generate-audio.mjs) reads the same timings for its silence.
+const speedLine = narration.lines.find((l) => l.scene === 3)!;
+export const SIGNAL_LOST = Math.round((speedLine.start + speedLine.words[speedLine.words.length - 1].end + 0.02) * 100) / 100;
 
 // Scene 5 (index 4): CaseOh's shots (seconds into the scene). One alien per shot.
 export const SHOTS = [1.35, 1.75, 2.15, 2.6, 3.0, 3.45];
@@ -23,4 +28,3 @@ export const SKIES = {
   moon: { top: "#020208", horizon: "#1a1420" },
   ship: { top: "#030305", horizon: "#0b0a10" },
 };
-export const SWIPES = ["#2a0c12", "#7a1020", "#0d0d12", "#3b0a5c", "#141018"];

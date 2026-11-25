@@ -51,47 +51,47 @@
       "scene": 1,
       "file": "jupiter/voice/line1.mp3",
       "start": 0.35,
-      "duration": 3.291,
+      "duration": 3.082,
       "words": [
         {
           "spoken": "Houston",
           "start": 0.098,
-          "end": 0.579,
+          "end": 0.555,
           "text": "Houston…",
           "emphasis": false
         },
         {
-          "spoken": "we're",
-          "start": 0.783,
-          "end": 0.939,
-          "text": "we're",
+          "spoken": "the",
+          "start": 0.747,
+          "end": 0.855,
+          "text": "the",
           "emphasis": false
         },
         {
-          "spoken": "picking",
-          "start": 0.963,
-          "end": 1.288,
-          "text": "picking",
-          "emphasis": false
-        },
-        {
-          "spoken": "up",
-          "start": 1.312,
-          "end": 1.42,
-          "text": "up",
-          "emphasis": false
-        },
-        {
-          "spoken": "movement",
-          "start": 1.432,
-          "end": 1.805,
-          "text": "movement",
+          "spoken": "keys",
+          "start": 0.879,
+          "end": 1.18,
+          "text": "keys",
           "emphasis": true
         },
         {
+          "spoken": "are",
+          "start": 1.204,
+          "end": 1.312,
+          "text": "are",
+          "emphasis": false
+        },
+        {
+          "spoken": "moving",
+          "start": 1.324,
+          "end": 1.649,
+          "text": "moving",
+          "emphasis": false
+        },
+        {
           "spoken": "outside",
-          "start": 1.829,
-          "end": 2.37,
+          "start": 1.673,
+          "end": 2.189,
           "text": "outside.",
           "emphasis": false
         }
@@ -143,53 +143,74 @@
         }
       ],
       "extra": [],
-      "speaker": "???",
+      "speaker": "THE KEYS",
       "tone": "alien"
     },
     {
       "scene": 3,
       "file": "jupiter/voice/line3.mp3",
-      "start": 0.2,
-      "duration": 2.9,
+      "start": 0.12,
+      "duration": 3.683,
       "words": [
         {
-          "spoken": "They're",
-          "start": 0.09,
-          "end": 0.272,
-          "text": "They're",
+          "spoken": "Chat",
+          "start": 0.087,
+          "end": 0.476,
+          "text": "Chat!",
+          "emphasis": false
+        },
+        {
+          "spoken": "The",
+          "start": 0.937,
+          "end": 1.067,
+          "text": "The",
+          "emphasis": false
+        },
+        {
+          "spoken": "keys",
+          "start": 1.076,
+          "end": 1.335,
+          "text": "keys",
+          "emphasis": true
+        },
+        {
+          "spoken": "are",
+          "start": 1.344,
+          "end": 1.409,
+          "text": "are",
           "emphasis": false
         },
         {
           "spoken": "inside",
-          "start": 0.282,
-          "end": 0.675,
+          "start": 1.419,
+          "end": 1.743,
           "text": "inside",
-          "emphasis": true
+          "emphasis": false
         },
         {
           "spoken": "the",
-          "start": 0.685,
-          "end": 0.735,
+          "start": 1.752,
+          "end": 1.807,
           "text": "the",
           "emphasis": false
         },
         {
           "spoken": "ship",
-          "start": 0.746,
-          "end": 1.098,
+          "start": 1.817,
+          "end": 2.15,
           "text": "ship!",
           "emphasis": false
         },
         {
           "spoken": "They're",
-          "start": 1.794,
-          "end": 2.147,
+          "start": 2.633,
+          "end": 2.985,
           "text": "They're—",
           "emphasis": false
         }
       ],
       "extra": [],
-      "speaker": "ENGINEER · RADIO",
+      "speaker": "SPEED · RADIO",
       "tone": "radio"
     },
     {

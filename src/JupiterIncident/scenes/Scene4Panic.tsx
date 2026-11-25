@@ -4,7 +4,14 @@ import { CameraRig, punchFov, type Vec3 } from "../../shared/three/World";
 import { SKIES } from "../constants";
 import { Alien, Astronaut, Corridor } from "../three/JupiterProps";
 
-// 4. Red alarm: the engineer runs, shapes close in behind. Then the radio cuts out.
+const RUNNERS = [
+  // Speed out in front in his red suit, then two more crew.
+  { x: 0.2, dz: 0, suit: "#e63946", skin: "#8d5524", phase: 0 },
+  { x: -1.1, dz: -2.2, suit: "#e9ecef", skin: "#ffd7b5", phase: 1.3 },
+  { x: 1.2, dz: -3.4, suit: "#e9ecef", skin: "#c68642", phase: 2.1 },
+];
+
+// 4. Red alarm: Speed and the crew run, shapes close in behind. Then the radio cuts out.
 export const Scene4Panic: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -21,20 +28,23 @@ export const Scene4Panic: React.FC = () => {
       <fog attach="fog" args={["#0a0204", 5, 30]} />
       <ambientLight intensity={0.06} />
       <Corridor lights={0.12} red={0.6 + 0.4 * Math.sin(t * 9)} />
-      <Astronaut
-        position={[0.2, 0, runZ]}
-        color="#e9ecef"
-        skin="#f1c27d"
-        pants="#c9ccd1"
-        walk={stride}
-        lift={Math.abs(Math.sin(stride)) * 0.2}
-        lean={0.25}
-        roll={Math.sin(stride) * 0.12}
-        armsUp={0.6 + 0.3 * Math.sin(t * 16)}
-        expression="shock"
-      />
+      {RUNNERS.map((r, i) => (
+        <Astronaut
+          key={i}
+          position={[r.x, 0, runZ + r.dz]}
+          color={r.suit}
+          skin={r.skin}
+          pants="#c9ccd1"
+          walk={stride + r.phase}
+          lift={Math.abs(Math.sin(stride + r.phase)) * 0.2}
+          lean={0.25}
+          roll={Math.sin(stride + r.phase) * 0.12}
+          armsUp={0.6 + 0.3 * Math.sin(t * 16 + r.phase)}
+          expression="shock"
+        />
+      ))}
       {[0, 1, 2].map((i) => (
-        <Alien key={i} position={[(i - 1) * 1.3, 0, runZ - 6 - i * 2.5 + Math.min(1.5, t * 0.5)]} t={t * 1.5} seed={i + 5} scale={1.1} />
+        <Alien key={i} position={[(i - 1) * 1.3, 0, runZ - 7.5 - i * 2.5 + Math.min(1.5, t * 0.5)]} t={t * 1.5} seed={i + 5} scale={1.1} />
       ))}
     </SceneCanvas>
   );

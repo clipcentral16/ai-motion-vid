@@ -11,7 +11,7 @@
 //   node scripts/generate-audio.mjs jupiter
 //         public/jupiter/*.mp3 (dark score, radio static, flatline, gunshots...)
 
-import { writeFileSync, mkdirSync, unlinkSync } from "node:fs";
+import { writeFileSync, mkdirSync, unlinkSync, readFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { join } from "node:path";
 
@@ -551,18 +551,17 @@ const gunshot = () => {
   writeWav("gunshot", buf);
 };
 
-// Alien vanishing: descending warble that fizzles out.
+// A key dissolving: dark downward hiss with a sub drop (no bouncy warble).
 const vanish = () => {
-  const d = 0.8;
+  const d = 1.0;
   const buf = stereo(d);
-  let ph = 0, lp = 0;
+  let lp = 0, ph = 0;
   for (let i = 0; i < buf[0].length; i++) {
     const t = i / SR;
-    const f = 900 * Math.exp(-t * 3.5) + 60 * Math.sin(TAU * 25 * t);
-    ph += (TAU * f) / SR;
-    lp += lpCoef(3000) * (noise() - lp);
-    const env = Math.min(1, t / 0.01) * Math.exp(-t * 4);
-    add(buf, i, (Math.sign(Math.sin(ph)) * 0.25 + lp * 0.6 * Math.exp(-t * 6)) * env, Math.sin(t * 20) * 0.3);
+    lp += lpCoef(2600 * Math.exp(-t * 3) + 120) * (noise() - lp);
+    ph += (TAU * (70 * Math.exp(-t * 2.5) + 25)) / SR;
+    const env = Math.min(1, t / 0.02) * Math.exp(-t * 3.2);
+    add(buf, i, (lp * 0.9 + Math.sin(ph) * 0.6) * env, Math.sin(t * 7) * 0.25);
   }
   writeWav("vanish", buf);
 };
@@ -584,40 +583,65 @@ const alarm = () => {
   writeWav("alarm", buf);
 };
 
-// Dark score, 32.5s. Section times (s) match src/JupiterIncident/constants.ts.
+// Score for the Jupiter incident, 32.5s: calm space ambience at first, turning
+// dangerous when the keys appear (9.5s), silence when Speed's radio cuts out,
+// heavy dark drums for the fight, a sad pad, then a solemn hero swell.
+// Section times match src/JupiterIncident/constants.ts; the radio cut is read
+// from the narration timings.
 const darkScore = () => {
   const DURATION = 32.5;
-  const HEARTBEAT_FROM = 9.5;
-  const RISER_FROM = 14;
-  const SILENCE_FROM = 17.1; // radio cuts out
+  const DANGER_FROM = 9.5;
+  const narr = JSON.parse(readFileSync(join(process.cwd(), "src", "JupiterIncident", "narration.json"), "utf8"));
+  const speed = narr.lines.find((l) => l.scene === 3);
+  const SILENCE_FROM = 14 + speed.start + speed.words[speed.words.length - 1].end + 0.02;
   const ACTION_FROM = 18.5;
   const SAD_FROM = 23.5;
   const HERO_FROM = 28;
   const buf = stereo(DURATION);
+  const danger = (t) => Math.min(1, Math.max(0, (t - DANGER_FROM + 0.5) / 2));
 
-  // Low dissonant drone (A + B-flat) with slow swell, until the action.
-  let lp = 0;
-  for (let i = 0; i < buf[0].length; i++) {
+  // Calm: a soft, airy Dmaj9 pad with slow breathing, fading out as danger rises.
+  let cl = 0;
+  for (let i = 0; i < Math.round(SILENCE_FROM * SR); i++) {
     const t = i / SR;
+    const calm = 1 - danger(t);
+    if (calm <= 0) continue;
     let v = 0;
-    if (t < SILENCE_FROM) {
-      const sw = 0.6 + 0.4 * Math.sin(TAU * 0.12 * t);
-      for (const f of [55, 58.27, 110, 116.54]) v += ((f * t) % 1) * 2 - 1;
-      lp += lpCoef(220 + 160 * sw) * (v - lp);
-      let g = 0.09 * sw * Math.min(1, t / 1.5);
-      if (t >= RISER_FROM) g *= 1 + (t - RISER_FROM) * 0.5;
-      add(buf, i, lp * g, Math.sin(t * 0.2) * 0.3);
+    for (const f of [146.83, 220.0, 277.18, 329.63, 369.99]) v += Math.sin(TAU * f * t) + 0.3 * Math.sin(TAU * f * 2.003 * t);
+    cl += lpCoef(900) * (v - cl);
+    const breathe = 0.65 + 0.35 * Math.sin(TAU * 0.11 * t);
+    add(buf, i, cl * 0.022 * breathe * calm * Math.min(1, t / 2), Math.sin(t * 0.25) * 0.4);
+  }
+  // Gentle chimes in the calm part
+  for (const [at, f] of [[1.2, 880], [3.6, 739.99], [6.0, 659.25], [8.2, 587.33]]) {
+    for (let j = 0; j < 2.5 * SR; j++) {
+      const t = j / SR;
+      add(buf, Math.round((at + t) * SR), (Math.sin(TAU * f * t) + 0.25 * Math.sin(TAU * f * 2.76 * t)) * Math.exp(-t * 1.6) * 0.07, -0.3);
     }
   }
-  // Riser before the radio cuts: rising filtered noise
+  // Danger: low dissonant drone (A + B-flat) swelling in, until the radio cut.
+  let lp = 0;
+  for (let i = 0; i < Math.round(SILENCE_FROM * SR); i++) {
+    const t = i / SR;
+    const g0 = danger(t);
+    if (g0 <= 0) continue;
+    const sw = 0.6 + 0.4 * Math.sin(TAU * 0.12 * t);
+    let v = 0;
+    for (const f of [55, 58.27, 110, 116.54]) v += ((f * t) % 1) * 2 - 1;
+    lp += lpCoef(220 + 160 * sw) * (v - lp);
+    let g = 0.1 * sw * g0;
+    if (t >= 14) g *= 1 + (t - 14) * 0.5;
+    add(buf, i, lp * g, Math.sin(t * 0.2) * 0.3);
+  }
+  // Riser into the radio cut
   let rl = 0;
-  for (let i = Math.round(RISER_FROM * SR); i < Math.round(SILENCE_FROM * SR); i++) {
-    const t = i / SR - RISER_FROM;
-    const span = SILENCE_FROM - RISER_FROM;
+  for (let i = Math.round(14 * SR); i < Math.round(SILENCE_FROM * SR); i++) {
+    const t = i / SR - 14;
+    const span = SILENCE_FROM - 14;
     rl += lpCoef(300 + 5000 * (t / span) ** 2) * (noise() - rl);
     add(buf, i, rl * 0.35 * (t / span));
   }
-  // Heartbeat
+  // Heartbeat once the keys appear
   const thump = (start, g) => {
     let ph = 0;
     for (let j = 0; j < 0.25 * SR; j++) {
@@ -626,62 +650,48 @@ const darkScore = () => {
       add(buf, Math.round((start + t) * SR), Math.sin(ph) * Math.exp(-t * 14) * g);
     }
   };
-  for (let t = HEARTBEAT_FROM; t < SILENCE_FROM - 0.4; t += 0.8 - Math.min(0.3, (t - HEARTBEAT_FROM) * 0.04)) {
+  for (let t = DANGER_FROM + 0.6; t < SILENCE_FROM - 0.4; t += 0.8 - Math.min(0.3, (t - DANGER_FROM) * 0.04)) {
     thump(t, 0.9);
     thump(t + 0.22, 0.6);
   }
-  // Action: driving drums + ostinato
-  const kick = (start) => {
+  // Fight: heavy low taiko hits and a growling bass pulse (no melodic riff).
+  const taiko = (start, f0, g) => {
     let ph = 0;
-    for (let j = 0; j < 0.3 * SR; j++) {
+    for (let j = 0; j < 0.6 * SR; j++) {
       const t = j / SR;
-      ph += (TAU * (48 + 100 * Math.exp(-t * 30))) / SR;
-      add(buf, Math.round((start + t) * SR), Math.sin(ph) * Math.exp(-t * 10) * 0.9);
+      ph += (TAU * (f0 + f0 * 0.8 * Math.exp(-t * 18))) / SR;
+      add(buf, Math.round((start + t) * SR), (Math.sin(ph) * Math.exp(-t * 5) + noise() * 0.12 * Math.exp(-t * 25)) * g);
     }
   };
-  const snare = (start) => {
-    let l = 0;
-    for (let j = 0; j < 0.18 * SR; j++) {
-      const t = j / SR;
-      const n = noise();
-      l += lpCoef(1500) * (n - l);
-      add(buf, Math.round((start + t) * SR), (n - l) * Math.exp(-t * 20) * 0.5);
-    }
-  };
-  const pluck = (start, f, g) => {
-    let l = 0, ph = 0;
-    for (let j = 0; j < 0.18 * SR; j++) {
-      const t = j / SR;
-      ph += f / SR;
-      l += lpCoef(900 * Math.exp(-t * 10) + 200) * (((ph % 1) * 2 - 1) - l);
-      add(buf, Math.round((start + t) * SR), l * Math.exp(-t * 9) * g, -0.2);
-    }
-  };
-  const step = 60 / 140 / 2; // 140 BPM eighths
-  const riff = [55, 55, 65.41, 55, 73.42, 55, 65.41, 61.74];
-  for (let k = 0, t = ACTION_FROM; t < SAD_FROM - 0.2; k++, t += step) {
-    if (k % 2 === 0) kick(t);
-    if (k % 4 === 2) snare(t);
-    pluck(t, riff[k % 8] * 2, 0.45);
+  const step = 60 / 120 / 2;
+  const pattern = [1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0];
+  let bl = 0;
+  for (let k = 0, t = ACTION_FROM; t < SAD_FROM - 0.3; k++, t += step) {
+    if (pattern[k % 16]) taiko(t, k % 16 === 0 ? 50 : 70, 0.85);
   }
-  // Sad pad, then a heroic major swell
+  for (let i = Math.round(ACTION_FROM * SR); i < Math.round((SAD_FROM - 0.2) * SR); i++) {
+    const t = i / SR;
+    const saw = ((36.71 * t) % 1) * 2 - 1 + (((36.9 * t) % 1) * 2 - 1);
+    bl += lpCoef(180 + 120 * Math.abs(Math.sin(TAU * 2 * t))) * (saw - bl);
+    add(buf, i, bl * 0.18 * Math.min(1, (t - ACTION_FROM) / 0.5));
+  }
+  // Sad pad, then a slow, solemn hero swell
   let pl = 0;
   for (let i = Math.round(SAD_FROM * SR); i < buf[0].length; i++) {
     const t = i / SR;
     const hero = t >= HERO_FROM;
-    const chord = hero ? [146.83, 185.0, 220.0, 293.66] : [110, 130.81, 164.81];
+    const chord = hero ? [73.42, 146.83, 220.0, 293.66, 369.99] : [110, 130.81, 164.81];
     let v = 0;
     for (const f of chord) for (const det of [0.996, 1.004]) v += ((f * det * t) % 1) * 2 - 1;
-    pl += lpCoef(hero ? 1400 : 600) * (v - pl);
-    const g = hero ? 0.06 * Math.min(1, (t - HERO_FROM) / 1.2) : 0.045 * Math.min(1, (t - SAD_FROM) / 1);
+    pl += lpCoef(hero ? 900 : 600) * (v - pl);
+    const g = hero ? 0.05 * Math.min(1, (t - HERO_FROM) / 2) : 0.045 * Math.min(1, (t - SAD_FROM) / 1);
     add(buf, i, pl * g, Math.sin(t * 0.4) * 0.3);
   }
-  // Timpani roll into the hero swell
-  for (let t = HERO_FROM - 0.6; t < HERO_FROM + 0.2; t += 0.07) thump(t, 0.25 + (t - HERO_FROM + 0.6) * 0.6);
+  for (let t = HERO_FROM - 0.6; t < HERO_FROM + 0.2; t += 0.07) thump(t, 0.2 + (t - HERO_FROM + 0.6) * 0.5);
 
   for (let i = 0; i < buf[0].length; i++) {
     const t = i / SR;
-    const g = Math.min(1, t / 0.5) * Math.min(1, Math.max(0, (DURATION - t) / 1.8));
+    const g = Math.min(1, t / 1.5) * Math.min(1, Math.max(0, (DURATION - t) / 1.8));
     buf[0][i] *= g;
     buf[1][i] *= g;
   }
@@ -689,7 +699,6 @@ const darkScore = () => {
 };
 
 if (SET === "jupiter") {
-  whoosh();
   radioStatic();
   squelch();
   flatline();

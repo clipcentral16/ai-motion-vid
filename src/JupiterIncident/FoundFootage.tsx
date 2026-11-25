@@ -80,7 +80,7 @@ export const FoundFootage: React.FC = () => {
           <div style={{ fontFamily: MONO, fontSize: 70, color: "#ff3b3b", letterSpacing: "0.18em", opacity: Math.floor((frame - lostFrom) / 8) % 2 ? 1 : 0.35 }}>
             SIGNAL LOST
           </div>
-          <div style={{ fontFamily: MONO, fontSize: 32, color: "rgba(220,235,225,0.6)", letterSpacing: "0.1em" }}>ENGINEER · NO VITAL SIGNS</div>
+          <div style={{ fontFamily: MONO, fontSize: 32, color: "rgba(220,235,225,0.6)", letterSpacing: "0.1em" }}>SPEED · NO VITAL SIGNS</div>
         </AbsoluteFill>
       ) : null}
     </AbsoluteFill>

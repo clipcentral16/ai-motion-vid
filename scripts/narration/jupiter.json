@@ -3,21 +3,86 @@
   "rate": "-6%",
   "pitch": "-4Hz",
   "target_lufs": -13,
-  "scene_seconds": [5, 4.5, 4.5, 4.5, 5, 4.5, 4.5],
+  "scene_seconds": [
+    5,
+    4.5,
+    4.5,
+    4.5,
+    5,
+    4.5,
+    4.5
+  ],
   "audio_dir": "jupiter/voice",
   "json_out": "src/JupiterIncident/narration.json",
   "lines": [
-    { "scene": 0, "caption": "2011. A crew reached *Jupiter.", "start": 0.45, "tone": "narrator" },
-    { "scene": 1, "caption": "Houston… we're picking up *movement outside.", "start": 0.35,
-      "voice": "en-US-GuyNeural", "rate": "+4%", "pitch": "-2Hz", "fx": "radio", "speaker": "CAPTAIN · RADIO", "tone": "radio" },
-    { "scene": 2, "caption": "You should *not have come.", "start": 0.9,
-      "voice": "en-US-ChristopherNeural", "rate": "-12%", "pitch": "-6Hz", "fx": "alien", "lufs": -9, "speaker": "???", "tone": "alien" },
-    { "scene": 3, "caption": "They're *inside the ship! They're—", "start": 0.2,
-      "voice": "en-US-EricNeural", "rate": "+24%", "pitch": "+6Hz", "fx": "radio", "speaker": "ENGINEER · RADIO", "tone": "radio" },
-    { "scene": 4, "caption": "I have a *gun.", "start": 0.3,
-      "voice": "en-US-AndrewNeural", "rate": "-4%", "pitch": "-3Hz", "speaker": "CASEOH", "tone": "hero" },
-    { "scene": 5, "caption": "They're… all… *gone.", "start": 0.8,
-      "voice": "en-US-AndrewNeural", "rate": "-38%", "pitch": "-6Hz", "fx": "weak", "lufs": -17, "speaker": "CASEOH", "tone": "weak" },
-    { "scene": 6, "caption": "CaseOh. A true *hero.", "start": 0.2, "tone": "narrator" }
+    {
+      "scene": 0,
+      "caption": "2011. A crew reached *Jupiter.",
+      "start": 0.45,
+      "tone": "narrator"
+    },
+    {
+      "scene": 1,
+      "caption": "Houston… the *keys are moving outside.",
+      "start": 0.35,
+      "voice": "en-US-GuyNeural",
+      "rate": "+4%",
+      "pitch": "-2Hz",
+      "fx": "radio",
+      "speaker": "CAPTAIN · RADIO",
+      "tone": "radio"
+    },
+    {
+      "scene": 2,
+      "caption": "You should *not have come.",
+      "start": 0.9,
+      "voice": "en-US-ChristopherNeural",
+      "rate": "-12%",
+      "pitch": "-6Hz",
+      "fx": "alien",
+      "lufs": -9,
+      "speaker": "THE KEYS",
+      "tone": "alien"
+    },
+    {
+      "scene": 3,
+      "caption": "Chat! The *keys are inside the ship! They're—",
+      "start": 0.12,
+      "voice": "en-US-RogerNeural",
+      "rate": "+35%",
+      "pitch": "+14Hz",
+      "fx": "radio",
+      "speaker": "SPEED · RADIO",
+      "tone": "radio",
+      "lufs": -11
+    },
+    {
+      "scene": 4,
+      "caption": "I have a *gun.",
+      "start": 0.3,
+      "voice": "en-US-AndrewNeural",
+      "rate": "-4%",
+      "pitch": "-3Hz",
+      "speaker": "CASEOH",
+      "tone": "hero"
+    },
+    {
+      "scene": 5,
+      "caption": "They're… all… *gone.",
+      "start": 0.8,
+      "voice": "en-US-AndrewNeural",
+      "rate": "-38%",
+      "pitch": "-6Hz",
+      "fx": "weak",
+      "lufs": -17,
+      "speaker": "CASEOH",
+      "tone": "weak"
+    },
+    {
+      "scene": 6,
+      "caption": "CaseOh. A true *hero.",
+      "start": 0.2,
+      "tone": "narrator"
+    }
   ]
 }

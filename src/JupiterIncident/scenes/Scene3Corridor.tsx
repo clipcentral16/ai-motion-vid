@@ -2,7 +2,7 @@ import { Easing, interpolate, random, useCurrentFrame, useVideoConfig } from "re
 import { SceneCanvas } from "../../shared/three/SceneCanvas";
 import { CameraRig, punchFov, type Vec3 } from "../../shared/three/World";
 import { SKIES } from "../constants";
-import { Alien, Corridor } from "../three/JupiterProps";
+import { Alien, Astronaut, Corridor } from "../three/JupiterProps";
 
 // 3. The lights fail in the ship's corridor and something walks out of the dark.
 export const Scene3Corridor: React.FC = () => {
@@ -22,6 +22,9 @@ export const Scene3Corridor: React.FC = () => {
       <ambientLight intensity={0.08} />
       <Corridor lights={lights} red={0.35 + 0.35 * Math.sin(t * 4)} />
       <Alien position={[0, 0, alienZ]} t={t} seed={3} scale={1.15} opacity={t > 0.3 ? 1 : 0} />
+      {/* Two crew members frozen in the corridor, backing away */}
+      <Astronaut position={[-1.2, 0, -2 + Math.min(1.2, t * 0.35)]} rotationY={Math.PI - 0.2} color="#e9ecef" skin="#f1c27d" pants="#c9ccd1" armsUp={0.5 + 0.15 * Math.sin(t * 6)} expression="shock" lean={-0.15} />
+      <Astronaut position={[1.3, 0, -3.5 + Math.min(1.2, t * 0.4)]} rotationY={Math.PI + 0.3} color="#e9ecef" skin="#c68642" pants="#c9ccd1" armsUp={0.25} expression="shock" lean={-0.1} />
     </SceneCanvas>
   );
 };

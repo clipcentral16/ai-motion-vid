@@ -62,7 +62,7 @@ export const HeroTitles: React.FC = () => {
           <div style={{ fontFamily: FONT, fontSize: 60, color: "#ffffff", opacity: sub, letterSpacing: "0.06em" }}>
             TRUE HERO <span style={{ fontFamily: "'Noto Color Emoji'" }}>🏅</span>
           </div>
-          <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 30, color: "rgba(220,235,225,0.6)", opacity: sub, letterSpacing: "0.12em" }}>JUPITER I · 2011</div>
+          <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 30, color: "rgba(220,235,225,0.6)", opacity: sub, letterSpacing: "0.12em" }}>CREW OF 6 · 1 SURVIVOR · JUPITER I · 2011</div>
         </div>
       ) : null}
     </AbsoluteFill>

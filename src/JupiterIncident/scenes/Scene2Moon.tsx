@@ -6,6 +6,14 @@ import { CameraRig, Lights, punchFov, type Vec3 } from "../../shared/three/World
 import { SKIES } from "../constants";
 import { Alien, Astronaut, Jupiter, Lander, Rocks } from "../three/JupiterProps";
 
+// Everyone turns toward the movement (`toward`) shortly after 2s.
+const CREW = [
+  { x: 2.6, z: -3.2, rot: -0.6, toward: -2.6, suit: "#e63946", skin: "#8d5524", arms: 0.2, walk: true },
+  { x: 4.2, z: -4.6, rot: 0.2, toward: -2.8, suit: "#2f3640", skin: "#e0ac69", arms: 0, walk: false, scale: 1.2 },
+  { x: -2.4, z: -2.4, rot: 0.8, toward: -2.4, suit: "#e9ecef", skin: "#f1c27d", arms: 0.1, walk: true },
+  { x: -1.2, z: -5.6, rot: 2.6, toward: 3.4, suit: "#e9ecef", skin: "#c68642", arms: 0.35, walk: false },
+];
+
 // 2. On an icy moon, the captain radios Houston while something moves in the dark.
 export const Scene2Moon: React.FC = () => {
   const frame = useCurrentFrame();
@@ -33,6 +41,26 @@ export const Scene2Moon: React.FC = () => {
       <Rocks count={40} area={80} seed="moonrock" />
       <Lander position={[5, 0, -7]} flicker={flicker} rotationY={0.4} />
       <Astronaut position={[0, 0, 0]} rotationY={0.35 + look} color="#e9ecef" skin="#ffd7b5" pants="#c9ccd1" armsUp={0.32} expression={t > 2.3 ? "shock" : "happy"} />
+      {/* The rest of the landing party: Speed (red suit), CaseOh by the lander, two more crew */}
+      {CREW.map((c, i) => {
+        const turn = interpolate(t, [2.0 + i * 0.12, 2.5 + i * 0.12], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+        const stride = c.walk ? t * 6 + i : 0;
+        return (
+          <Astronaut
+            key={i}
+            position={[c.x + (c.walk ? Math.sin(t * 0.6) * 0.3 : 0), 0, c.z]}
+            rotationY={c.rot + turn * (c.toward - c.rot)}
+            color={c.suit}
+            skin={c.skin}
+            pants="#c9ccd1"
+            walk={stride}
+            lift={c.walk ? Math.abs(Math.sin(stride)) * 0.08 : 0}
+            armsUp={turn > 0.5 ? 0.45 : c.arms}
+            expression={turn > 0.5 ? "shock" : "happy"}
+            scale={c.scale ?? 1}
+          />
+        );
+      })}
       <Alien position={[dart(0), 0, -34]} t={t} seed={1} rotationY={Math.PI / 2} scale={1.3} />
       <Alien position={[dart(0.35), 0, -42]} t={t} seed={2} rotationY={Math.PI / 2} scale={1.3} />
     </SceneCanvas>
