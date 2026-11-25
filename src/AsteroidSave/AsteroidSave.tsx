@@ -25,7 +25,7 @@ const SCENES = [
 
 const FLASHES = [
   { frame: Math.round(SCENE_STARTS[3] + CATCH * FPS), peak: 0.35, length: 8 },
-  { frame: Math.round(SCENE_STARTS[4] + FLICK * FPS), peak: 0.55, length: 10 },
+  { frame: Math.round(SCENE_STARTS[4] + FLICK * FPS) + 1, peak: 0.35, length: 8 },
 ];
 
 // "What if an asteroid was about to hit Earth?" — vertical 9:16.

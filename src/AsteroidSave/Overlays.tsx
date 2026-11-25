@@ -12,7 +12,7 @@ const sec = (scene: number, s: number) => SCENE_STARTS[scene] / 30 + s;
 // Game-style callouts for each move.
 const CALLOUTS: Callout[] = [
   { at: sec(3, AIR_ROLL - 0.1), until: sec(3, CATCH - 0.15), text: "AIR ROLL", color: "#66e0ff", top: 300, size: 110 },
-  { at: sec(3, CATCH), until: sec(4, 0), text: "CAUGHT!", color: "#ffd166", top: 300, size: 140 },
+  { at: sec(3, CATCH), until: sec(4, 0), text: "ZEN TOUCH!", color: "#ffd166", top: 300, size: 140 },
   { at: sec(4, RESET), until: sec(4, FLICK - 0.1), text: "FLIP RESET!", color: "#66e0ff", top: 300, size: 120 },
   { at: sec(4, FLICK), until: sec(5, 0), text: "MUSTY FLICK!", color: "#ff4d6d", top: 300, size: 140 },
   { at: sec(5, 0.4), until: sec(6, 0), text: "WHAT A SAVE!", color: "#ffd166", top: 330, size: 150 },

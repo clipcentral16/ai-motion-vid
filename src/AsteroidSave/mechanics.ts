@@ -1,84 +1,170 @@
 import { Easing, interpolate } from "remotion";
-import { AIR_ROLL, CATCH, FLICK, RESET } from "./constants";
+import { AIR_ROLL, CATCH, FLICK, RESET, SCENE_SECONDS } from "./constants";
 
-// The save, as pure functions of scene-local time (seconds).
-// Side-on arena: the car faces +X (yaw π/2), X is "forward", Y is up.
-// Car pose: position + Euler [pitch, yaw, roll] in "YXZ" order.
-// pitch < 0 = nose up; roll = barrel roll around the car's forward axis.
+// The save as one continuous move, as pure functions of "save time" T:
+// T = scene-4 local time, and T = SCENE4_LEN + local time in scene 5.
+//
+//   zen touch  -> the rock's momentum dies on contact, but the car keeps
+//                 flying and keeps air rolling underneath it (air dribble)
+//   flip reset -> mid-roll, the car is upside down: all 4 wheels hit the rock
+//   musty      -> roll out upright, drop back nose-down, backflip; the nose
+//                 meets the rock's surface aimed through its centre and the
+//                 flip follows through to a full rotation
+//
+// Side-on arena: the car faces +X (yaw π/2), Y is up. Car pose is an Euler
+// [pitch, yaw, roll] in "YXZ" order; pitch < 0 = nose up.
 
 export const ROCK_R = 2.2;
-/** Asteroid centre when it sits on the car's roof (car centre at the origin). */
-export const CATCH_POS: [number, number, number] = [0, 2.55, 0];
 const YAW = Math.PI / 2;
+const NOSE = 1.35; // centre-to-nose length
+export const SCENE4_LEN = SCENE_SECONDS[3];
 
-type Pose = { pos: [number, number, number]; rot: [number, number, number, "YXZ"] };
-type Rock = { pos: [number, number, number]; squash: number; heat: number; spin: number };
+const T_CATCH = CATCH;
+const T_RESET = SCENE4_LEN + RESET;
+const T_FLICK = SCENE4_LEN + FLICK;
+
+/** Where the car is at the zen touch (the origin of the arena). */
+const C: [number, number] = [0, 0];
+/** The car keeps this velocity after the touch. */
+const V: [number, number] = [0.45, 0.35];
+
+// Air roll: two spins before the touch (ends upright), then a steady roll
+// timed so the car is exactly upside down at the reset, then rolls out upright.
+const ROLL_AT_CATCH = Math.PI * 4;
+const ROLL_AT_RESET = ROLL_AT_CATCH + Math.PI * 9;
+const OMEGA = (ROLL_AT_RESET - ROLL_AT_CATCH) / (T_RESET - T_CATCH);
+// Last half-turn eases out (sine) starting at the same spin rate.
+const ROLL_OUT = (Math.PI * Math.PI) / (2 * OMEGA);
+const T_UPRIGHT = T_RESET + ROLL_OUT;
+// The musty set-up (drop back, nose dip) starts while it's still rolling out.
+const T_SET = T_RESET + 0.2;
+
+// Musty: nose-up angle φ (= -pitch) through the flip.
+const PHI_SETUP = -0.45; // nose dipped
+const PHI_CONTACT = 1.15; // nose up-and-forward at contact
+const FLIP_SPEED = 7; // rad/s, same before and after contact (follow-through)
+const T_FLIP_START = T_FLICK - (PHI_CONTACT - PHI_SETUP) / FLIP_SPEED;
+const T_FLIP_END = T_FLICK + (Math.PI * 2 - PHI_CONTACT) / FLIP_SPEED;
+const SHOT: [number, number] = [Math.cos(PHI_CONTACT), Math.sin(PHI_CONTACT)];
 
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
-const ease = Easing.inOut(Easing.cubic);
 
-// ---------- Scene 4: air roll + catch ----------
+type Pose = { pos: [number, number, number]; rot: [number, number, number, "YXZ"]; noseUp: number };
+type Rock = { pos: [number, number, number]; squash: number; heat: number; spin: number };
 
-export const catchCar = (t: number): Pose => {
-  // Fly up from below-left, ease into the catch point.
-  const u = interpolate(t, [0, CATCH], [0, 1], { ...clamp, easing: Easing.out(Easing.cubic) });
-  const pos: [number, number, number] = [-7 * (1 - u), -9 * (1 - u) + Math.sin(t * 2) * 0.05 * u, 0];
-  // Nose points along the climb, levelling out right at the catch.
-  const pitch = interpolate(t, [0, CATCH - 0.35, CATCH], [-0.95, -0.7, 0], clamp);
-  // Two full air rolls while "air rolled" is spoken.
-  const roll = interpolate(t, [AIR_ROLL - 0.15, CATCH - 0.2], [0, Math.PI * 4], { ...clamp, easing: ease });
-  const bob = t > CATCH ? Math.sin((t - CATCH) * 3) * 0.06 : 0;
-  return { pos: [pos[0], pos[1] + bob, pos[2]], rot: [pitch, YAW, roll, "YXZ"] };
+const roll = (T: number) => {
+  if (T < T_CATCH) return interpolate(T, [AIR_ROLL - 0.15, T_CATCH], [0, ROLL_AT_CATCH], { ...clamp, easing: Easing.inOut(Easing.sin) });
+  if (T < T_RESET) return ROLL_AT_CATCH + OMEGA * (T - T_CATCH);
+  if (T < T_UPRIGHT) return ROLL_AT_RESET + Math.PI * Math.sin(((T - T_RESET) / ROLL_OUT) * (Math.PI / 2));
+  return ROLL_AT_RESET + Math.PI;
 };
 
-export const catchRock = (t: number): Rock => {
-  if (t < CATCH) {
-    // Falling in from the upper right, hot from the atmosphere.
-    const d = CATCH - t;
-    return { pos: [CATCH_POS[0] + d * 5.5, CATCH_POS[1] + d * 8, CATCH_POS[2]], squash: 1, heat: 1, spin: t * 1.5 };
+/** Rock height above the car centre while dribbling: pushed up when the car is side-on. */
+const rideHeight = (r: number) => 0.5 + ROCK_R * 0.95 + 0.55 * Math.abs(Math.sin(r));
+
+/** Car path before the musty set-up begins. */
+const flyPos = (T: number): [number, number] => {
+  if (T < T_CATCH) {
+    // Climb in from below-left, arriving with velocity V.
+    const k = (T_CATCH - T) / T_CATCH;
+    return [C[0] + V[0] * (T - T_CATCH) - 7 * k * k, C[1] + V[1] * (T - T_CATCH) - 9 * k * k];
   }
-  // Dead stop on the roof: one squash, then it just sits there.
-  const s = t - CATCH;
-  const bob = Math.sin(s * 3) * 0.06;
-  return {
-    pos: [CATCH_POS[0], CATCH_POS[1] + bob, CATCH_POS[2]],
-    squash: 1 - 0.18 * Math.exp(-s * 7) * Math.cos(s * 18),
-    heat: Math.max(0, 1 - s * 0.6),
-    spin: CATCH * 1.5,
-  };
+  return [C[0] + V[0] * (T - T_CATCH), C[1] + V[1] * (T - T_CATCH)];
 };
 
-// ---------- Scene 5: flip reset + musty flick ----------
+/** Rock centre when the set-up starts, and at the flick (it floats on with the car's velocity). */
+const rockAtSet = (): [number, number] => {
+  const p = flyPos(T_SET);
+  return [p[0], p[1] + rideHeight(roll(T_SET))];
+};
+const rockAtFlick = (): [number, number] => {
+  const a = rockAtSet();
+  return [a[0] + V[0] * (T_FLICK - T_SET) * 0.6, a[1] + V[1] * (T_FLICK - T_SET) * 0.6];
+};
 
-export const flickCar = (t: number): Pose => {
-  const RISE_END = RESET;
-  const back = RESET + 0.45;
-  const setup = FLICK - 0.35;
-  // Height: drop, rise to touch with the wheels (inverted), drop, rise under the rock.
-  const y = interpolate(t, [0, 0.35, RISE_END, back, setup, FLICK, FLICK + 1.2], [0, -1.6, 0.18, -1.5, 0.15, 0.3, 1.4], { ...clamp, easing: ease });
-  const x = interpolate(t, [0, RESET, back, setup, FLICK + 1.2], [0, 0, -1.2, -1.0, 0.4], { ...clamp, easing: ease });
-  // Roll: upside down for the reset, back upright after.
-  const roll = interpolate(t, [0, 0.35, RESET + 0.05, back], [0, Math.PI, Math.PI, Math.PI * 2], { ...clamp, easing: ease });
-  // Pitch: nose dips for the musty set-up, then a full backflip through the rock.
-  // At FLICK the nose points straight up into the rock (pitch -π/2), then the flip completes.
-  const pitch = interpolate(t, [back, setup, FLICK, FLICK + 0.45, FLICK + 1.5], [0, 0.45, -Math.PI / 2, -Math.PI * 2, -Math.PI * 2], { ...clamp, easing: ease });
-  return { pos: [x, y, 0], rot: [pitch, YAW, roll, "YXZ"] };
+/** Car position at the flick: nose tip on the rock's surface, aimed through its centre. */
+const carAtFlick = (): [number, number] => {
+  const r = rockAtFlick();
+  const d = NOSE + ROCK_R * 0.9;
+  return [r[0] - SHOT[0] * d, r[1] - SHOT[1] * d];
+};
+
+export const carPose = (T: number): Pose => {
+  const rl = roll(T);
+  let x: number, y: number, phi: number;
+  if (T < T_SET) {
+    [x, y] = flyPos(T);
+    // Nose follows the climb, level from the touch onward.
+    phi = interpolate(T, [0, T_CATCH - 0.35, T_CATCH], [0.95, 0.7, 0], clamp);
+  } else {
+    // Drop back into the musty set-up, flip through the rock, follow through.
+    const from = flyPos(T_SET);
+    const at = carAtFlick();
+    const after: [number, number] = [at[0] + 0.6, at[1] + 1.4];
+    x = interpolate(T, [T_SET, T_FLIP_START, T_FLICK, T_FLIP_END + 0.6], [from[0], at[0] - 0.3, at[0], after[0]], {
+      ...clamp,
+      easing: Easing.inOut(Easing.sin),
+    });
+    y = interpolate(T, [T_SET, T_FLIP_START, T_FLICK, T_FLIP_END + 0.6], [from[1], at[1] - 0.25, at[1], after[1]], {
+      ...clamp,
+      easing: Easing.inOut(Easing.sin),
+    });
+    if (T < T_FLIP_START) {
+      phi = interpolate(T, [T_SET + 0.1, T_FLIP_START], [0, PHI_SETUP], { ...clamp, easing: Easing.inOut(Easing.quad) });
+    } else if (T < T_FLIP_END) {
+      // Constant spin rate straight through contact = proper follow-through.
+      phi = PHI_SETUP + FLIP_SPEED * (T - T_FLIP_START);
+    } else {
+      phi = Math.PI * 2;
+    }
+  }
+  const bob = T > T_CATCH && T < T_SET ? Math.sin((T - T_CATCH) * 3) * 0.04 : 0;
+  return { pos: [x, y + bob, 0], rot: [-phi, YAW, rl, "YXZ"], noseUp: phi };
+};
+
+export const rockState = (T: number): Rock => {
+  if (T < T_CATCH) {
+    // Falling in fast from the upper right, hot from the atmosphere.
+    const d = T_CATCH - T;
+    const p = flyPos(T_CATCH);
+    return { pos: [p[0] + d * 5.5, p[1] + rideHeight(ROLL_AT_CATCH) + d * 8, 0], squash: 1, heat: 1, spin: T * 1.5 };
+  }
+  if (T < T_FLICK) {
+    // Zen touch: momentum gone, it rides on the rolling car.
+    const s = T - T_CATCH;
+    const touch = 1 - 0.18 * Math.exp(-s * 7) * Math.cos(s * 18);
+    let pos: [number, number];
+    if (T < T_SET) {
+      const p = flyPos(T);
+      pos = [p[0], p[1] + rideHeight(roll(T))];
+    } else {
+      const a = rockAtSet();
+      const b = rockAtFlick();
+      const u = (T - T_SET) / (T_FLICK - T_SET);
+      pos = [a[0] + (b[0] - a[0]) * u, a[1] + (b[1] - a[1]) * u];
+    }
+    const reset = Math.exp(-Math.max(0, T - T_RESET) * 8) * (T > T_RESET ? 1 : 0);
+    return { pos: [pos[0], pos[1], 0], squash: touch - reset * 0.1, heat: Math.max(0, 1 - s * 0.6), spin: T_CATCH * 1.5 + s * 0.4 };
+  }
+  // Flicked: launched along the nose direction, accelerating away.
+  const s = T - T_FLICK;
+  const r = rockAtFlick();
+  const dist = s * 24 + s * s * 20;
+  return {
+    pos: [r[0] + SHOT[0] * dist, r[1] + SHOT[1] * dist, -s * 2],
+    squash: 1 + 0.3 * Math.exp(-s * 6),
+    heat: Math.min(1, s * 1.5),
+    spin: T_CATCH * 1.5 + 2 + s * 6,
+  };
 };
 
 /** Wheel glow for the flip reset. */
-export const resetGlow = (t: number) => interpolate(t, [RESET - 0.05, RESET, RESET + 0.6], [0, 1, 0], clamp);
+export const resetGlow = (T: number) => interpolate(T, [T_RESET - 0.05, T_RESET, T_RESET + 0.6], [0, 1, 0], clamp);
 
-export const flickRock = (t: number): Rock => {
-  const nudge = interpolate(t, [RESET, RESET + 0.4], [0, 0.35], { ...clamp, easing: Easing.out(Easing.quad) });
-  const drift = interpolate(t, [RESET + 0.4, FLICK], [0, -0.5], clamp);
-  const base: [number, number, number] = [CATCH_POS[0] + drift, CATCH_POS[1] + nudge, CATCH_POS[2]];
-  if (t < FLICK) return { pos: base, squash: 1 - 0.12 * Math.exp(-Math.max(0, t - RESET) * 8) * (t > RESET ? 1 : 0), heat: 0, spin: 3 + t * 0.3 };
-  // Launched: fast and accelerating, straight up and slightly forward.
-  const s = t - FLICK;
-  return {
-    pos: [base[0] + s * 3, base[1] + s * 26 + s * s * 22, base[2] - s * 2],
-    squash: 1 + 0.3 * Math.exp(-s * 6),
-    heat: Math.min(1, s * 1.5),
-    spin: 3 + FLICK * 0.3 + s * 6,
-  };
+/** Where the flick's impact effects go: the nose tip at contact. */
+export const flickPoint = (): [number, number, number] => {
+  const r = rockAtFlick();
+  return [r[0] - SHOT[0] * ROCK_R * 0.9, r[1] - SHOT[1] * ROCK_R * 0.9, 0];
 };
+
+export const SAVE = { T_CATCH, T_RESET, T_FLICK, T_UPRIGHT, T_SET, T_FLIP_START, T_FLIP_END };
