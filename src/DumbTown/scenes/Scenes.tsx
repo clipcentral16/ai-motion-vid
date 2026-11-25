@@ -4,7 +4,7 @@ import { BlockCanvas, BlockLights, Grass, House, LampPost, Road, StormClouds, To
 import { blend, cheer, handsOnHips, headInHands, holdUp, idle, lounge, push, sad, scared, sit, walk } from "../../shared/blocky/poses";
 import { CameraRig, punchFov, type Vec3 } from "../../shared/three/World";
 import { BEAT, SKIES } from "../constants";
-import { Classroom, Mansion, MoneyRain, Rain, Scanner, ShopDoor, Sign } from "../three/TownProps";
+import { Classroom, Mansion, MoneyRain, Rain, Scanner, ShopDoor, Sign } from "../../shared/blocky/TownProps";
 
 // ---------- Cast ----------
 export const BOB: Look = { skin: "#f2c9a0", shirt: "#3f7fd6", pants: "#2f4b7c", shoes: "#ffffff", hair: "spiky", hairColor: "#6b3a1e", top: "hoodie", sleeves: "long", jeans: true, build: "kid" };

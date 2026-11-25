@@ -1,0 +1,856 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "+12%",
+  "lines": [
+    {
+      "scene": 0,
+      "file": "clumsytown/voice/line0.mp3",
+      "start": 0.2,
+      "duration": 3.291,
+      "words": [
+        {
+          "spoken": "In",
+          "start": 0.078,
+          "end": 0.179,
+          "text": "In",
+          "emphasis": false
+        },
+        {
+          "spoken": "this",
+          "start": 0.179,
+          "end": 0.346,
+          "text": "this",
+          "emphasis": false
+        },
+        {
+          "spoken": "town",
+          "start": 0.357,
+          "end": 0.737,
+          "text": "town,",
+          "emphasis": false
+        },
+        {
+          "spoken": "the",
+          "start": 1.071,
+          "end": 1.15,
+          "text": "the",
+          "emphasis": false
+        },
+        {
+          "spoken": "clumsiest",
+          "start": 1.161,
+          "end": 1.674,
+          "text": "clumsiest",
+          "emphasis": true
+        },
+        {
+          "spoken": "person",
+          "start": 1.674,
+          "end": 2.054,
+          "text": "person",
+          "emphasis": false
+        },
+        {
+          "spoken": "gets",
+          "start": 2.065,
+          "end": 2.21,
+          "text": "gets",
+          "emphasis": false
+        },
+        {
+          "spoken": "crowned",
+          "start": 2.21,
+          "end": 2.567,
+          "text": "crowned",
+          "emphasis": false
+        },
+        {
+          "spoken": "king",
+          "start": 2.567,
+          "end": 2.902,
+          "text": "king.",
+          "emphasis": true
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 1,
+      "file": "clumsytown/voice/line1.mp3",
+      "start": 0.15,
+      "duration": 2.116,
+      "words": [
+        {
+          "spoken": "Trip",
+          "start": 0.089,
+          "end": 0.29,
+          "text": "Trip",
+          "emphasis": false
+        },
+        {
+          "spoken": "over",
+          "start": 0.301,
+          "end": 0.469,
+          "text": "over",
+          "emphasis": false
+        },
+        {
+          "spoken": "nothing",
+          "start": 0.469,
+          "end": 0.837,
+          "text": "nothing?",
+          "emphasis": false
+        },
+        {
+          "spoken": "Here's",
+          "start": 1.216,
+          "end": 1.362,
+          "text": "Here's",
+          "emphasis": false
+        },
+        {
+          "spoken": "a",
+          "start": 1.362,
+          "end": 1.406,
+          "text": "a",
+          "emphasis": false
+        },
+        {
+          "spoken": "crown",
+          "start": 1.406,
+          "end": 1.763,
+          "text": "crown.",
+          "emphasis": true
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 2,
+      "file": "clumsytown/voice/line2.mp3",
+      "start": 0.15,
+      "duration": 2.664,
+      "words": [
+        {
+          "spoken": "Spill",
+          "start": 0.089,
+          "end": 0.346,
+          "text": "Spill",
+          "emphasis": false
+        },
+        {
+          "spoken": "coffee",
+          "start": 0.346,
+          "end": 0.714,
+          "text": "coffee",
+          "emphasis": false
+        },
+        {
+          "spoken": "on",
+          "start": 0.714,
+          "end": 0.815,
+          "text": "on",
+          "emphasis": false
+        },
+        {
+          "spoken": "yourself",
+          "start": 0.826,
+          "end": 1.35,
+          "text": "yourself?",
+          "emphasis": false
+        },
+        {
+          "spoken": "You",
+          "start": 1.719,
+          "end": 1.786,
+          "text": "You",
+          "emphasis": false
+        },
+        {
+          "spoken": "get",
+          "start": 1.786,
+          "end": 1.875,
+          "text": "get",
+          "emphasis": false
+        },
+        {
+          "spoken": "a",
+          "start": 1.875,
+          "end": 1.92,
+          "text": "a",
+          "emphasis": false
+        },
+        {
+          "spoken": "parade",
+          "start": 1.92,
+          "end": 2.299,
+          "text": "parade.",
+          "emphasis": true
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 3,
+      "file": "clumsytown/voice/line3.mp3",
+      "start": 0.15,
+      "duration": 3.187,
+      "words": [
+        {
+          "spoken": "Our",
+          "start": 0.078,
+          "end": 0.212,
+          "text": "Our",
+          "emphasis": false
+        },
+        {
+          "spoken": "king",
+          "start": 0.212,
+          "end": 0.502,
+          "text": "king",
+          "emphasis": false
+        },
+        {
+          "spoken": "fell",
+          "start": 0.513,
+          "end": 0.804,
+          "text": "fell",
+          "emphasis": false
+        },
+        {
+          "spoken": "down",
+          "start": 0.804,
+          "end": 1.049,
+          "text": "down",
+          "emphasis": false
+        },
+        {
+          "spoken": "the",
+          "start": 1.06,
+          "end": 1.116,
+          "text": "the",
+          "emphasis": false
+        },
+        {
+          "spoken": "stairs",
+          "start": 1.116,
+          "end": 1.618,
+          "text": "stairs",
+          "emphasis": true
+        },
+        {
+          "spoken": "at",
+          "start": 1.853,
+          "end": 1.92,
+          "text": "at",
+          "emphasis": false
+        },
+        {
+          "spoken": "his",
+          "start": 1.92,
+          "end": 2.031,
+          "text": "his",
+          "emphasis": false
+        },
+        {
+          "spoken": "own",
+          "start": 2.042,
+          "end": 2.232,
+          "text": "own",
+          "emphasis": false
+        },
+        {
+          "spoken": "coronation",
+          "start": 2.232,
+          "end": 2.812,
+          "text": "coronation.",
+          "emphasis": true
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 4,
+      "file": "clumsytown/voice/line4.mp3",
+      "start": 0.2,
+      "duration": 2.691,
+      "words": [
+        {
+          "spoken": "But",
+          "start": 0.1,
+          "end": 0.179,
+          "text": "But",
+          "emphasis": false
+        },
+        {
+          "spoken": "I'm",
+          "start": 0.19,
+          "end": 0.312,
+          "text": "I'm",
+          "emphasis": false
+        },
+        {
+          "spoken": "Max",
+          "start": 0.324,
+          "end": 0.815,
+          "text": "Max…",
+          "emphasis": true
+        },
+        {
+          "spoken": "and",
+          "start": 0.982,
+          "end": 1.116,
+          "text": "and",
+          "emphasis": false
+        },
+        {
+          "spoken": "I've",
+          "start": 1.127,
+          "end": 1.228,
+          "text": "I've",
+          "emphasis": false
+        },
+        {
+          "spoken": "never",
+          "start": 1.228,
+          "end": 1.484,
+          "text": "never",
+          "emphasis": false
+        },
+        {
+          "spoken": "tripped",
+          "start": 1.496,
+          "end": 1.741,
+          "text": "tripped",
+          "emphasis": false
+        },
+        {
+          "spoken": "in",
+          "start": 1.741,
+          "end": 1.775,
+          "text": "in",
+          "emphasis": false
+        },
+        {
+          "spoken": "my",
+          "start": 1.775,
+          "end": 1.886,
+          "text": "my",
+          "emphasis": false
+        },
+        {
+          "spoken": "life",
+          "start": 1.886,
+          "end": 2.333,
+          "text": "life.",
+          "emphasis": false
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 5,
+      "file": "clumsytown/voice/line5.mp3",
+      "start": 0.15,
+      "duration": 1.907,
+      "words": [
+        {
+          "spoken": "I",
+          "start": 0.089,
+          "end": 0.145,
+          "text": "I",
+          "emphasis": false
+        },
+        {
+          "spoken": "can",
+          "start": 0.145,
+          "end": 0.234,
+          "text": "can",
+          "emphasis": false
+        },
+        {
+          "spoken": "balance",
+          "start": 0.234,
+          "end": 0.625,
+          "text": "balance",
+          "emphasis": false
+        },
+        {
+          "spoken": "anything",
+          "start": 0.625,
+          "end": 0.993,
+          "text": "anything.",
+          "emphasis": true
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 6,
+      "file": "clumsytown/voice/line6.mp3",
+      "start": 0.15,
+      "duration": 4.023,
+      "words": [
+        {
+          "spoken": "I",
+          "start": 0.1,
+          "end": 0.156,
+          "text": "I",
+          "emphasis": false
+        },
+        {
+          "spoken": "stepped",
+          "start": 0.167,
+          "end": 0.413,
+          "text": "stepped",
+          "emphasis": false
+        },
+        {
+          "spoken": "on",
+          "start": 0.413,
+          "end": 0.48,
+          "text": "on",
+          "emphasis": false
+        },
+        {
+          "spoken": "a",
+          "start": 0.48,
+          "end": 0.513,
+          "text": "a",
+          "emphasis": false
+        },
+        {
+          "spoken": "banana",
+          "start": 0.513,
+          "end": 0.826,
+          "text": "banana",
+          "emphasis": true
+        },
+        {
+          "spoken": "peel",
+          "start": 0.826,
+          "end": 1.105,
+          "text": "peel",
+          "emphasis": false
+        },
+        {
+          "spoken": "on",
+          "start": 1.105,
+          "end": 1.25,
+          "text": "on",
+          "emphasis": false
+        },
+        {
+          "spoken": "purpose",
+          "start": 1.261,
+          "end": 1.908,
+          "text": "purpose…",
+          "emphasis": false
+        },
+        {
+          "spoken": "and",
+          "start": 2.109,
+          "end": 2.266,
+          "text": "and",
+          "emphasis": false
+        },
+        {
+          "spoken": "slid",
+          "start": 2.266,
+          "end": 2.556,
+          "text": "slid",
+          "emphasis": false
+        },
+        {
+          "spoken": "into",
+          "start": 2.567,
+          "end": 2.746,
+          "text": "into",
+          "emphasis": false
+        },
+        {
+          "spoken": "a",
+          "start": 2.746,
+          "end": 2.801,
+          "text": "a",
+          "emphasis": false
+        },
+        {
+          "spoken": "perfect",
+          "start": 2.812,
+          "end": 3.192,
+          "text": "perfect",
+          "emphasis": true
+        },
+        {
+          "spoken": "pose",
+          "start": 3.192,
+          "end": 3.661,
+          "text": "pose.",
+          "emphasis": false
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 7,
+      "file": "clumsytown/voice/line7.mp3",
+      "start": 0.15,
+      "duration": 2.09,
+      "words": [
+        {
+          "spoken": "So",
+          "start": 0.089,
+          "end": 0.223,
+          "text": "So",
+          "emphasis": false
+        },
+        {
+          "spoken": "I",
+          "start": 0.223,
+          "end": 0.357,
+          "text": "I",
+          "emphasis": false
+        },
+        {
+          "spoken": "entered",
+          "start": 0.357,
+          "end": 0.525,
+          "text": "entered",
+          "emphasis": false
+        },
+        {
+          "spoken": "the",
+          "start": 0.525,
+          "end": 0.58,
+          "text": "the",
+          "emphasis": false
+        },
+        {
+          "spoken": "Clumsy",
+          "start": 0.58,
+          "end": 1.004,
+          "text": "Clumsy",
+          "emphasis": true
+        },
+        {
+          "spoken": "Championship",
+          "start": 1.016,
+          "end": 1.708,
+          "text": "Championship.",
+          "emphasis": false
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 8,
+      "file": "clumsytown/voice/line8.mp3",
+      "start": 0.15,
+      "duration": 6.139,
+      "words": [
+        {
+          "spoken": "Final",
+          "start": 0.145,
+          "end": 0.379,
+          "text": "Final",
+          "emphasis": false
+        },
+        {
+          "spoken": "test",
+          "start": 0.379,
+          "end": 0.826,
+          "text": "test:",
+          "emphasis": false
+        },
+        {
+          "spoken": "fall",
+          "start": 1.239,
+          "end": 1.607,
+          "text": "fall",
+          "emphasis": false
+        },
+        {
+          "spoken": "down",
+          "start": 1.607,
+          "end": 1.864,
+          "text": "down",
+          "emphasis": false
+        },
+        {
+          "spoken": "a",
+          "start": 1.864,
+          "end": 1.886,
+          "text": "a",
+          "emphasis": false
+        },
+        {
+          "spoken": "hundred",
+          "start": 1.886,
+          "end": 2.176,
+          "text": "hundred",
+          "emphasis": true
+        },
+        {
+          "spoken": "stairs",
+          "start": 2.176,
+          "end": 2.779,
+          "text": "stairs.",
+          "emphasis": false
+        },
+        {
+          "spoken": "I",
+          "start": 3.136,
+          "end": 3.17,
+          "text": "I",
+          "emphasis": false
+        },
+        {
+          "spoken": "tripped",
+          "start": 3.181,
+          "end": 3.426,
+          "text": "tripped",
+          "emphasis": false
+        },
+        {
+          "spoken": "on",
+          "start": 3.426,
+          "end": 3.549,
+          "text": "on",
+          "emphasis": false
+        },
+        {
+          "spoken": "purpose",
+          "start": 3.56,
+          "end": 4.163,
+          "text": "purpose…",
+          "emphasis": false
+        },
+        {
+          "spoken": "and",
+          "start": 4.33,
+          "end": 4.475,
+          "text": "and",
+          "emphasis": false
+        },
+        {
+          "spoken": "landed",
+          "start": 4.487,
+          "end": 4.799,
+          "text": "landed",
+          "emphasis": false
+        },
+        {
+          "spoken": "a",
+          "start": 4.799,
+          "end": 4.844,
+          "text": "a",
+          "emphasis": false
+        },
+        {
+          "spoken": "perfect",
+          "start": 4.855,
+          "end": 5.234,
+          "text": "perfect",
+          "emphasis": true
+        },
+        {
+          "spoken": "backflip",
+          "start": 5.246,
+          "end": 5.748,
+          "text": "backflip.",
+          "emphasis": false
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 9,
+      "file": "clumsytown/voice/line9.mp3",
+      "start": 0.3,
+      "duration": 2.873,
+      "words": [
+        {
+          "spoken": "Zero",
+          "start": 0.089,
+          "end": 0.424,
+          "text": "Zero",
+          "emphasis": false
+        },
+        {
+          "spoken": "falls",
+          "start": 0.424,
+          "end": 0.926,
+          "text": "falls.",
+          "emphasis": false
+        },
+        {
+          "spoken": "I",
+          "start": 1.295,
+          "end": 1.35,
+          "text": "I",
+          "emphasis": false
+        },
+        {
+          "spoken": "went",
+          "start": 1.35,
+          "end": 1.484,
+          "text": "went",
+          "emphasis": false
+        },
+        {
+          "spoken": "home",
+          "start": 1.484,
+          "end": 1.886,
+          "text": "home,",
+          "emphasis": false
+        },
+        {
+          "spoken": "defeated",
+          "start": 2.031,
+          "end": 2.5,
+          "text": "defeated.",
+          "emphasis": true
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 10,
+      "file": "clumsytown/voice/line10.mp3",
+      "start": 0.4,
+      "duration": 4.415,
+      "words": [
+        {
+          "spoken": "Then",
+          "start": 0.089,
+          "end": 0.156,
+          "text": "Then",
+          "emphasis": false
+        },
+        {
+          "spoken": "the",
+          "start": 0.156,
+          "end": 0.201,
+          "text": "the",
+          "emphasis": false
+        },
+        {
+          "spoken": "judges",
+          "start": 0.201,
+          "end": 0.525,
+          "text": "judges",
+          "emphasis": false
+        },
+        {
+          "spoken": "called",
+          "start": 0.525,
+          "end": 0.904,
+          "text": "called.",
+          "emphasis": false
+        },
+        {
+          "spoken": "Never",
+          "start": 1.25,
+          "end": 1.451,
+          "text": "Never",
+          "emphasis": false
+        },
+        {
+          "spoken": "falling",
+          "start": 1.451,
+          "end": 1.841,
+          "text": "falling",
+          "emphasis": false
+        },
+        {
+          "spoken": "once",
+          "start": 1.841,
+          "end": 2.188,
+          "text": "once",
+          "emphasis": false
+        },
+        {
+          "spoken": "is",
+          "start": 2.254,
+          "end": 2.388,
+          "text": "is",
+          "emphasis": false
+        },
+        {
+          "spoken": "the",
+          "start": 2.388,
+          "end": 2.478,
+          "text": "the",
+          "emphasis": false
+        },
+        {
+          "spoken": "clumsiest",
+          "start": 2.478,
+          "end": 3.158,
+          "text": "clumsiest",
+          "emphasis": true
+        },
+        {
+          "spoken": "thing",
+          "start": 3.17,
+          "end": 3.438,
+          "text": "thing",
+          "emphasis": false
+        },
+        {
+          "spoken": "in",
+          "start": 3.438,
+          "end": 3.516,
+          "text": "in",
+          "emphasis": false
+        },
+        {
+          "spoken": "history",
+          "start": 3.527,
+          "end": 4.051,
+          "text": "history.",
+          "emphasis": false
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 11,
+      "file": "clumsytown/voice/line11.mp3",
+      "start": 0.4,
+      "duration": 1.907,
+      "words": [
+        {
+          "spoken": "Now",
+          "start": 0.089,
+          "end": 0.223,
+          "text": "Now",
+          "emphasis": false
+        },
+        {
+          "spoken": "I'm",
+          "start": 0.234,
+          "end": 0.312,
+          "text": "I'm",
+          "emphasis": false
+        },
+        {
+          "spoken": "the",
+          "start": 0.324,
+          "end": 0.368,
+          "text": "the",
+          "emphasis": false
+        },
+        {
+          "spoken": "king",
+          "start": 0.368,
+          "end": 0.658,
+          "text": "king.",
+          "emphasis": true
+        }
+      ],
+      "extra": []
+    }
+  ]
+}

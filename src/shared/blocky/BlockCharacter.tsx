@@ -82,6 +82,7 @@ export type Look = {
   /** Hair tie colour for ponytails. */
   accent?: string;
   sunglasses?: boolean;
+  crown?: boolean;
 };
 
 type Props = {
@@ -278,6 +279,29 @@ export const BlockCharacter: React.FC<Props> = ({ look, pose, expression = "happ
             {M(skin, rbox(0.55, 0.3, 0.55, 0.1), [0, 0.1, 0])}
             {M(skin, rbox(1.25, 1.2, 1.15, 0.24), [0, 0.68, 0])}
             <mesh geometry={plane(1.08, 1.08)} material={faceMat(expression, blink)} position={[0, 0.66, 0.581]} />
+            {look.crown ? (
+              <group position={[0, 1.55, 0]}>
+                <mesh castShadow>
+                  <cylinderGeometry args={[0.72, 0.68, 0.45, 16, 1, true]} />
+                  <meshStandardMaterial color="#ffcc33" metalness={0.7} roughness={0.25} side={2} />
+                </mesh>
+                {Array.from({ length: 6 }).map((_, i) => {
+                  const a = (i / 6) * Math.PI * 2;
+                  return (
+                    <group key={i} position={[Math.sin(a) * 0.68, 0.38, Math.cos(a) * 0.68]}>
+                      <mesh castShadow>
+                        <coneGeometry args={[0.16, 0.42, 4]} />
+                        <meshStandardMaterial color="#ffcc33" metalness={0.7} roughness={0.25} />
+                      </mesh>
+                      <mesh position={[0, 0.25, 0]}>
+                        <sphereGeometry args={[0.08, 8, 6]} />
+                        <meshStandardMaterial color={i % 2 ? "#e63946" : "#4361ee"} roughness={0.2} />
+                      </mesh>
+                    </group>
+                  );
+                })}
+              </group>
+            ) : null}
             {look.sunglasses ? (
               <group position={[0, 0.8, 0.6]}>
                 {[-1, 1].map((s) => (

@@ -1,8 +1,8 @@
 import * as THREE from "three";
 import { useMemo } from "react";
 import { random } from "remotion";
-import { plastic, rbox } from "../../shared/blocky/BlockCharacter";
-import { Tree } from "../../shared/blocky/Environment";
+import { plastic, rbox } from "./BlockCharacter";
+import { Tree } from "./Environment";
 
 type V3 = [number, number, number];
 

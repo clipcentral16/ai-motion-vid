@@ -20,7 +20,10 @@
     "narration:asteroid": "python3 scripts/generate-narration.py scripts/narration/asteroid.json",
     "render:dumbtown": "remotion render DumbTown out/dumb-town.mp4 --crf=24",
     "audio:dumbtown": "node scripts/generate-audio.mjs dumbtown",
-    "narration:dumbtown": "python3 scripts/generate-narration.py scripts/narration/dumbtown.json"
+    "narration:dumbtown": "python3 scripts/generate-narration.py scripts/narration/dumbtown.json",
+    "render:clumsytown": "remotion render ClumsyTown out/clumsy-town.mp4 --crf=24",
+    "audio:clumsytown": "node scripts/generate-audio.mjs clumsytown",
+    "narration:clumsytown": "python3 scripts/generate-narration.py scripts/narration/clumsytown.json"
   },
   "repository": {
     "type": "git",

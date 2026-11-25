@@ -11,6 +11,8 @@ import * as Asteroid from "./AsteroidSave/constants";
 import { STYLE_TEST_FRAMES, StyleTest } from "./StyleTest/StyleTest";
 import { DumbTown } from "./DumbTown/DumbTown";
 import * as Dumb from "./DumbTown/constants";
+import { ClumsyTown } from "./ClumsyTown/ClumsyTown";
+import * as Clumsy from "./ClumsyTown/constants";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -57,6 +59,7 @@ export const RemotionRoot: React.FC = () => {
       />
       <Composition id="StyleTest" component={StyleTest} durationInFrames={STYLE_TEST_FRAMES} fps={30} width={1080} height={1920} />
       <Composition id="DumbTown" component={DumbTown} durationInFrames={Dumb.TOTAL_FRAMES} fps={Dumb.FPS} width={Dumb.WIDTH} height={Dumb.HEIGHT} />
+      <Composition id="ClumsyTown" component={ClumsyTown} durationInFrames={Clumsy.TOTAL_FRAMES} fps={Clumsy.FPS} width={Clumsy.WIDTH} height={Clumsy.HEIGHT} />
     </>
   );
 };

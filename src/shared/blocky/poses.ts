@@ -295,3 +295,63 @@ export const lounge = (t: number, seed = 0): Pose => {
   p.head = { x: 0.3, y: 0.15 * Math.sin(t * 0.8), z: 0 };
   return p;
 };
+
+/** Arms stretched out to the sides, wobbling, for balancing. */
+export const balance = (t: number, seed = 0): Pose => {
+  const p = idle(t, seed);
+  const w = Math.sin(t * 2.6 + seed);
+  p.shoulderL = { x: 0, z: 1.45 + 0.15 * w };
+  p.shoulderR = { x: 0, z: 1.45 - 0.15 * w };
+  p.elbowL = { x: -0.1, z: 0.1 };
+  p.elbowR = { x: -0.1, z: 0.1 };
+  p.torsoRoll = 0.06 * w;
+  p.head = { x: 0, y: 0, z: -0.05 * w };
+  return p;
+};
+
+/** Tucked mid-air: knees to chest, arms hugging the shins (for flips). */
+export const tuck = (t: number, seed = 0): Pose => {
+  const p = idle(t, seed);
+  p.hipL = { x: -1.9, z: 0.08 };
+  p.hipR = { x: -1.9, z: 0.08 };
+  p.kneeL = p.kneeR = 2.1;
+  p.ankleL = p.ankleR = 0.3;
+  p.shoulderL = { x: -1.3, z: 0.25 };
+  p.shoulderR = { x: -1.3, z: 0.25 };
+  p.elbowL = { x: -0.9, z: 0 };
+  p.elbowR = { x: -0.9, z: 0 };
+  p.lean = 0.35;
+  p.head = { x: 0.3, y: 0, z: 0 };
+  return p;
+};
+
+/** Arms and legs flailing (slipping, tripping, falling). */
+export const flail = (t: number, seed = 0): Pose => {
+  const p = idle(t, seed);
+  const a = Math.sin(t * 18 + seed);
+  const b = Math.sin(t * 15 + seed + 1);
+  p.shoulderL = { x: -0.6 + 0.8 * a, z: 1.6 + 0.6 * b };
+  p.shoulderR = { x: -0.6 - 0.8 * b, z: 1.6 - 0.6 * a };
+  p.elbowL = { x: -0.6, z: 0.3 * a };
+  p.elbowR = { x: -0.6, z: 0.3 * b };
+  p.hipL = { x: -0.7 + 0.5 * b, z: 0.15 };
+  p.hipR = { x: 0.2 - 0.5 * a, z: 0.15 };
+  p.kneeL = 0.5 + 0.3 * a;
+  p.kneeR = 0.4 + 0.3 * b;
+  return p;
+};
+
+/** Lying flat after a faceplant: arms out in front, legs straight. */
+export const splat = (t: number, seed = 0): Pose => {
+  const p = idle(t, seed);
+  p.shoulderL = { x: -2.9, z: 0.35 };
+  p.shoulderR = { x: -2.9, z: 0.35 };
+  p.elbowL = { x: 0, z: 0 };
+  p.elbowR = { x: 0, z: 0 };
+  p.hipL = { x: 0, z: 0.1 };
+  p.hipR = { x: 0, z: 0.1 };
+  p.kneeL = p.kneeR = 0.05;
+  p.head = { x: -0.4, y: 0.2 * Math.sin(t * 3 + seed), z: 0 };
+  p.breathe = 0;
+  return p;
+};

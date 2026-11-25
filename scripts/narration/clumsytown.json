@@ -1,0 +1,31 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "+12%",
+  "pitch": "+4Hz",
+  "target_lufs": -14,
+  "scene_seconds": [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+  "audio_dir": "clumsytown/voice",
+  "json_out": "src/ClumsyTown/narration.json",
+  "lines": [
+    { "scene": 0, "caption": "In this town, the *clumsiest person gets crowned *king.", "start": 0.2 },
+    { "scene": 1, "caption": "Trip over nothing? Here's a *crown.", "start": 0.15 },
+    { "scene": 2, "caption": "Spill coffee on yourself? You get a *parade.", "start": 0.15 },
+    { "scene": 3, "caption": "Our king fell down the *stairs at his own *coronation.", "start": 0.15 },
+    { "scene": 4, "caption": "But I'm *Max… and I've never tripped in my life.", "start": 0.2 },
+    { "scene": 5, "caption": "I can balance *anything.", "start": 0.15 },
+    { "scene": 6, "caption": "I stepped on a *banana peel on purpose… and slid into a *perfect pose.", "start": 0.15 },
+    { "scene": 7, "caption": "So I entered the *Clumsy Championship.", "start": 0.15 },
+    { "scene": 8, "caption": "Final test: fall down a *hundred stairs. I tripped on purpose… and landed a *perfect backflip.", "start": 0.15 },
+    { "scene": 9, "caption": "Zero falls. I went home, *defeated.", "start": 0.3 },
+    { "scene": 10, "caption": "Then the judges called. Never falling once is the *clumsiest thing in history.", "start": 0.4 },
+    { "scene": 11, "caption": "Now I'm the *king.", "start": 0.4 }
+  ],
+  "crowd": [
+    { "name": "cheer", "layers": 12, "spread": 0.8, "pitch": 6, "pitch_spread": 18, "rate": "+15%", "lufs": -16,
+      "texts": ["Yeaaah!", "Long live the king!", "Woooo!", "Hooray!", "Yeah!"],
+      "voices": ["en-US-AvaNeural", "en-US-GuyNeural", "en-US-EmmaNeural", "en-US-EricNeural", "en-US-JennyNeural", "en-US-RogerNeural", "en-US-AriaNeural", "en-US-AndrewNeural"] },
+    { "name": "gasp", "layers": 10, "spread": 0.3, "pitch": 4, "pitch_spread": 15, "rate": "+10%", "lufs": -18,
+      "texts": ["Ohhh!", "Whoa!", "Ooh!"],
+      "voices": ["en-US-AvaNeural", "en-US-GuyNeural", "en-US-EmmaNeural", "en-US-EricNeural", "en-US-JennyNeural"] }
+  ]
+}

@@ -19,7 +19,7 @@ import { join } from "node:path";
 
 const SR = 44100;
 const SET = process.argv[2] ?? "no-legs";
-const OUT_NAME = { nuke: "whatif-nuke", jupiter: "jupiter", asteroid: "asteroid", dumbtown: "dumbtown" }[SET] ?? "whatif";
+const OUT_NAME = { nuke: "whatif-nuke", jupiter: "jupiter", asteroid: "asteroid", dumbtown: "dumbtown", clumsytown: "clumsytown" }[SET] ?? "whatif";
 const OUT = join(process.cwd(), "public", OUT_NAME);
 mkdirSync(OUT, { recursive: true });
 
@@ -1136,7 +1136,134 @@ const quirkyScore = () => {
   writeWav("score", buf, 0.8);
 };
 
-if (SET === "dumbtown") {
+// ---------- "In this town, the clumsiest person gets crowned king" ----------
+
+const thud = () => {
+  const buf = stereo(0.6);
+  let ph = 0, lp = 0;
+  for (let j = 0; j < 0.6 * SR; j++) {
+    const t = j / SR;
+    ph += (TAU * (45 + 70 * Math.exp(-t * 25))) / SR;
+    lp += lpCoef(700) * (noise() - lp);
+    add(buf, j, Math.sin(ph) * Math.exp(-t * 9) + lp * Math.exp(-t * 20) * 0.9);
+  }
+  writeWav("thud", buf);
+};
+const splash = () => {
+  const buf = stereo(0.9);
+  let lp = 0;
+  for (let j = 0; j < 0.9 * SR; j++) {
+    const t = j / SR;
+    lp += lpCoef(3000 * Math.exp(-t * 3) + 300) * (noise() - lp);
+    const bubbles = rand() < 0.004 ? 1 : 0;
+    add(buf, j, lp * Math.exp(-t * 4) * 1.2 + bubbles * Math.sin(TAU * 900 * t) * 0.2, (rand() - 0.5) * 0.3);
+  }
+  writeWav("splash", buf);
+};
+const slideWhistle = () => {
+  const buf = stereo(1.6);
+  let ph = 0;
+  for (let j = 0; j < 1.6 * SR; j++) {
+    const t = j / SR;
+    const f = t < 0.8 ? 500 + 1300 * (t / 0.8) : 1800 - 1400 * ((t - 0.8) / 0.8);
+    ph += (TAU * f * (1 + 0.01 * Math.sin(TAU * 7 * t))) / SR;
+    const env = Math.min(1, t / 0.03) * Math.min(1, (1.6 - t) / 0.1);
+    add(buf, j, (Math.sin(ph) + noise() * 0.05) * env * 0.5);
+  }
+  writeWav("slide", buf);
+};
+const fanfare = () => {
+  const buf = stereo(2.2);
+  const notes = [[0, 392, 0.18], [0.2, 392, 0.18], [0.4, 392, 0.18], [0.6, 523.25, 1.4]];
+  for (const [st, f, len] of notes) {
+    for (const mult of [1, 1.25, 1.5]) {
+      let ph = 0, lp = 0;
+      for (let j = 0; j < len * SR; j++) {
+        const t = j / SR;
+        ph += (f * mult * (1 + 0.004 * Math.sin(TAU * 5 * t))) / SR;
+        lp += lpCoef(2200) * (((ph % 1) * 2 - 1) - lp);
+        const env = Math.min(1, t / 0.03) * Math.min(1, (len - t) / 0.08);
+        add(buf, Math.round((st + t) * SR), lp * env * 0.22, mult === 1 ? 0 : mult === 1.25 ? -0.3 : 0.3);
+      }
+    }
+  }
+  writeWav("fanfare", buf);
+};
+
+// Royal-but-silly score, 49.5s at 104 BPM in C major: pizzicato bass, marimba
+// and snare rolls; sad and sparse in the rain, building on the call, then a
+// big regal finish.
+const royalScore = () => {
+  const SECS = [4.0, 3.2, 3.5, 4.0, 3.4, 2.8, 4.8, 3.0, 7.2, 3.7, 5.4, 4.5];
+  const START = SECS.map((_, i) => SECS.slice(0, i).reduce((a, b) => a + b, 0));
+  const DURATION = SECS.reduce((a, b) => a + b, 0);
+  const SAD = START[9];
+  const BUILD = START[10];
+  const WIN = START[11];
+  const beat = 60 / 104;
+  const buf = stereo(DURATION);
+  const chords = [
+    [261.63, 329.63, 392], // C
+    [349.23, 440, 523.25], // F
+    [392, 493.88, 587.33], // G
+    [261.63, 329.63, 392], // C
+  ];
+  const pluck = (st, f, g, pan) => {
+    for (let j = 0; j < 0.3 * SR; j++) {
+      const t = j / SR;
+      const v = Math.sin(TAU * f * t) + 0.3 * Math.sin(TAU * f * 2 * t) * Math.exp(-t * 20);
+      add(buf, Math.round((st + t) * SR), v * Math.exp(-t * 12) * g, pan);
+    }
+  };
+  const snare = (st, g) => {
+    let lp = 0;
+    for (let j = 0; j < 0.12 * SR; j++) {
+      const t = j / SR;
+      const n = noise();
+      lp += lpCoef(1800) * (n - lp);
+      add(buf, Math.round((st + t) * SR), (n - lp) * Math.exp(-t * 30) * g, 0.1);
+    }
+  };
+  for (let k = 0; k * (beat / 2) < DURATION; k++) {
+    const t = k * (beat / 2);
+    const chord = chords[Math.floor(t / (beat * 4)) % 4];
+    if (t >= SAD && t < BUILD) {
+      if (k % 4 === 0) pluck(t, chord[0] * 0.5, 0.2, 0);
+      continue;
+    }
+    if (t >= BUILD && t < WIN) {
+      const u = (t - BUILD) / (WIN - BUILD);
+      snare(t, 0.1 + 0.35 * u);
+      if (k % 2 === 0) pluck(t, chord[0], 0.1 + 0.15 * u, 0);
+      continue;
+    }
+    const win = t >= WIN;
+    pluck(t, chord[k % 3] * (k % 4 < 2 ? 1 : 2), win ? 0.26 : 0.18, ((k % 3) - 1) * 0.3);
+    if (k % 2 === 0) pluck(t, chord[0] * 0.5, 0.3, 0);
+    if (k % 4 === 2) snare(t, 0.3);
+    if (win) snare(t + beat / 4, 0.15);
+  }
+  for (let i = 0; i < buf[0].length; i++) {
+    const t = i / SR;
+    const g = Math.min(1, t / 0.5) * Math.min(1, Math.max(0, (DURATION - t) / 2));
+    buf[0][i] *= g;
+    buf[1][i] *= g;
+  }
+  writeWav("score", buf, 0.8);
+};
+
+if (SET === "clumsytown") {
+  whoosh();
+  thud();
+  dingSfx();
+  splash();
+  slideWhistle();
+  fanfare();
+  trombone();
+  rainLoop();
+  phoneBuzz();
+  royalScore();
+} else if (SET === "dumbtown") {
   whoosh();
   kaching();
   bonk();
