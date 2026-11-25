@@ -4,9 +4,10 @@ import { AIR_ROLL, CATCH, FLICK, RESET, SCENE_SECONDS } from "./constants";
 // The save as one continuous move, as pure functions of "save time" T:
 // T = scene-4 local time, and T = SCENE4_LEN + local time in scene 5.
 //
-//   zen touch  -> the rock's momentum dies on contact, but the car keeps
-//                 flying and keeps air rolling underneath it (air dribble)
-//   flip reset -> mid-roll, the car is upside down: all 4 wheels hit the rock
+//   zen touch  -> he air rolls in and the touch pauses all momentum: car and
+//                 rock hang together, frozen, for the rest of scene 4
+//   flip reset -> from the pause he rolls (accelerating) into a half-roll so
+//                 he's upside down with all 4 wheels on the rock
 //   musty      -> roll out upright, drop back nose-down, backflip; the nose
 //                 meets the rock's surface aimed through its centre and the
 //                 flip follows through to a full rotation
@@ -25,14 +26,17 @@ const T_FLICK = SCENE4_LEN + FLICK;
 
 /** Where the car is at the zen touch (the origin of the arena). */
 const C: [number, number] = [0, 0];
-/** The car keeps this velocity after the touch. */
+/** Slow drift once things start moving again after the pause. */
 const V: [number, number] = [0.45, 0.35];
+/** The pause ends when scene 5 starts. */
+const T_GO = SCENE4_LEN;
 
-// Air roll: two spins before the touch (ends upright), then a steady roll
-// timed so the car is exactly upside down at the reset, then rolls out upright.
+// Air roll: two spins before the touch (ends upright), frozen during the
+// pause, then an accelerating half-roll so he's upside down at the reset,
+// then rolls out upright.
 const ROLL_AT_CATCH = Math.PI * 4;
-const ROLL_AT_RESET = ROLL_AT_CATCH + Math.PI * 9;
-const OMEGA = (ROLL_AT_RESET - ROLL_AT_CATCH) / (T_RESET - T_CATCH);
+const ROLL_AT_RESET = ROLL_AT_CATCH + Math.PI;
+const OMEGA = (2 * (ROLL_AT_RESET - ROLL_AT_CATCH)) / (T_RESET - T_GO); // spin rate reached at the reset
 // Last half-turn eases out (sine) starting at the same spin rate.
 const ROLL_OUT = (Math.PI * Math.PI) / (2 * OMEGA);
 const T_UPRIGHT = T_RESET + ROLL_OUT;
@@ -54,7 +58,11 @@ type Rock = { pos: [number, number, number]; squash: number; heat: number; spin:
 
 const roll = (T: number) => {
   if (T < T_CATCH) return interpolate(T, [AIR_ROLL - 0.15, T_CATCH], [0, ROLL_AT_CATCH], { ...clamp, easing: Easing.inOut(Easing.sin) });
-  if (T < T_RESET) return ROLL_AT_CATCH + OMEGA * (T - T_CATCH);
+  if (T < T_GO) return ROLL_AT_CATCH;
+  if (T < T_RESET) {
+    const u = (T - T_GO) / (T_RESET - T_GO);
+    return ROLL_AT_CATCH + (ROLL_AT_RESET - ROLL_AT_CATCH) * u * u;
+  }
   if (T < T_UPRIGHT) return ROLL_AT_RESET + Math.PI * Math.sin(((T - T_RESET) / ROLL_OUT) * (Math.PI / 2));
   return ROLL_AT_RESET + Math.PI;
 };
@@ -65,11 +73,14 @@ const rideHeight = (r: number) => 0.5 + ROCK_R * 0.95 + 0.55 * Math.abs(Math.sin
 /** Car path before the musty set-up begins. */
 const flyPos = (T: number): [number, number] => {
   if (T < T_CATCH) {
-    // Climb in from below-left, arriving with velocity V.
+    // Climb in from below-left, decelerating to a stop at the touch.
     const k = (T_CATCH - T) / T_CATCH;
-    return [C[0] + V[0] * (T - T_CATCH) - 7 * k * k, C[1] + V[1] * (T - T_CATCH) - 9 * k * k];
+    return [C[0] - 7 * k * k, C[1] - 9 * k * k];
   }
-  return [C[0] + V[0] * (T - T_CATCH), C[1] + V[1] * (T - T_CATCH)];
+  // Paused (a tiny hover), then a slow drift once he goes again.
+  const hover = Math.sin((T - T_CATCH) * 2.2) * 0.05;
+  const go = Math.max(0, T - T_GO);
+  return [C[0] + V[0] * go, C[1] + V[1] * go + hover];
 };
 
 /** Rock centre when the set-up starts, and at the flick (it floats on with the car's velocity). */
@@ -118,7 +129,7 @@ export const carPose = (T: number): Pose => {
       phi = Math.PI * 2;
     }
   }
-  const bob = T > T_CATCH && T < T_SET ? Math.sin((T - T_CATCH) * 3) * 0.04 : 0;
+  const bob = 0;
   return { pos: [x, y + bob, 0], rot: [-phi, YAW, rl, "YXZ"], noseUp: phi };
 };
 

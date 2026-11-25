@@ -7,8 +7,8 @@ import { ROCK_R, carPose, rockState } from "../mechanics";
 import { Asteroid, FlyingCar } from "../three/AsteroidProps";
 import { SkyArena } from "./SkyArena";
 
-// 4. Zen air rolls up to the asteroid: the zen touch kills its momentum, and he
-//    keeps flying and air rolling underneath it.
+// 4. Zen air rolls up to the asteroid; the zen touch pauses all momentum and
+//    the two hang frozen while the camera circles them.
 export const Scene4Catch: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -29,7 +29,7 @@ export const Scene4Catch: React.FC = () => {
       <CameraRig position={cam} target={focus} fov={punchFov(frame, fps, 60) - (hit > 0 ? 8 * Math.exp(-hit * 4) : 0)} />
       <SkyArena t={t} />
       <group position={car.pos} rotation={car.rot}>
-        <FlyingCar boost={hit < 0 ? 1 : 0.55} flicker={t} />
+        <FlyingCar boost={hit < 0 ? 1 : 0.3} flicker={t} />
       </group>
       <Asteroid position={rock.pos} radius={ROCK_R} spin={rock.spin} heat={rock.heat} squash={rock.squash} />
       {/* Fire trail while it falls */}
@@ -39,8 +39,8 @@ export const Scene4Catch: React.FC = () => {
             return <Puff key={k} position={back.pos} progress={0.3 + k * 0.06} seed={`ft${k}`} size={2.4 - k * 0.15} color="#ff9a3c" glow={1.4} rise={0} />;
           })
         : null}
-      {/* Boost trail behind the car */}
-      {Array.from({ length: 10 }).map((_, k) => {
+      {/* Boost trail behind the car (only while it's moving) */}
+      {hit < 0.2 && Array.from({ length: 10 }).map((_, k) => {
             const back = carPose(t - (k + 1) * 0.05);
             return <Puff key={`c${k}`} position={back.pos} progress={0.3 + k * 0.07} seed={`ct${k}`} size={0.8} color="#cfe8ff" glow={0.6} rise={0} />;
           })}
