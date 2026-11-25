@@ -19,7 +19,7 @@ import { join } from "node:path";
 
 const SR = 44100;
 const SET = process.argv[2] ?? "no-legs";
-const OUT_NAME = { nuke: "whatif-nuke", jupiter: "jupiter", asteroid: "asteroid" }[SET] ?? "whatif";
+const OUT_NAME = { nuke: "whatif-nuke", jupiter: "jupiter", asteroid: "asteroid", dumbtown: "dumbtown" }[SET] ?? "whatif";
 const OUT = join(process.cwd(), "public", OUT_NAME);
 mkdirSync(OUT, { recursive: true });
 
@@ -924,7 +924,233 @@ const hypeScore = () => {
   writeWav("score", buf, 0.8);
 };
 
-if (SET === "asteroid") {
+// ---------- "In this town, you get paid for being dumb" ----------
+
+const tone = (buf, start, f, len, g, type = "sine", decay = 6, pan = 0) => {
+  let ph = 0;
+  for (let j = 0; j < len * SR; j++) {
+    const t = j / SR;
+    ph += f / SR;
+    const x = ph % 1;
+    const w = type === "sine" ? Math.sin(TAU * x) : type === "square" ? (x < 0.5 ? 1 : -1) : x * 2 - 1;
+    add(buf, Math.round((start + t) * SR), w * Math.min(1, t / 0.004) * Math.exp(-t * decay) * g, pan);
+  }
+};
+
+const kaching = () => {
+  const buf = stereo(1.2);
+  // drawer thunk + bell + coin jingles
+  let ph = 0;
+  for (let j = 0; j < 0.15 * SR; j++) {
+    const t = j / SR;
+    ph += (TAU * (90 + 60 * Math.exp(-t * 30))) / SR;
+    add(buf, j, Math.sin(ph) * Math.exp(-t * 25) * 0.8);
+  }
+  for (const [f, d] of [[2093, 0.12], [2637, 0.14]]) tone(buf, d, f, 1.0, 0.35, "sine", 4);
+  for (let c = 0; c < 9; c++) tone(buf, 0.18 + c * 0.05 + rand() * 0.03, 3000 + rand() * 2500, 0.15, 0.12, "sine", 30, rand() - 0.5);
+  writeWav("kaching", buf);
+};
+const bonk = () => {
+  const buf = stereo(0.6);
+  let ph = 0;
+  for (let j = 0; j < 0.6 * SR; j++) {
+    const t = j / SR;
+    ph += (TAU * (320 * Math.exp(-t * 6) + 120)) / SR;
+    add(buf, j, (Math.sin(ph) + 0.4 * Math.sin(ph * 2.7)) * Math.exp(-t * 9) * 0.9);
+  }
+  writeWav("bonk", buf);
+};
+const popSfx = () => {
+  const buf = stereo(0.25);
+  let ph = 0;
+  for (let j = 0; j < 0.25 * SR; j++) {
+    const t = j / SR;
+    ph += (TAU * (300 + 1400 * Math.exp(-t * 40))) / SR;
+    add(buf, j, Math.sin(ph) * Math.exp(-t * 22) * 0.8);
+  }
+  writeWav("pop", buf);
+};
+const dingSfx = () => {
+  const buf = stereo(1.2);
+  tone(buf, 0, 1046.5, 1.1, 0.5, "sine", 3);
+  tone(buf, 0.09, 1568, 1.0, 0.4, "sine", 3);
+  writeWav("ding", buf);
+};
+const gasp = () => {
+  const buf = stereo(0.7);
+  let lo = 0, band = 0;
+  for (let j = 0; j < 0.7 * SR; j++) {
+    const t = j / SR;
+    const fc = 900 + 1400 * Math.min(1, t / 0.3);
+    const f = 2 * Math.sin((Math.PI * fc) / SR);
+    const hi = noise() - lo - 0.3 * band;
+    band += f * hi;
+    lo += f * band;
+    const env = Math.min(1, t / 0.08) * Math.max(0, 1 - t / 0.55);
+    add(buf, j, band * env * 0.9);
+  }
+  writeWav("gasp", buf);
+};
+const trombone = () => {
+  const buf = stereo(2.6);
+  const notes = [[0, 233.08, 0.45], [0.5, 220, 0.45], [1.0, 207.65, 0.45], [1.5, 196, 1.0]];
+  for (const [st, f, len] of notes) {
+    let ph = 0, lp = 0;
+    for (let j = 0; j < len * SR; j++) {
+      const t = j / SR;
+      const vib = st === 1.5 ? 1 + 0.02 * Math.sin(TAU * 6 * t) : 1;
+      ph += (f * vib) / SR;
+      const saw = (ph % 1) * 2 - 1;
+      lp += lpCoef(900) * (saw - lp);
+      const env = Math.min(1, t / 0.04) * Math.min(1, (len - t) / 0.1);
+      add(buf, Math.round((st + t) * SR), lp * env * 0.55);
+    }
+  }
+  writeWav("trombone", buf);
+};
+const scan = () => {
+  const buf = stereo(1.6);
+  for (let k = 0; k < 7; k++) tone(buf, k * 0.18, 880 + k * 110, 0.1, 0.25, "square", 20);
+  writeWav("scan", buf);
+};
+const buzzer = () => {
+  const buf = stereo(0.9);
+  let lp = 0, ph = 0;
+  for (let j = 0; j < 0.8 * SR; j++) {
+    const t = j / SR;
+    ph += 110 / SR;
+    lp += lpCoef(1200) * ((ph % 1 < 0.5 ? 1 : -1) - lp);
+    add(buf, j, lp * Math.min(1, (0.8 - t) / 0.05) * 0.6);
+  }
+  writeWav("buzzer", buf);
+};
+const creak = () => {
+  const buf = stereo(1.0);
+  let lp = 0;
+  for (let j = 0; j < 1.0 * SR; j++) {
+    const t = j / SR;
+    const f = 180 + 120 * Math.sin(TAU * 1.3 * t);
+    const pulse = ((t * f) % 1) < 0.08 ? 1 : 0;
+    lp += lpCoef(1800) * (pulse - lp);
+    add(buf, j, lp * Math.sin(Math.PI * t) * 1.2);
+  }
+  writeWav("creak", buf);
+};
+const rainLoop = () => {
+  const d = 6;
+  const buf = stereo(d);
+  let lp = 0;
+  for (let i = 0; i < buf[0].length; i++) {
+    const t = i / SR;
+    const n = noise();
+    lp += lpCoef(2500) * (n - lp);
+    const drop = rand() < 0.002 ? noise() * 1.5 : 0;
+    const env = Math.min(1, t / 0.6) * Math.min(1, (d - t) / 0.8);
+    add(buf, i, (lp * 0.5 + (n - lp) * 0.15 + drop * 0.3) * env, (rand() - 0.5) * 0.4);
+  }
+  writeWav("rain", buf);
+};
+const phoneBuzz = () => {
+  const buf = stereo(1.4);
+  for (const st of [0, 0.55]) {
+    let ph = 0;
+    for (let j = 0; j < 0.4 * SR; j++) {
+      const t = j / SR;
+      ph += (TAU * 150) / SR;
+      add(buf, Math.round((st + t) * SR), (Math.sin(ph) + 0.4 * Math.sign(Math.sin(ph * 2))) * Math.min(1, t / 0.01) * Math.min(1, (0.4 - t) / 0.02) * 0.6);
+    }
+  }
+  writeWav("buzz", buf);
+};
+
+// Playful score, 53.8s at 100 BPM in F major: marimba arpeggios, plucky bass,
+// snaps and shaker. Sad and sparse for the walk home, building on the phone,
+// then the full band for the billion.
+const quirkyScore = () => {
+  const SECS = [3.5, 3.8, 3.5, 4.8, 3.0, 2.8, 4.0, 3.2, 3.2, 3.0, 5.8, 3.2, 5.5, 4.5];
+  const START = SECS.map((_, i) => SECS.slice(0, i).reduce((a, b) => a + b, 0));
+  const DURATION = SECS.reduce((a, b) => a + b, 0);
+  const SAD = START[11];
+  const BUILD = START[12];
+  const WIN = START[13];
+  const beat = 60 / 100;
+  const buf = stereo(DURATION);
+  const happy = [
+    [174.61, 220, 261.63, 349.23], // F
+    [146.83, 174.61, 220, 293.66], // Dm
+    [233.08, 293.66, 349.23, 466.16], // Bb
+    [196, 261.63, 329.63, 392], // C
+  ];
+  const marimba = (st, f, g, pan) => {
+    for (let j = 0; j < 0.4 * SR; j++) {
+      const t = j / SR;
+      const v = Math.sin(TAU * f * t) + 0.35 * Math.sin(TAU * f * 3.99 * t) * Math.exp(-t * 30);
+      add(buf, Math.round((st + t) * SR), v * Math.exp(-t * 9) * g, pan);
+    }
+  };
+  const snap = (st, g) => {
+    let lp = 0;
+    for (let j = 0; j < 0.06 * SR; j++) {
+      const t = j / SR;
+      const n = noise();
+      lp += lpCoef(3000) * (n - lp);
+      add(buf, Math.round((st + t) * SR), (n - lp) * Math.exp(-t * 60) * g, 0.2);
+    }
+  };
+  const kick = (st, g) => {
+    let ph = 0;
+    for (let j = 0; j < 0.25 * SR; j++) {
+      const t = j / SR;
+      ph += (TAU * (50 + 90 * Math.exp(-t * 30))) / SR;
+      add(buf, Math.round((st + t) * SR), Math.sin(ph) * Math.exp(-t * 11) * g);
+    }
+  };
+  for (let k = 0; k * (beat / 2) < DURATION; k++) {
+    const t = k * (beat / 2);
+    const chord = happy[Math.floor(t / (beat * 4)) % 4];
+    const sad = t >= SAD && t < BUILD;
+    const build = t >= BUILD && t < WIN;
+    const win = t >= WIN;
+    if (sad) {
+      if (k % 4 === 0) marimba(t, chord[0] * 0.5, 0.18, 0);
+      continue;
+    }
+    if (build) {
+      const u = (t - BUILD) / (WIN - BUILD);
+      marimba(t, chord[k % 4] * 2, 0.08 + 0.12 * u, -0.2);
+      if (k % 2 === 0) snap(t, 0.15 + 0.3 * u);
+      continue;
+    }
+    marimba(t, chord[(k * 3) % 4] * 2, win ? 0.24 : 0.17, ((k % 3) - 1) * 0.3);
+    if (k % 2 === 0) marimba(t, chord[0] * 0.5, 0.22, 0);
+    if (k % 4 === 2) snap(t, 0.35);
+    if (k % 4 === 0) kick(t, win ? 0.8 : 0.5);
+    if (win && k % 2 === 1) snap(t, 0.2);
+  }
+  for (let i = 0; i < buf[0].length; i++) {
+    const t = i / SR;
+    const g = Math.min(1, t / 0.5) * Math.min(1, Math.max(0, (DURATION - t) / 2));
+    buf[0][i] *= g;
+    buf[1][i] *= g;
+  }
+  writeWav("score", buf, 0.8);
+};
+
+if (SET === "dumbtown") {
+  whoosh();
+  kaching();
+  bonk();
+  popSfx();
+  dingSfx();
+  gasp();
+  trombone();
+  scan();
+  buzzer();
+  creak();
+  rainLoop();
+  phoneBuzz();
+  quirkyScore();
+} else if (SET === "asteroid") {
   whoosh();
   siren();
   rumble();

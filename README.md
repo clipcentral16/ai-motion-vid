@@ -14,5 +14,6 @@ Videos:
 - **What if North Korea started nuking everyone?** (`WhatIfNuke`, 9:16, 25s, narrated): [`examples/what-if-nuke.mp4`](examples/what-if-nuke.mp4). Render with `npm run render:nuke`.
 - **The 2011 Jupiter Incident** (`JupiterIncident`, 9:16, 32s, radio/alien voices, dark found-footage look): [`examples/jupiter-incident.mp4`](examples/jupiter-incident.mp4). Render with `npm run render:jupiter`.
 - **What if an asteroid was about to hit Earth?** (`AsteroidSave`, 9:16, 32s: Zen's air roll, catch, flip reset and musty flick): [`examples/asteroid-save.mp4`](examples/asteroid-save.mp4). Render with `npm run render:asteroid`.
+- **In this town, you get paid for being dumb** (`DumbTown`, 9:16, 54s, new blocky style): [`examples/dumb-town.mp4`](examples/dumb-town.mp4). Render with `npm run render:dumbtown`.
 
 A sample render of the starter scene is in [`examples/spinning-object.mp4`](examples/spinning-object.mp4). See [CLAUDE.md](CLAUDE.md) for the stack conventions.

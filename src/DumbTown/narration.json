@@ -1,0 +1,986 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "+12%",
+  "lines": [
+    {
+      "scene": 0,
+      "file": "dumbtown/voice/line0.mp3",
+      "start": 0.2,
+      "duration": 2.508,
+      "words": [
+        {
+          "spoken": "In",
+          "start": 0.089,
+          "end": 0.19,
+          "text": "In",
+          "emphasis": false
+        },
+        {
+          "spoken": "this",
+          "start": 0.19,
+          "end": 0.335,
+          "text": "this",
+          "emphasis": false
+        },
+        {
+          "spoken": "town",
+          "start": 0.335,
+          "end": 0.725,
+          "text": "town,",
+          "emphasis": false
+        },
+        {
+          "spoken": "you",
+          "start": 0.949,
+          "end": 1.027,
+          "text": "you",
+          "emphasis": false
+        },
+        {
+          "spoken": "get",
+          "start": 1.038,
+          "end": 1.172,
+          "text": "get",
+          "emphasis": false
+        },
+        {
+          "spoken": "paid",
+          "start": 1.172,
+          "end": 1.473,
+          "text": "paid",
+          "emphasis": false
+        },
+        {
+          "spoken": "for",
+          "start": 1.473,
+          "end": 1.574,
+          "text": "for",
+          "emphasis": false
+        },
+        {
+          "spoken": "being",
+          "start": 1.574,
+          "end": 1.808,
+          "text": "being",
+          "emphasis": false
+        },
+        {
+          "spoken": "dumb",
+          "start": 1.808,
+          "end": 2.143,
+          "text": "dumb.",
+          "emphasis": true
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 1,
+      "file": "dumbtown/voice/line1.mp3",
+      "start": 0.15,
+      "duration": 2.978,
+      "words": [
+        {
+          "spoken": "Get",
+          "start": 0.078,
+          "end": 0.156,
+          "text": "Get",
+          "emphasis": false
+        },
+        {
+          "spoken": "the",
+          "start": 0.156,
+          "end": 0.234,
+          "text": "the",
+          "emphasis": false
+        },
+        {
+          "spoken": "lowest",
+          "start": 0.246,
+          "end": 0.569,
+          "text": "lowest",
+          "emphasis": false
+        },
+        {
+          "spoken": "score",
+          "start": 0.569,
+          "end": 0.871,
+          "text": "score",
+          "emphasis": false
+        },
+        {
+          "spoken": "in",
+          "start": 0.882,
+          "end": 0.949,
+          "text": "in",
+          "emphasis": false
+        },
+        {
+          "spoken": "class",
+          "start": 0.949,
+          "end": 1.496,
+          "text": "class?",
+          "emphasis": false
+        },
+        {
+          "spoken": "That's",
+          "start": 1.864,
+          "end": 1.987,
+          "text": "That's",
+          "emphasis": false
+        },
+        {
+          "spoken": "a",
+          "start": 1.987,
+          "end": 2.031,
+          "text": "a",
+          "emphasis": false
+        },
+        {
+          "spoken": "bonus",
+          "start": 2.042,
+          "end": 2.6,
+          "text": "bonus.",
+          "emphasis": true
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 2,
+      "file": "dumbtown/voice/line2.mp3",
+      "start": 0.15,
+      "duration": 2.534,
+      "words": [
+        {
+          "spoken": "Push",
+          "start": 0.089,
+          "end": 0.234,
+          "text": "Push",
+          "emphasis": false
+        },
+        {
+          "spoken": "a",
+          "start": 0.234,
+          "end": 0.301,
+          "text": "a",
+          "emphasis": false
+        },
+        {
+          "spoken": "door",
+          "start": 0.312,
+          "end": 0.603,
+          "text": "door",
+          "emphasis": false
+        },
+        {
+          "spoken": "that",
+          "start": 0.614,
+          "end": 0.714,
+          "text": "that",
+          "emphasis": false
+        },
+        {
+          "spoken": "says",
+          "start": 0.725,
+          "end": 1.004,
+          "text": "says",
+          "emphasis": false
+        },
+        {
+          "spoken": "pull",
+          "start": 1.016,
+          "end": 1.35,
+          "text": "pull?",
+          "emphasis": false
+        },
+        {
+          "spoken": "Ka-ching",
+          "start": 1.696,
+          "end": 2.154,
+          "text": "Ka-ching!",
+          "emphasis": true
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 3,
+      "file": "dumbtown/voice/line3.mp3",
+      "start": 0.15,
+      "duration": 4.101,
+      "words": [
+        {
+          "spoken": "This",
+          "start": 0.089,
+          "end": 0.179,
+          "text": "This",
+          "emphasis": false
+        },
+        {
+          "spoken": "kid",
+          "start": 0.179,
+          "end": 0.324,
+          "text": "kid",
+          "emphasis": false
+        },
+        {
+          "spoken": "in",
+          "start": 0.335,
+          "end": 0.379,
+          "text": "in",
+          "emphasis": false
+        },
+        {
+          "spoken": "my",
+          "start": 0.379,
+          "end": 0.502,
+          "text": "my",
+          "emphasis": false
+        },
+        {
+          "spoken": "class",
+          "start": 0.502,
+          "end": 0.915,
+          "text": "class",
+          "emphasis": false
+        },
+        {
+          "spoken": "got",
+          "start": 0.915,
+          "end": 1.094,
+          "text": "got",
+          "emphasis": false
+        },
+        {
+          "spoken": "zero",
+          "start": 1.094,
+          "end": 1.562,
+          "text": "zero",
+          "emphasis": true
+        },
+        {
+          "spoken": "on",
+          "start": 1.562,
+          "end": 1.652,
+          "text": "on",
+          "emphasis": false
+        },
+        {
+          "spoken": "his",
+          "start": 1.652,
+          "end": 1.752,
+          "text": "his",
+          "emphasis": false
+        },
+        {
+          "spoken": "test",
+          "start": 1.752,
+          "end": 2.199,
+          "text": "test.",
+          "emphasis": false
+        },
+        {
+          "spoken": "Now",
+          "start": 2.556,
+          "end": 2.723,
+          "text": "Now",
+          "emphasis": false
+        },
+        {
+          "spoken": "he",
+          "start": 2.79,
+          "end": 2.891,
+          "text": "he",
+          "emphasis": false
+        },
+        {
+          "spoken": "lives",
+          "start": 2.902,
+          "end": 3.181,
+          "text": "lives",
+          "emphasis": false
+        },
+        {
+          "spoken": "in",
+          "start": 3.181,
+          "end": 3.237,
+          "text": "in",
+          "emphasis": false
+        },
+        {
+          "spoken": "a",
+          "start": 3.237,
+          "end": 3.27,
+          "text": "a",
+          "emphasis": false
+        },
+        {
+          "spoken": "mansion",
+          "start": 3.281,
+          "end": 3.728,
+          "text": "mansion.",
+          "emphasis": true
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 4,
+      "file": "dumbtown/voice/line4.mp3",
+      "start": 0.2,
+      "duration": 2.011,
+      "words": [
+        {
+          "spoken": "But",
+          "start": 0.1,
+          "end": 0.179,
+          "text": "But",
+          "emphasis": false
+        },
+        {
+          "spoken": "I'm",
+          "start": 0.179,
+          "end": 0.301,
+          "text": "I'm",
+          "emphasis": false
+        },
+        {
+          "spoken": "Bob",
+          "start": 0.301,
+          "end": 0.692,
+          "text": "Bob…",
+          "emphasis": true
+        },
+        {
+          "spoken": "and",
+          "start": 0.949,
+          "end": 1.027,
+          "text": "and",
+          "emphasis": false
+        },
+        {
+          "spoken": "I'm",
+          "start": 1.038,
+          "end": 1.138,
+          "text": "I'm",
+          "emphasis": false
+        },
+        {
+          "spoken": "never",
+          "start": 1.138,
+          "end": 1.306,
+          "text": "never",
+          "emphasis": false
+        },
+        {
+          "spoken": "dumb",
+          "start": 1.317,
+          "end": 1.629,
+          "text": "dumb.",
+          "emphasis": false
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 5,
+      "file": "dumbtown/voice/line5.mp3",
+      "start": 0.15,
+      "duration": 1.907,
+      "words": [
+        {
+          "spoken": "I",
+          "start": 0.089,
+          "end": 0.156,
+          "text": "I",
+          "emphasis": false
+        },
+        {
+          "spoken": "get",
+          "start": 0.167,
+          "end": 0.29,
+          "text": "get",
+          "emphasis": false
+        },
+        {
+          "spoken": "everything",
+          "start": 0.301,
+          "end": 0.692,
+          "text": "everything",
+          "emphasis": true
+        },
+        {
+          "spoken": "right",
+          "start": 0.692,
+          "end": 1.016,
+          "text": "right.",
+          "emphasis": false
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 6,
+      "file": "dumbtown/voice/line6.mp3",
+      "start": 0.15,
+      "duration": 3.187,
+      "words": [
+        {
+          "spoken": "One",
+          "start": 0.1,
+          "end": 0.257,
+          "text": "One",
+          "emphasis": false
+        },
+        {
+          "spoken": "day",
+          "start": 0.268,
+          "end": 0.48,
+          "text": "day",
+          "emphasis": false
+        },
+        {
+          "spoken": "I",
+          "start": 0.558,
+          "end": 0.625,
+          "text": "I",
+          "emphasis": false
+        },
+        {
+          "spoken": "forgot",
+          "start": 0.625,
+          "end": 0.938,
+          "text": "forgot",
+          "emphasis": true
+        },
+        {
+          "spoken": "we",
+          "start": 0.949,
+          "end": 1.027,
+          "text": "we",
+          "emphasis": false
+        },
+        {
+          "spoken": "had",
+          "start": 1.027,
+          "end": 1.116,
+          "text": "had",
+          "emphasis": false
+        },
+        {
+          "spoken": "a",
+          "start": 1.116,
+          "end": 1.15,
+          "text": "a",
+          "emphasis": false
+        },
+        {
+          "spoken": "test",
+          "start": 1.15,
+          "end": 1.607,
+          "text": "test.",
+          "emphasis": false
+        },
+        {
+          "spoken": "I",
+          "start": 1.964,
+          "end": 2.009,
+          "text": "I",
+          "emphasis": false
+        },
+        {
+          "spoken": "was",
+          "start": 2.02,
+          "end": 2.121,
+          "text": "was",
+          "emphasis": false
+        },
+        {
+          "spoken": "sure",
+          "start": 2.121,
+          "end": 2.321,
+          "text": "sure",
+          "emphasis": false
+        },
+        {
+          "spoken": "I'd",
+          "start": 2.321,
+          "end": 2.455,
+          "text": "I'd",
+          "emphasis": false
+        },
+        {
+          "spoken": "fail",
+          "start": 2.466,
+          "end": 2.824,
+          "text": "fail.",
+          "emphasis": false
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 7,
+      "file": "dumbtown/voice/line7.mp3",
+      "start": 0.4,
+      "duration": 1.907,
+      "words": [
+        {
+          "spoken": "Highest",
+          "start": 0.1,
+          "end": 0.324,
+          "text": "Highest",
+          "emphasis": true
+        },
+        {
+          "spoken": "score",
+          "start": 0.335,
+          "end": 0.603,
+          "text": "score",
+          "emphasis": false
+        },
+        {
+          "spoken": "in",
+          "start": 0.614,
+          "end": 0.67,
+          "text": "in",
+          "emphasis": false
+        },
+        {
+          "spoken": "the",
+          "start": 0.681,
+          "end": 0.725,
+          "text": "the",
+          "emphasis": false
+        },
+        {
+          "spoken": "class",
+          "start": 0.725,
+          "end": 1.295,
+          "text": "class.",
+          "emphasis": false
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 8,
+      "file": "dumbtown/voice/line8.mp3",
+      "start": 0.15,
+      "duration": 2.038,
+      "words": [
+        {
+          "spoken": "So",
+          "start": 0.089,
+          "end": 0.179,
+          "text": "So",
+          "emphasis": false
+        },
+        {
+          "spoken": "I",
+          "start": 0.19,
+          "end": 0.246,
+          "text": "I",
+          "emphasis": false
+        },
+        {
+          "spoken": "went",
+          "start": 0.246,
+          "end": 0.357,
+          "text": "went",
+          "emphasis": false
+        },
+        {
+          "spoken": "to",
+          "start": 0.357,
+          "end": 0.402,
+          "text": "to",
+          "emphasis": false
+        },
+        {
+          "spoken": "the",
+          "start": 0.413,
+          "end": 0.491,
+          "text": "the",
+          "emphasis": false
+        },
+        {
+          "spoken": "Dumb",
+          "start": 0.491,
+          "end": 0.692,
+          "text": "Dumb",
+          "emphasis": true
+        },
+        {
+          "spoken": "Centre",
+          "start": 0.692,
+          "end": 1.016,
+          "text": "Centre",
+          "emphasis": false
+        },
+        {
+          "spoken": "to",
+          "start": 1.027,
+          "end": 1.094,
+          "text": "to",
+          "emphasis": false
+        },
+        {
+          "spoken": "get",
+          "start": 1.094,
+          "end": 1.25,
+          "text": "get",
+          "emphasis": false
+        },
+        {
+          "spoken": "tested",
+          "start": 1.25,
+          "end": 1.674,
+          "text": "tested.",
+          "emphasis": false
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 9,
+      "file": "dumbtown/voice/line9.mp3",
+      "start": 0.6,
+      "duration": 1.907,
+      "words": [
+        {
+          "spoken": "Zero",
+          "start": 0.089,
+          "end": 0.324,
+          "text": "Zero",
+          "emphasis": true
+        },
+        {
+          "spoken": "percent",
+          "start": 0.335,
+          "end": 0.692,
+          "text": "percent",
+          "emphasis": false
+        },
+        {
+          "spoken": "dumb",
+          "start": 0.692,
+          "end": 0.971,
+          "text": "dumb.",
+          "emphasis": false
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 10,
+      "file": "dumbtown/voice/line10.mp3",
+      "start": 0.15,
+      "duration": 4.807,
+      "words": [
+        {
+          "spoken": "Their",
+          "start": 0.089,
+          "end": 0.201,
+          "text": "Their",
+          "emphasis": false
+        },
+        {
+          "spoken": "last",
+          "start": 0.201,
+          "end": 0.48,
+          "text": "last",
+          "emphasis": false
+        },
+        {
+          "spoken": "test",
+          "start": 0.48,
+          "end": 0.815,
+          "text": "test",
+          "emphasis": false
+        },
+        {
+          "spoken": "was",
+          "start": 0.826,
+          "end": 0.949,
+          "text": "was",
+          "emphasis": false
+        },
+        {
+          "spoken": "impossible",
+          "start": 0.949,
+          "end": 1.618,
+          "text": "impossible.",
+          "emphasis": true
+        },
+        {
+          "spoken": "I",
+          "start": 1.975,
+          "end": 2.031,
+          "text": "I",
+          "emphasis": false
+        },
+        {
+          "spoken": "pushed",
+          "start": 2.031,
+          "end": 2.243,
+          "text": "pushed",
+          "emphasis": false
+        },
+        {
+          "spoken": "the",
+          "start": 2.243,
+          "end": 2.31,
+          "text": "the",
+          "emphasis": false
+        },
+        {
+          "spoken": "pull",
+          "start": 2.321,
+          "end": 2.511,
+          "text": "pull",
+          "emphasis": false
+        },
+        {
+          "spoken": "door",
+          "start": 2.511,
+          "end": 2.746,
+          "text": "door",
+          "emphasis": false
+        },
+        {
+          "spoken": "on",
+          "start": 2.746,
+          "end": 2.868,
+          "text": "on",
+          "emphasis": false
+        },
+        {
+          "spoken": "purpose",
+          "start": 2.868,
+          "end": 3.482,
+          "text": "purpose…",
+          "emphasis": false
+        },
+        {
+          "spoken": "it",
+          "start": 3.616,
+          "end": 3.672,
+          "text": "it",
+          "emphasis": false
+        },
+        {
+          "spoken": "was",
+          "start": 3.683,
+          "end": 3.783,
+          "text": "was",
+          "emphasis": false
+        },
+        {
+          "spoken": "a",
+          "start": 3.795,
+          "end": 3.839,
+          "text": "a",
+          "emphasis": false
+        },
+        {
+          "spoken": "push",
+          "start": 3.839,
+          "end": 4.118,
+          "text": "push",
+          "emphasis": true
+        },
+        {
+          "spoken": "door",
+          "start": 4.129,
+          "end": 4.453,
+          "text": "door.",
+          "emphasis": false
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 11,
+      "file": "dumbtown/voice/line11.mp3",
+      "start": 0.3,
+      "duration": 1.907,
+      "words": [
+        {
+          "spoken": "I",
+          "start": 0.089,
+          "end": 0.145,
+          "text": "I",
+          "emphasis": false
+        },
+        {
+          "spoken": "went",
+          "start": 0.145,
+          "end": 0.279,
+          "text": "went",
+          "emphasis": false
+        },
+        {
+          "spoken": "home",
+          "start": 0.279,
+          "end": 0.647,
+          "text": "home,",
+          "emphasis": false
+        },
+        {
+          "spoken": "defeated",
+          "start": 0.703,
+          "end": 1.161,
+          "text": "defeated.",
+          "emphasis": true
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 12,
+      "file": "dumbtown/voice/line12.mp3",
+      "start": 0.4,
+      "duration": 4.415,
+      "words": [
+        {
+          "spoken": "Then",
+          "start": 0.089,
+          "end": 0.145,
+          "text": "Then",
+          "emphasis": false
+        },
+        {
+          "spoken": "my",
+          "start": 0.145,
+          "end": 0.257,
+          "text": "my",
+          "emphasis": false
+        },
+        {
+          "spoken": "phone",
+          "start": 0.268,
+          "end": 0.547,
+          "text": "phone",
+          "emphasis": false
+        },
+        {
+          "spoken": "buzzed",
+          "start": 0.558,
+          "end": 0.982,
+          "text": "buzzed.",
+          "emphasis": false
+        },
+        {
+          "spoken": "Zero",
+          "start": 1.339,
+          "end": 1.618,
+          "text": "Zero",
+          "emphasis": false
+        },
+        {
+          "spoken": "percent",
+          "start": 1.629,
+          "end": 2.009,
+          "text": "percent",
+          "emphasis": false
+        },
+        {
+          "spoken": "dumb",
+          "start": 2.009,
+          "end": 2.31,
+          "text": "dumb",
+          "emphasis": false
+        },
+        {
+          "spoken": "is",
+          "start": 2.6,
+          "end": 2.679,
+          "text": "is",
+          "emphasis": false
+        },
+        {
+          "spoken": "the",
+          "start": 2.679,
+          "end": 2.79,
+          "text": "the",
+          "emphasis": false
+        },
+        {
+          "spoken": "dumbest",
+          "start": 2.868,
+          "end": 3.158,
+          "text": "dumbest",
+          "emphasis": true
+        },
+        {
+          "spoken": "score",
+          "start": 3.159,
+          "end": 3.471,
+          "text": "score",
+          "emphasis": false
+        },
+        {
+          "spoken": "in",
+          "start": 3.471,
+          "end": 3.538,
+          "text": "in",
+          "emphasis": false
+        },
+        {
+          "spoken": "history",
+          "start": 3.538,
+          "end": 4.029,
+          "text": "history.",
+          "emphasis": false
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 13,
+      "file": "dumbtown/voice/line13.mp3",
+      "start": 0.4,
+      "duration": 1.907,
+      "words": [
+        {
+          "spoken": "I",
+          "start": 0.089,
+          "end": 0.145,
+          "text": "I",
+          "emphasis": false
+        },
+        {
+          "spoken": "won",
+          "start": 0.156,
+          "end": 0.268,
+          "text": "won",
+          "emphasis": false
+        },
+        {
+          "spoken": "a",
+          "start": 0.268,
+          "end": 0.312,
+          "text": "a",
+          "emphasis": false
+        },
+        {
+          "spoken": "billion",
+          "start": 0.312,
+          "end": 0.603,
+          "text": "billion",
+          "emphasis": true
+        },
+        {
+          "spoken": "dollars",
+          "start": 0.614,
+          "end": 1.127,
+          "text": "dollars.",
+          "emphasis": false
+        }
+      ],
+      "extra": []
+    }
+  ]
+}

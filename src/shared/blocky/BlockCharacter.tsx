@@ -81,6 +81,7 @@ export type Look = {
   build?: "adult" | "kid";
   /** Hair tie colour for ponytails. */
   accent?: string;
+  sunglasses?: boolean;
 };
 
 type Props = {
@@ -277,6 +278,14 @@ export const BlockCharacter: React.FC<Props> = ({ look, pose, expression = "happ
             {M(skin, rbox(0.55, 0.3, 0.55, 0.1), [0, 0.1, 0])}
             {M(skin, rbox(1.25, 1.2, 1.15, 0.24), [0, 0.68, 0])}
             <mesh geometry={plane(1.08, 1.08)} material={faceMat(expression, blink)} position={[0, 0.66, 0.581]} />
+            {look.sunglasses ? (
+              <group position={[0, 0.8, 0.6]}>
+                {[-1, 1].map((s) => (
+                  <mesh key={s} geometry={rbox(0.44, 0.28, 0.08, 0.06)} material={plastic("#111216", 0.15)} position={[s * 0.27, 0, 0]} />
+                ))}
+                <mesh geometry={rbox(1.3, 0.08, 0.08, 0.03)} material={plastic("#111216", 0.2)} position={[0, 0.08, 0]} />
+              </group>
+            ) : null}
             <group position={[0, 0.68, 0]}>
               <Hair style={look.hair} color={look.hairColor} accent={look.accent} />
             </group>

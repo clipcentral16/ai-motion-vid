@@ -102,6 +102,40 @@ const Page: React.FC<{ page: TikTokPage; durationInFrames: number; emphasis: Set
   );
 };
 
+/** One word at a time, big lime-yellow with a dark outline, mid-screen (the "In this town" look). */
+const WordPage: React.FC<{ page: TikTokPage; durationInFrames: number; emphasis: Set<number> }> = ({ page, durationInFrames, emphasis }) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const nowMs = page.startMs + (frame / fps) * 1000;
+  const endMs = page.startMs + (durationInFrames / fps) * 1000;
+  const idx = page.tokens.findIndex((tk, i) => tk.fromMs <= nowMs && nowMs < (page.tokens[i + 1]?.fromMs ?? Math.min(endMs, tk.toMs + 500)));
+  if (idx < 0) return null;
+  const token = page.tokens[idx];
+  const word = token.text.trim();
+  const since = frame - ((token.fromMs - page.startMs) / 1000) * fps;
+  const pop = spring({ frame: since, fps, config: { damping: 10, stiffness: 260, mass: 0.5 } });
+  const emph = emphasis.has(token.fromMs);
+  const emoji = isEmoji(word);
+  return (
+    <AbsoluteFill style={{ alignItems: "center", justifyContent: "center", paddingTop: 480 }}>
+      <div
+        style={{
+          fontFamily: `'${FONT}', 'Noto Color Emoji', sans-serif`,
+          fontSize: emph ? 165 : 140,
+          color: "#e4ff3c",
+          WebkitTextStroke: emoji ? undefined : "16px #15160f",
+          paintOrder: "stroke fill",
+          textShadow: emoji ? undefined : "0 9px 0 rgba(0,0,0,0.45), 0 0 28px rgba(0,0,0,0.35)",
+          transform: `scale(${0.55 + 0.45 * pop}) rotate(${(1 - Math.min(1, pop)) * -6}deg)`,
+          letterSpacing: "0.01em",
+        }}
+      >
+        {word}
+      </div>
+    </AbsoluteFill>
+  );
+};
+
 /**
  * Big bold outlined captions, centred near the bottom, popping in word by
  * word. `lines` holds one Caption[] per scene; each stays up until its
@@ -113,7 +147,9 @@ export const CaptionTrack: React.FC<{
   sceneStarts: number[];
   totalFrames: number;
   pageMeta?: Map<number, PageMeta>;
-}> = ({ lines, emphasis, sceneStarts, totalFrames, pageMeta }) => {
+  /** "lines": the whole line builds up word by word. "word": one word at a time, centred. */
+  variant?: "lines" | "word";
+}> = ({ lines, emphasis, sceneStarts, totalFrames, pageMeta, variant = "lines" }) => {
   const { fps } = useVideoConfig();
   // Build pages per scene so one scene's words never spill into another's page.
   const pages = useMemo(
@@ -131,7 +167,11 @@ export const CaptionTrack: React.FC<{
         const duration = Math.min(sceneEnd, next) - from;
         return (
           <Sequence key={i} from={from} durationInFrames={duration} layout="none">
-            <Page page={page} durationInFrames={duration} emphasis={emphasis} meta={pageMeta?.get(page.startMs)} />
+            {variant === "word" ? (
+              <WordPage page={page} durationInFrames={duration} emphasis={emphasis} />
+            ) : (
+              <Page page={page} durationInFrames={duration} emphasis={emphasis} meta={pageMeta?.get(page.startMs)} />
+            )}
           </Sequence>
         );
       })}

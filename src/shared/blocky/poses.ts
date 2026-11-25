@@ -230,3 +230,68 @@ export const handsOnHips = (t: number, seed = 0): Pose => {
   p.lean = -0.04;
   return p;
 };
+
+/** Seated on a chair (seat ~1.5 studs high): thighs forward, shins down. */
+export const sit = (t: number, seed = 0): Pose => {
+  const p = idle(t, seed);
+  p.bob = -0.55;
+  p.hipL = { x: -1.5, z: 0.04 };
+  p.hipR = { x: -1.5, z: 0.04 };
+  p.kneeL = p.kneeR = 1.5;
+  p.ankleL = p.ankleR = 0;
+  p.pelvisRoll = 0;
+  p.lean = 0.05;
+  return p;
+};
+
+/** Leaning into something with both arms straight out in front. */
+export const push = (t: number, effort = 1, seed = 0): Pose => {
+  const p = idle(t, seed);
+  p.lean = 0.25 * effort;
+  p.shoulderL = { x: -1.45 * effort, z: 0.15 };
+  p.shoulderR = { x: -1.45 * effort, z: 0.15 };
+  p.elbowL = { x: -0.15, z: 0 };
+  p.elbowR = { x: -0.15, z: 0 };
+  p.hipL = { x: -0.35 * effort, z: 0.05 };
+  p.hipR = { x: 0.3 * effort, z: 0.05 };
+  p.kneeL = 0.3 * effort;
+  p.kneeR = 0.1;
+  return p;
+};
+
+/** Right arm forward and up, holding something (a test paper) out in front. */
+export const holdUp = (t: number, seed = 0): Pose => {
+  const p = idle(t, seed);
+  p.shoulderR = { x: -1.25, z: 0.2 };
+  p.elbowR = { x: -0.7, z: 0 };
+  p.head = { ...p.head, x: 0.12 };
+  return p;
+};
+
+/** Hands on the head in disbelief. */
+export const headInHands = (t: number, seed = 0): Pose => {
+  const p = idle(t, seed);
+  const shake = Math.sin(t * 7 + seed) * 0.12;
+  p.shoulderL = { x: -0.6, z: 1.2 };
+  p.shoulderR = { x: -0.6, z: 1.2 };
+  p.elbowL = { x: -2.1, z: 0 };
+  p.elbowR = { x: -2.1, z: 0 };
+  p.head = { x: 0.1, y: shake, z: 0 };
+  return p;
+};
+
+/** Reclined on a lounger, hands behind the head. */
+export const lounge = (t: number, seed = 0): Pose => {
+  const p = sit(t, seed);
+  p.lean = -0.9;
+  p.hipL = { x: -0.7, z: 0.1 };
+  p.hipR = { x: -0.5, z: 0.06 };
+  p.kneeL = 0.3;
+  p.kneeR = 0.6;
+  p.shoulderL = { x: 0.2, z: 2.4 };
+  p.shoulderR = { x: 0.2, z: 2.4 };
+  p.elbowL = { x: 0, z: 2.0 };
+  p.elbowR = { x: 0, z: 2.0 };
+  p.head = { x: 0.3, y: 0.15 * Math.sin(t * 0.8), z: 0 };
+  return p;
+};

@@ -9,6 +9,8 @@ import * as Jupiter from "./JupiterIncident/constants";
 import { AsteroidSave } from "./AsteroidSave/AsteroidSave";
 import * as Asteroid from "./AsteroidSave/constants";
 import { STYLE_TEST_FRAMES, StyleTest } from "./StyleTest/StyleTest";
+import { DumbTown } from "./DumbTown/DumbTown";
+import * as Dumb from "./DumbTown/constants";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -54,6 +56,7 @@ export const RemotionRoot: React.FC = () => {
         height={Asteroid.HEIGHT}
       />
       <Composition id="StyleTest" component={StyleTest} durationInFrames={STYLE_TEST_FRAMES} fps={30} width={1080} height={1920} />
+      <Composition id="DumbTown" component={DumbTown} durationInFrames={Dumb.TOTAL_FRAMES} fps={Dumb.FPS} width={Dumb.WIDTH} height={Dumb.HEIGHT} />
     </>
   );
 };
