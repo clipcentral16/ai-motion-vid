@@ -1,0 +1,31 @@
+{
+  "voice": "en-US-BrianMultilingualNeural",
+  "rate": "+14%",
+  "pitch": "+2Hz",
+  "target_lufs": -14,
+  "scene_seconds": [4.5, 4.7, 4.6, 4.0, 4.2, 5.4, 3.2, 3.6, 4.8, 3.0, 3.4, 4.0],
+  "audio_dir": "flyingcars/voice",
+  "json_out": "src/FlyingCars/narration.json",
+  "lines": [
+    { "scene": 0, "caption": "What if tomorrow morning, everyone woke up with a *flying car?", "start": 0.2 },
+    { "scene": 1, "caption": "Day one is *amazing. Your forty minute commute? *Four minutes.", "start": 0.15 },
+    { "scene": 2, "caption": "But there are over a *billion cars on Earth… and they all want the *sky.", "start": 0.15 },
+    { "scene": 3, "caption": "Rush hour turns into a traffic jam in *three dimensions.", "start": 0.15 },
+    { "scene": 4, "caption": "So cities could build *sky lanes, stacked at different *heights.", "start": 0.15 },
+    { "scene": 5, "caption": "One dead battery and your car becomes a *brick. So every car gets a *parachute.", "start": 0.15 },
+    { "scene": 6, "caption": "Birds would have the *worst year ever.", "start": 0.15 },
+    { "scene": 7, "caption": "But the roads go *empty… so we could turn them into *parks.", "start": 0.15 },
+    { "scene": 8, "caption": "And since you can fly anywhere, people could move to *mountains and tiny *islands.", "start": 0.15 },
+    { "scene": 9, "caption": "Your *roof becomes your new *driveway.", "start": 0.15 },
+    { "scene": 10, "caption": "And pizza delivery? *Ninety seconds.", "start": 0.15 },
+    { "scene": 11, "caption": "So… would you take the *flying car?", "start": 0.2 }
+  ],
+  "crowd": [
+    { "name": "cheer", "layers": 10, "spread": 0.6, "pitch": 6, "pitch_spread": 18, "rate": "+15%", "lufs": -17,
+      "texts": ["Yeaaah!", "Woooo!", "Let's go!", "Yeah!"],
+      "voices": ["en-US-AvaNeural", "en-US-GuyNeural", "en-US-EmmaNeural", "en-US-EricNeural", "en-US-JennyNeural", "en-US-AndrewNeural"] },
+    { "name": "honk", "layers": 8, "spread": 0.9, "pitch": 0, "pitch_spread": 10, "rate": "+20%", "lufs": -18,
+      "texts": ["Move it!", "Come on!", "Hey!", "Let's go, buddy!"],
+      "voices": ["en-US-GuyNeural", "en-US-EricNeural", "en-US-RogerNeural", "en-US-AndrewNeural", "en-US-JennyNeural"] }
+  ]
+}

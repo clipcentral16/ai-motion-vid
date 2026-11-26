@@ -1,0 +1,968 @@
+{
+  "voice": "en-US-BrianMultilingualNeural",
+  "rate": "+14%",
+  "lines": [
+    {
+      "scene": 0,
+      "file": "flyingcars/voice/line0.mp3",
+      "start": 0.2,
+      "duration": 3.788,
+      "words": [
+        {
+          "spoken": "What",
+          "start": 0.066,
+          "end": 0.186,
+          "text": "What",
+          "emphasis": false
+        },
+        {
+          "spoken": "if",
+          "start": 0.197,
+          "end": 0.329,
+          "text": "if",
+          "emphasis": false
+        },
+        {
+          "spoken": "tomorrow",
+          "start": 0.34,
+          "end": 0.713,
+          "text": "tomorrow",
+          "emphasis": false
+        },
+        {
+          "spoken": "morning",
+          "start": 0.724,
+          "end": 1.195,
+          "text": "morning,",
+          "emphasis": false
+        },
+        {
+          "spoken": "everyone",
+          "start": 1.689,
+          "end": 2.083,
+          "text": "everyone",
+          "emphasis": false
+        },
+        {
+          "spoken": "woke",
+          "start": 2.094,
+          "end": 2.314,
+          "text": "woke",
+          "emphasis": false
+        },
+        {
+          "spoken": "up",
+          "start": 2.325,
+          "end": 2.478,
+          "text": "up",
+          "emphasis": false
+        },
+        {
+          "spoken": "with",
+          "start": 2.489,
+          "end": 2.599,
+          "text": "with",
+          "emphasis": false
+        },
+        {
+          "spoken": "a",
+          "start": 2.61,
+          "end": 2.654,
+          "text": "a",
+          "emphasis": false
+        },
+        {
+          "spoken": "flying",
+          "start": 2.664,
+          "end": 3.015,
+          "text": "flying",
+          "emphasis": true
+        },
+        {
+          "spoken": "car",
+          "start": 3.026,
+          "end": 3.399,
+          "text": "car?",
+          "emphasis": false
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 1,
+      "file": "flyingcars/voice/line1.mp3",
+      "start": 0.15,
+      "duration": 4.101,
+      "words": [
+        {
+          "spoken": "Day",
+          "start": 0.055,
+          "end": 0.197,
+          "text": "Day",
+          "emphasis": false
+        },
+        {
+          "spoken": "one",
+          "start": 0.208,
+          "end": 0.45,
+          "text": "one",
+          "emphasis": false
+        },
+        {
+          "spoken": "is",
+          "start": 0.461,
+          "end": 0.625,
+          "text": "is",
+          "emphasis": false
+        },
+        {
+          "spoken": "amazing",
+          "start": 0.636,
+          "end": 1.228,
+          "text": "amazing.",
+          "emphasis": true
+        },
+        {
+          "spoken": "Your",
+          "start": 1.579,
+          "end": 1.678,
+          "text": "Your",
+          "emphasis": false
+        },
+        {
+          "spoken": "forty",
+          "start": 1.689,
+          "end": 1.985,
+          "text": "forty",
+          "emphasis": false
+        },
+        {
+          "spoken": "minute",
+          "start": 1.996,
+          "end": 2.292,
+          "text": "minute",
+          "emphasis": false
+        },
+        {
+          "spoken": "commute",
+          "start": 2.303,
+          "end": 2.818,
+          "text": "commute?",
+          "emphasis": false
+        },
+        {
+          "spoken": "Four",
+          "start": 3.158,
+          "end": 3.246,
+          "text": "Four",
+          "emphasis": true
+        },
+        {
+          "spoken": "minutes",
+          "start": 3.257,
+          "end": 3.728,
+          "text": "minutes.",
+          "emphasis": false
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 2,
+      "file": "flyingcars/voice/line2.mp3",
+      "start": 0.15,
+      "duration": 3.997,
+      "words": [
+        {
+          "spoken": "But",
+          "start": 0.066,
+          "end": 0.164,
+          "text": "But",
+          "emphasis": false
+        },
+        {
+          "spoken": "there",
+          "start": 0.175,
+          "end": 0.274,
+          "text": "there",
+          "emphasis": false
+        },
+        {
+          "spoken": "are",
+          "start": 0.285,
+          "end": 0.384,
+          "text": "are",
+          "emphasis": false
+        },
+        {
+          "spoken": "over",
+          "start": 0.395,
+          "end": 0.625,
+          "text": "over",
+          "emphasis": false
+        },
+        {
+          "spoken": "a",
+          "start": 0.636,
+          "end": 0.702,
+          "text": "a",
+          "emphasis": false
+        },
+        {
+          "spoken": "billion",
+          "start": 0.713,
+          "end": 1.009,
+          "text": "billion",
+          "emphasis": true
+        },
+        {
+          "spoken": "cars",
+          "start": 1.02,
+          "end": 1.338,
+          "text": "cars",
+          "emphasis": false
+        },
+        {
+          "spoken": "on",
+          "start": 1.349,
+          "end": 1.458,
+          "text": "on",
+          "emphasis": false
+        },
+        {
+          "spoken": "Earth",
+          "start": 1.469,
+          "end": 1.875,
+          "text": "Earth…",
+          "emphasis": false
+        },
+        {
+          "spoken": "and",
+          "start": 2.379,
+          "end": 2.544,
+          "text": "and",
+          "emphasis": false
+        },
+        {
+          "spoken": "they",
+          "start": 2.555,
+          "end": 2.675,
+          "text": "they",
+          "emphasis": false
+        },
+        {
+          "spoken": "all",
+          "start": 2.686,
+          "end": 2.873,
+          "text": "all",
+          "emphasis": false
+        },
+        {
+          "spoken": "want",
+          "start": 2.884,
+          "end": 3.059,
+          "text": "want",
+          "emphasis": false
+        },
+        {
+          "spoken": "the",
+          "start": 3.07,
+          "end": 3.136,
+          "text": "the",
+          "emphasis": false
+        },
+        {
+          "spoken": "sky",
+          "start": 3.147,
+          "end": 3.618,
+          "text": "sky.",
+          "emphasis": true
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 3,
+      "file": "flyingcars/voice/line3.mp3",
+      "start": 0.15,
+      "duration": 3.474,
+      "words": [
+        {
+          "spoken": "Rush",
+          "start": 0.077,
+          "end": 0.34,
+          "text": "Rush",
+          "emphasis": false
+        },
+        {
+          "spoken": "hour",
+          "start": 0.351,
+          "end": 0.647,
+          "text": "hour",
+          "emphasis": false
+        },
+        {
+          "spoken": "turns",
+          "start": 0.658,
+          "end": 1.009,
+          "text": "turns",
+          "emphasis": false
+        },
+        {
+          "spoken": "into",
+          "start": 1.02,
+          "end": 1.316,
+          "text": "into",
+          "emphasis": false
+        },
+        {
+          "spoken": "a",
+          "start": 1.327,
+          "end": 1.371,
+          "text": "a",
+          "emphasis": false
+        },
+        {
+          "spoken": "traffic",
+          "start": 1.382,
+          "end": 1.754,
+          "text": "traffic",
+          "emphasis": false
+        },
+        {
+          "spoken": "jam",
+          "start": 1.765,
+          "end": 2.105,
+          "text": "jam",
+          "emphasis": false
+        },
+        {
+          "spoken": "in",
+          "start": 2.127,
+          "end": 2.27,
+          "text": "in",
+          "emphasis": false
+        },
+        {
+          "spoken": "three",
+          "start": 2.281,
+          "end": 2.489,
+          "text": "three",
+          "emphasis": true
+        },
+        {
+          "spoken": "dimensions",
+          "start": 2.5,
+          "end": 3.092,
+          "text": "dimensions.",
+          "emphasis": false
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 4,
+      "file": "flyingcars/voice/line4.mp3",
+      "start": 0.15,
+      "duration": 3.605,
+      "words": [
+        {
+          "spoken": "So",
+          "start": 0.047,
+          "end": 0.178,
+          "text": "So",
+          "emphasis": false
+        },
+        {
+          "spoken": "cities",
+          "start": 0.189,
+          "end": 0.551,
+          "text": "cities",
+          "emphasis": false
+        },
+        {
+          "spoken": "could",
+          "start": 0.562,
+          "end": 0.727,
+          "text": "could",
+          "emphasis": false
+        },
+        {
+          "spoken": "build",
+          "start": 0.738,
+          "end": 0.946,
+          "text": "build",
+          "emphasis": false
+        },
+        {
+          "spoken": "sky",
+          "start": 0.957,
+          "end": 1.264,
+          "text": "sky",
+          "emphasis": true
+        },
+        {
+          "spoken": "lanes",
+          "start": 1.275,
+          "end": 1.736,
+          "text": "lanes,",
+          "emphasis": false
+        },
+        {
+          "spoken": "stacked",
+          "start": 1.966,
+          "end": 2.426,
+          "text": "stacked",
+          "emphasis": false
+        },
+        {
+          "spoken": "at",
+          "start": 2.437,
+          "end": 2.547,
+          "text": "at",
+          "emphasis": false
+        },
+        {
+          "spoken": "different",
+          "start": 2.558,
+          "end": 2.81,
+          "text": "different",
+          "emphasis": false
+        },
+        {
+          "spoken": "heights",
+          "start": 2.821,
+          "end": 3.249,
+          "text": "heights.",
+          "emphasis": true
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 5,
+      "file": "flyingcars/voice/line5.mp3",
+      "start": 0.15,
+      "duration": 4.78,
+      "words": [
+        {
+          "spoken": "One",
+          "start": 0.077,
+          "end": 0.296,
+          "text": "One",
+          "emphasis": false
+        },
+        {
+          "spoken": "dead",
+          "start": 0.307,
+          "end": 0.515,
+          "text": "dead",
+          "emphasis": false
+        },
+        {
+          "spoken": "battery",
+          "start": 0.526,
+          "end": 0.998,
+          "text": "battery",
+          "emphasis": false
+        },
+        {
+          "spoken": "and",
+          "start": 1.009,
+          "end": 1.129,
+          "text": "and",
+          "emphasis": false
+        },
+        {
+          "spoken": "your",
+          "start": 1.14,
+          "end": 1.272,
+          "text": "your",
+          "emphasis": false
+        },
+        {
+          "spoken": "car",
+          "start": 1.283,
+          "end": 1.568,
+          "text": "car",
+          "emphasis": false
+        },
+        {
+          "spoken": "becomes",
+          "start": 1.579,
+          "end": 1.897,
+          "text": "becomes",
+          "emphasis": false
+        },
+        {
+          "spoken": "a",
+          "start": 1.908,
+          "end": 1.974,
+          "text": "a",
+          "emphasis": false
+        },
+        {
+          "spoken": "brick",
+          "start": 1.985,
+          "end": 2.434,
+          "text": "brick.",
+          "emphasis": true
+        },
+        {
+          "spoken": "So",
+          "start": 2.755,
+          "end": 2.942,
+          "text": "So",
+          "emphasis": false
+        },
+        {
+          "spoken": "every",
+          "start": 2.953,
+          "end": 3.216,
+          "text": "every",
+          "emphasis": false
+        },
+        {
+          "spoken": "car",
+          "start": 3.227,
+          "end": 3.523,
+          "text": "car",
+          "emphasis": false
+        },
+        {
+          "spoken": "gets",
+          "start": 3.534,
+          "end": 3.742,
+          "text": "gets",
+          "emphasis": false
+        },
+        {
+          "spoken": "a",
+          "start": 3.753,
+          "end": 3.808,
+          "text": "a",
+          "emphasis": false
+        },
+        {
+          "spoken": "parachute",
+          "start": 3.819,
+          "end": 4.422,
+          "text": "parachute.",
+          "emphasis": true
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 6,
+      "file": "flyingcars/voice/line6.mp3",
+      "start": 0.15,
+      "duration": 2.247,
+      "words": [
+        {
+          "spoken": "Birds",
+          "start": 0.077,
+          "end": 0.395,
+          "text": "Birds",
+          "emphasis": false
+        },
+        {
+          "spoken": "would",
+          "start": 0.406,
+          "end": 0.537,
+          "text": "would",
+          "emphasis": false
+        },
+        {
+          "spoken": "have",
+          "start": 0.548,
+          "end": 0.768,
+          "text": "have",
+          "emphasis": false
+        },
+        {
+          "spoken": "the",
+          "start": 0.778,
+          "end": 0.877,
+          "text": "the",
+          "emphasis": false
+        },
+        {
+          "spoken": "worst",
+          "start": 0.888,
+          "end": 1.217,
+          "text": "worst",
+          "emphasis": true
+        },
+        {
+          "spoken": "year",
+          "start": 1.228,
+          "end": 1.48,
+          "text": "year",
+          "emphasis": false
+        },
+        {
+          "spoken": "ever",
+          "start": 1.491,
+          "end": 1.875,
+          "text": "ever.",
+          "emphasis": false
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 7,
+      "file": "flyingcars/voice/line7.mp3",
+      "start": 0.15,
+      "duration": 3.004,
+      "words": [
+        {
+          "spoken": "But",
+          "start": 0.066,
+          "end": 0.164,
+          "text": "But",
+          "emphasis": false
+        },
+        {
+          "spoken": "the",
+          "start": 0.175,
+          "end": 0.23,
+          "text": "the",
+          "emphasis": false
+        },
+        {
+          "spoken": "roads",
+          "start": 0.241,
+          "end": 0.57,
+          "text": "roads",
+          "emphasis": false
+        },
+        {
+          "spoken": "go",
+          "start": 0.581,
+          "end": 0.778,
+          "text": "go",
+          "emphasis": false
+        },
+        {
+          "spoken": "empty",
+          "start": 0.789,
+          "end": 1.195,
+          "text": "empty…",
+          "emphasis": true
+        },
+        {
+          "spoken": "so",
+          "start": 1.228,
+          "end": 1.404,
+          "text": "so",
+          "emphasis": false
+        },
+        {
+          "spoken": "we",
+          "start": 1.414,
+          "end": 1.513,
+          "text": "we",
+          "emphasis": false
+        },
+        {
+          "spoken": "could",
+          "start": 1.524,
+          "end": 1.645,
+          "text": "could",
+          "emphasis": false
+        },
+        {
+          "spoken": "turn",
+          "start": 1.656,
+          "end": 1.853,
+          "text": "turn",
+          "emphasis": false
+        },
+        {
+          "spoken": "them",
+          "start": 1.864,
+          "end": 1.985,
+          "text": "them",
+          "emphasis": false
+        },
+        {
+          "spoken": "into",
+          "start": 1.996,
+          "end": 2.171,
+          "text": "into",
+          "emphasis": false
+        },
+        {
+          "spoken": "parks",
+          "start": 2.182,
+          "end": 2.653,
+          "text": "parks.",
+          "emphasis": true
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 8,
+      "file": "flyingcars/voice/line8.mp3",
+      "start": 0.15,
+      "duration": 4.18,
+      "words": [
+        {
+          "spoken": "And",
+          "start": 0.077,
+          "end": 0.175,
+          "text": "And",
+          "emphasis": false
+        },
+        {
+          "spoken": "since",
+          "start": 0.186,
+          "end": 0.417,
+          "text": "since",
+          "emphasis": false
+        },
+        {
+          "spoken": "you",
+          "start": 0.428,
+          "end": 0.504,
+          "text": "you",
+          "emphasis": false
+        },
+        {
+          "spoken": "can",
+          "start": 0.515,
+          "end": 0.636,
+          "text": "can",
+          "emphasis": false
+        },
+        {
+          "spoken": "fly",
+          "start": 0.647,
+          "end": 0.987,
+          "text": "fly",
+          "emphasis": false
+        },
+        {
+          "spoken": "anywhere",
+          "start": 0.998,
+          "end": 1.546,
+          "text": "anywhere,",
+          "emphasis": false
+        },
+        {
+          "spoken": "people",
+          "start": 1.7,
+          "end": 1.963,
+          "text": "people",
+          "emphasis": false
+        },
+        {
+          "spoken": "could",
+          "start": 1.974,
+          "end": 2.127,
+          "text": "could",
+          "emphasis": false
+        },
+        {
+          "spoken": "move",
+          "start": 2.138,
+          "end": 2.379,
+          "text": "move",
+          "emphasis": false
+        },
+        {
+          "spoken": "to",
+          "start": 2.39,
+          "end": 2.478,
+          "text": "to",
+          "emphasis": false
+        },
+        {
+          "spoken": "mountains",
+          "start": 2.489,
+          "end": 2.95,
+          "text": "mountains",
+          "emphasis": true
+        },
+        {
+          "spoken": "and",
+          "start": 2.961,
+          "end": 3.059,
+          "text": "and",
+          "emphasis": false
+        },
+        {
+          "spoken": "tiny",
+          "start": 3.07,
+          "end": 3.377,
+          "text": "tiny",
+          "emphasis": false
+        },
+        {
+          "spoken": "islands",
+          "start": 3.388,
+          "end": 3.827,
+          "text": "islands.",
+          "emphasis": true
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 9,
+      "file": "flyingcars/voice/line9.mp3",
+      "start": 0.15,
+      "duration": 2.247,
+      "words": [
+        {
+          "spoken": "Your",
+          "start": 0.066,
+          "end": 0.219,
+          "text": "Your",
+          "emphasis": false
+        },
+        {
+          "spoken": "roof",
+          "start": 0.23,
+          "end": 0.537,
+          "text": "roof",
+          "emphasis": true
+        },
+        {
+          "spoken": "becomes",
+          "start": 0.548,
+          "end": 0.932,
+          "text": "becomes",
+          "emphasis": false
+        },
+        {
+          "spoken": "your",
+          "start": 0.943,
+          "end": 1.064,
+          "text": "your",
+          "emphasis": false
+        },
+        {
+          "spoken": "new",
+          "start": 1.075,
+          "end": 1.261,
+          "text": "new",
+          "emphasis": false
+        },
+        {
+          "spoken": "driveway",
+          "start": 1.272,
+          "end": 1.875,
+          "text": "driveway.",
+          "emphasis": true
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 10,
+      "file": "flyingcars/voice/line10.mp3",
+      "start": 0.15,
+      "duration": 2.691,
+      "words": [
+        {
+          "spoken": "And",
+          "start": 0.045,
+          "end": 0.177,
+          "text": "And",
+          "emphasis": false
+        },
+        {
+          "spoken": "pizza",
+          "start": 0.188,
+          "end": 0.528,
+          "text": "pizza",
+          "emphasis": false
+        },
+        {
+          "spoken": "delivery",
+          "start": 0.539,
+          "end": 1.12,
+          "text": "delivery?",
+          "emphasis": false
+        },
+        {
+          "spoken": "Ninety",
+          "start": 1.447,
+          "end": 1.743,
+          "text": "Ninety",
+          "emphasis": true
+        },
+        {
+          "spoken": "seconds",
+          "start": 1.754,
+          "end": 2.325,
+          "text": "seconds.",
+          "emphasis": false
+        }
+      ],
+      "extra": []
+    },
+    {
+      "scene": 11,
+      "file": "flyingcars/voice/line11.mp3",
+      "start": 0.2,
+      "duration": 2.508,
+      "words": [
+        {
+          "spoken": "So",
+          "start": 0.047,
+          "end": 0.343,
+          "text": "So…",
+          "emphasis": false
+        },
+        {
+          "spoken": "would",
+          "start": 0.76,
+          "end": 0.935,
+          "text": "would",
+          "emphasis": false
+        },
+        {
+          "spoken": "you",
+          "start": 0.946,
+          "end": 1.034,
+          "text": "you",
+          "emphasis": false
+        },
+        {
+          "spoken": "take",
+          "start": 1.045,
+          "end": 1.264,
+          "text": "take",
+          "emphasis": false
+        },
+        {
+          "spoken": "the",
+          "start": 1.275,
+          "end": 1.352,
+          "text": "the",
+          "emphasis": false
+        },
+        {
+          "spoken": "flying",
+          "start": 1.363,
+          "end": 1.714,
+          "text": "flying",
+          "emphasis": true
+        },
+        {
+          "spoken": "car",
+          "start": 1.725,
+          "end": 2.13,
+          "text": "car?",
+          "emphasis": false
+        }
+      ],
+      "extra": []
+    }
+  ]
+}

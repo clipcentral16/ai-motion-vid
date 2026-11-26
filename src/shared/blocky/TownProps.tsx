@@ -184,7 +184,7 @@ export const ShopDoor: React.FC<{ position: V3; sign: string; open?: number; wal
 );
 
 // ---------- Mansion ----------
-const Palm: React.FC<{ position: V3; size?: number }> = ({ position, size = 1 }) => (
+export const Palm: React.FC<{ position: V3; size?: number }> = ({ position, size = 1 }) => (
   <group position={position} scale={size}>
     {Array.from({ length: 7 }).map((_, i) => (
       <mesh key={i} geometry={rbox(0.7, 1.4, 0.7, 0.2)} material={plastic(i % 2 ? "#9b7650" : "#8a6744", 0.9)} position={[Math.sin(i * 0.4) * 0.25 * i * 0.3, 0.7 + i * 1.3, 0]} castShadow />

@@ -19,7 +19,7 @@ import { join } from "node:path";
 
 const SR = 44100;
 const SET = process.argv[2] ?? "no-legs";
-const OUT_NAME = { nuke: "whatif-nuke", jupiter: "jupiter", asteroid: "asteroid", dumbtown: "dumbtown", clumsytown: "clumsytown" }[SET] ?? "whatif";
+const OUT_NAME = { nuke: "whatif-nuke", jupiter: "jupiter", asteroid: "asteroid", dumbtown: "dumbtown", clumsytown: "clumsytown", flyingcars: "flyingcars" }[SET] ?? "whatif";
 const OUT = join(process.cwd(), "public", OUT_NAME);
 mkdirSync(OUT, { recursive: true });
 
@@ -1252,7 +1252,161 @@ const royalScore = () => {
   writeWav("score", buf, 0.8);
 };
 
-if (SET === "clumsytown") {
+// ---------- flyingcars ----------
+// Rising electric hover hum for a car taking off.
+const liftoff = () => {
+  const d = 1.6;
+  const buf = stereo(d);
+  let ph = 0, ph2 = 0, lp = 0;
+  for (let j = 0; j < d * SR; j++) {
+    const t = j / SR;
+    const f = 90 + 260 * Math.min(1, t / 1.1) ** 1.5;
+    ph += (TAU * f) / SR;
+    ph2 += (TAU * f * 3.01) / SR;
+    lp += lpCoef(900 + 2500 * Math.min(1, t)) * (noise() - lp);
+    const env = Math.min(1, t / 0.15) * Math.min(1, (d - t) / 0.4);
+    add(buf, j, (Math.sin(ph) * 0.6 + Math.sin(ph2) * 0.2 + lp * 0.5) * env * 0.8, Math.sin(TAU * 0.6 * t) * 0.3);
+  }
+  writeWav("liftoff", buf);
+};
+// A traffic jam of horns: many short honks at different pitches.
+const hornJam = () => {
+  const d = 2.4;
+  const buf = stereo(d);
+  const r = mulberry32(77);
+  for (let k = 0; k < 14; k++) {
+    const st = r() * 1.9, len = 0.12 + r() * 0.35, f = 300 + r() * 300, pan = r() * 1.6 - 0.8;
+    let lp = 0;
+    for (let j = 0; j < len * SR; j++) {
+      const t = j / SR;
+      const v = (Math.sign(Math.sin(TAU * f * t)) + Math.sign(Math.sin(TAU * f * 1.26 * t))) * 0.5;
+      lp += lpCoef(1600) * (v - lp);
+      const env = Math.min(1, t / 0.01) * Math.min(1, (len - t) / 0.02);
+      add(buf, Math.round((st + t) * SR), lp * env * 0.35, pan);
+    }
+  }
+  writeWav("jam", buf);
+};
+// Panicked bird chirps (fast down-sweeping whistles).
+const chirps = () => {
+  const d = 1.4;
+  const buf = stereo(d);
+  const r = mulberry32(9);
+  for (let k = 0; k < 9; k++) {
+    const st = k * 0.14 + r() * 0.05, len = 0.09, f0 = 2600 + r() * 1400, pan = r() * 1.4 - 0.7;
+    let ph = 0;
+    for (let j = 0; j < len * SR; j++) {
+      const t = j / SR;
+      ph += (TAU * f0 * (1 - 0.45 * (t / len))) / SR;
+      add(buf, Math.round((st + t) * SR), Math.sin(ph) * Math.sin(Math.PI * t / len) * 0.4, pan);
+    }
+  }
+  writeWav("chirp", buf);
+};
+// Parachute "fwump": a fabric pop.
+const chute = () => {
+  const d = 0.7;
+  const buf = stereo(d);
+  let lp = 0, ph = 0;
+  for (let j = 0; j < d * SR; j++) {
+    const t = j / SR;
+    lp += lpCoef(1200 * Math.exp(-t * 6) + 150) * (noise() - lp);
+    ph += (TAU * (120 * Math.exp(-t * 8) + 50)) / SR;
+    add(buf, j, (lp * 1.4 + Math.sin(ph) * 0.6) * Math.min(1, t / 0.005) * Math.exp(-t * 6));
+  }
+  writeWav("chute", buf);
+};
+// Sputter of a dying battery: crackly decaying pulses.
+const sputter = () => {
+  const d = 1.2;
+  const buf = stereo(d);
+  let ph = 0;
+  for (let j = 0; j < d * SR; j++) {
+    const t = j / SR;
+    const f = 220 * (1 - 0.7 * t / d);
+    ph += (TAU * f) / SR;
+    const gate = Math.sin(TAU * (14 - 8 * t) * t) > 0.2 ? 1 : 0.1;
+    add(buf, j, (Math.sign(Math.sin(ph)) * 0.3 + noise() * 0.2) * gate * Math.exp(-t * 1.5) * 0.7);
+  }
+  writeWav("sputter", buf);
+};
+
+// Bright, floaty pop score at 112 BPM in D major: plucky synth arps, bass,
+// claps; a lift for the sky-lane/park section and a big finish.
+const skyScore = () => {
+  const SECS = [4.5, 4.7, 4.6, 4.0, 4.2, 5.4, 3.2, 3.6, 4.8, 3.0, 3.4, 4.0];
+  const START = SECS.map((_, i) => SECS.slice(0, i).reduce((a, b) => a + b, 0));
+  const DURATION = SECS.reduce((a, b) => a + b, 0);
+  const DROP = START[1];
+  const FINAL = START[11];
+  const beat = 60 / 112;
+  const buf = stereo(DURATION);
+  const chords = [
+    [293.66, 369.99, 440], // D
+    [246.94, 293.66, 369.99], // Bm
+    [196, 246.94, 293.66], // G
+    [220, 277.18, 329.63], // A
+  ];
+  const pluck = (st, f, g, pan, dec = 10) => {
+    for (let j = 0; j < 0.4 * SR; j++) {
+      const t = j / SR;
+      const v = Math.sin(TAU * f * t) + 0.35 * Math.sin(TAU * f * 2 * t) * Math.exp(-t * 15) + 0.15 * Math.sin(TAU * f * 3 * t) * Math.exp(-t * 25);
+      add(buf, Math.round((st + t) * SR), v * Math.exp(-t * dec) * g, pan);
+    }
+  };
+  const kick = (st, g) => {
+    let ph = 0;
+    for (let j = 0; j < 0.25 * SR; j++) {
+      const t = j / SR;
+      ph += (TAU * (50 + 120 * Math.exp(-t * 30))) / SR;
+      add(buf, Math.round((st + t) * SR), Math.sin(ph) * Math.exp(-t * 14) * g);
+    }
+  };
+  const clap = (st, g) => {
+    let lp = 0;
+    for (let j = 0; j < 0.15 * SR; j++) {
+      const t = j / SR;
+      const n = noise();
+      lp += lpCoef(1500) * (n - lp);
+      const burst = t < 0.03 ? (Math.floor(t / 0.01) % 2 ? 0.5 : 1) : 1;
+      add(buf, Math.round((st + t) * SR), (n - lp) * Math.exp(-t * 22) * g * burst, -0.1);
+    }
+  };
+  for (let k = 0; k * (beat / 2) < DURATION; k++) {
+    const t = k * (beat / 2);
+    const chord = chords[Math.floor(t / (beat * 4)) % 4];
+    const intro = t < DROP;
+    const fin = t >= FINAL;
+    const arpNote = chord[[0, 1, 2, 1][k % 4]] * (k % 8 < 4 ? 2 : 1);
+    pluck(t, arpNote, intro ? 0.12 : 0.17, ((k % 4) - 1.5) * 0.25);
+    if (intro) continue;
+    if (k % 2 === 0) pluck(t, chord[0] * 0.5, 0.28, 0, 7);
+    if (k % 2 === 0) kick(t, fin ? 0.6 : 0.5);
+    if (k % 4 === 2) clap(t, fin ? 0.4 : 0.3);
+    if (fin && k % 2 === 1) pluck(t, chord[2] * 2, 0.1, 0.4);
+  }
+  for (let i = 0; i < buf[0].length; i++) {
+    const t = i / SR;
+    const g = Math.min(1, t / 0.3) * Math.min(1, Math.max(0, (DURATION - t) / 2));
+    buf[0][i] *= g;
+    buf[1][i] *= g;
+  }
+  writeWav("score", buf, 0.8);
+};
+
+if (SET === "flyingcars") {
+  whoosh();
+  honk();
+  dingSfx();
+  popSfx();
+  boing();
+  liftoff();
+  hornJam();
+  chirps();
+  chute();
+  sputter();
+  skyScore();
+} else if (SET === "clumsytown") {
   whoosh();
   thud();
   dingSfx();

@@ -52,10 +52,13 @@ src/DumbTown/                "In this town, you get paid for being dumb" (blocky
 src/ClumsyTown/              "In this town, the clumsiest person gets crowned king" (blocky style,
                              12 scenes; three/ClumsyProps: castle, throne, grand stairs, judges,
                              banana peel, coffee splash, confetti; Tumble helper for falls/flips)
+src/FlyingCars/              "What if everyone woke up with a flying car?" (blocky style, 12 scenes;
+                             three/FlyingProps: FlyingCar with driver, Parachute, Bird, SkyLane,
+                             LandingPad, Mountain, Ocean/Island, PizzaBox, Clouds)
 src/AsteroidSave/            "What if an asteroid was about to hit Earth?" (Zen's Rocket League
                              save: mechanics.ts choreography, game-style callouts, boost meter)
 public/                      static assets (audio, models, textures, fonts)
-scripts/generate-audio.mjs   synthesises music + SFX (no arg: public/whatif/, `nuke`, `jupiter`, `asteroid`, `dumbtown`, `clumsytown`: public/<set>/)
+scripts/generate-audio.mjs   synthesises music + SFX (no arg: public/whatif/, `nuke`, `jupiter`, `asteroid`, `dumbtown`, `clumsytown`, `flyingcars`: public/<set>/)
 scripts/generate-narration.py  narrator voice (Microsoft Edge TTS) + word timings,
                              one config per video in scripts/narration/*.json
 remotion.config.ts           render config (ANGLE GL renderer for WebGL)
@@ -68,9 +71,9 @@ out/                         render output (git-ignored)
 - `npm run render`: render `SpinningObject` to `out/spinning-object.mp4`
 - `npx remotion render <CompositionId> out/<name>.mp4`: render any composition
 - `npm run typecheck`: TypeScript check
-- `npm run render:whatif` / `render:nuke` / `render:jupiter` / `render:asteroid` / `render:dumbtown` / `render:clumsytown`: render a video (1080×1920) to `out/`
-- `npm run audio` / `audio:nuke` / `audio:jupiter` / `audio:asteroid` / `audio:dumbtown` / `audio:clumsytown`: regenerate the synthesised music and sound effects
-- `npm run narration` / `narration:nuke` / `narration:jupiter` / `narration:asteroid` / `narration:dumbtown` / `narration:clumsytown`: regenerate the narrator voice-over from `scripts/narration/<video>.json` (needs `pip install edge-tts` and network access to `speech.platform.bing.com`)
+- `npm run render:whatif` / `render:nuke` / `render:jupiter` / `render:asteroid` / `render:dumbtown` / `render:clumsytown` / `render:flyingcars`: render a video (1080×1920) to `out/`
+- `npm run audio` / `audio:nuke` / `audio:jupiter` / `audio:asteroid` / `audio:dumbtown` / `audio:clumsytown` / `audio:flyingcars`: regenerate the synthesised music and sound effects
+- `npm run narration` / `narration:nuke` / `narration:jupiter` / `narration:asteroid` / `narration:dumbtown` / `narration:clumsytown` / `narration:flyingcars`: regenerate the narrator voice-over from `scripts/narration/<video>.json` (needs `pip install edge-tts` and network access to `speech.platform.bing.com`)
 
 Blocky-style videos render slowly in software WebGL (~30s of render per 1s of video); run long renders in the background.
 

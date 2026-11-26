@@ -22,8 +22,11 @@
     "audio:dumbtown": "node scripts/generate-audio.mjs dumbtown",
     "narration:dumbtown": "python3 scripts/generate-narration.py scripts/narration/dumbtown.json",
     "render:clumsytown": "remotion render ClumsyTown out/clumsy-town.mp4 --crf=24",
+    "render:flyingcars": "remotion render FlyingCars out/flying-cars.mp4 --crf=24",
     "audio:clumsytown": "node scripts/generate-audio.mjs clumsytown",
-    "narration:clumsytown": "python3 scripts/generate-narration.py scripts/narration/clumsytown.json"
+    "audio:flyingcars": "node scripts/generate-audio.mjs flyingcars",
+    "narration:clumsytown": "python3 scripts/generate-narration.py scripts/narration/clumsytown.json",
+    "narration:flyingcars": "python3 scripts/generate-narration.py scripts/narration/flyingcars.json"
   },
   "repository": {
     "type": "git",
